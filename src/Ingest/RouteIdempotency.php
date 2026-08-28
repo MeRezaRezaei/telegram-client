@@ -90,7 +90,21 @@ final class RouteIdempotency
      */
     public function seen(string $method, string $routeKey, int $accountId): bool
     {
-        return self::routeExists(self::tableFor($method), self::routeId($method, $routeKey, $accountId));
+        return $this->storedId($method, $routeKey, $accountId) !== null;
+    }
+
+    /**
+     * Id of the instance this route is answered by (the row PK doubles as
+     * the pointer to the stored response), or null when unseen — the
+     * response-routing wiring resolves the stored model from it.
+     */
+    public function storedId(string $method, string $routeKey, int $accountId): ?string
+    {
+        $id = DB::table(self::tableFor($method))
+            ->where('route_id', self::routeId($method, $routeKey, $accountId))
+            ->value('id');
+
+        return $id === null ? null : (string) $id;
     }
 
     /**

@@ -50,6 +50,11 @@ final class UpdateIngestor
 
     private const MODELS_NS = 'MeRezaRezaei\TelegramClient\Schema\Generated\Models\\';
 
+    public function __construct(
+        private readonly RouteIdempotency $routes = new RouteIdempotency(),
+    ) {
+    }
+
     /**
      * Root-namespace entity anchors are off the shipped dial by design
      * (P1 dial semantics: root namespace stays in the full generated set).
@@ -133,6 +138,9 @@ final class UpdateIngestor
 
     /** @var array<string, bool> table => migrated on this connection (checked once) */
     private static array $tablesReady = [];
+
+    /** @var array<string, list<string>>|null anchor table => family instance tables (lazy) */
+    private static ?array $familyTables = null;
 
     private static function constructor(string $name): TlConstructor
     {
@@ -218,6 +226,69 @@ final class UpdateIngestor
     }
 
     /**
+     * Ingest a method RESPONSE under a tenant (plan Task 5 wiring):
+     * update-kind payloads branch FIRST and always become instances
+     * (updates never touch routes, per P1 design); everything else is
+     * route-deduped — seen? return the stored instance : ingest + mark.
+     *
+     * Methods without a generated route table (generic/vector returns —
+     * the generator skips them) ingest unconditionally: dedup applies
+     * exactly where a tl_route_<method> table exists (and is migrated).
+     *
+     * @param array<string, mixed> $params
+     * @param array<string, mixed> $response
+     */
+    public function ingestResponse(string $method, array $params, array $response, int $accountId): ?TlInstanceModel
+    {
+        if (RouteIdempotency::isUpdatePayload($response)) {
+            return $this->ingest($response, $accountId);
+        }
+
+        $table = RouteIdempotency::tableFor($method);
+        if (!Schema::hasTable($table)) {
+            return $this->ingest($response, $accountId);
+        }
+
+        $key = RouteIdempotency::keyFor($method, $params);
+        $storedId = $this->routes->storedId($method, $key, $accountId);
+        if ($storedId !== null) {
+            return $this->storedInstance((string) ($response['_'] ?? ''), $storedId);
+        }
+
+        $root = $this->ingest($response, $accountId);
+
+        // The route row PK IS the stored instance id, so a response already
+        // recorded under another route (content-aggregated roots can be
+        // byte-identical across params) must not be re-marked — the unique
+        // PK would reject it.
+        if (!DB::table($table)->where('id', (string) $root->getKey())->exists()) {
+            $this->routes->mark($method, $key, $accountId, (string) $root->getKey());
+        }
+
+        return $root;
+    }
+
+    /**
+     * The instance a seen route points at, resolved through the duplicate
+     * response's constructor tables (normally the same constructor that
+     * answered first; null if the family drifted and the id misses).
+     */
+    private function storedInstance(string $constructor, string $storedId): ?TlInstanceModel
+    {
+        if ($constructor === '') {
+            return null;
+        }
+
+        /** @var class-string<TlInstanceModel> $instanceClass */
+        $instanceClass = self::modelClass(Naming::ctorModel(self::constructor($constructor)->resultType, $constructor));
+
+        /** @var TlInstanceModel|null $instance */
+        $instance = $instanceClass::query()->find($storedId);
+
+        return $instance;
+    }
+
+    /**
      * @param array<string, mixed> $payload
      * @param array<string, TlInstanceModel> $instances
      * @param list<array{class: class-string<TlAnchorModel>, parent_path: string, idx: int, value_path?: string, value?: mixed}> $childRows
@@ -286,6 +357,17 @@ final class UpdateIngestor
             $anchor->save(); // TlAnchorModel::booted assigns the UUIDv7 PK
 
             $anchorId = (string) $anchor->getKey();
+        } else {
+            // Reused anchor: keep the discriminator truthful when the
+            // constructor changed (user → userEmpty transition) — the
+            // anchor tells the CURRENT constructor of its instance family.
+            $anchorClass::query()->where('id', $anchorId)->where(
+                fn ($q) => $q->where('constructor_id', '!=', $ctor->id)->orWhere('constructor_name', '!=', $name),
+            )->update([
+                'constructor_id' => $ctor->id,
+                'constructor_name' => $name,
+                'updated_at' => now(),
+            ]);
         }
 
         $instance = $instanceClass::query()->find($anchorId) ?? new $instanceClass();
@@ -329,7 +411,10 @@ final class UpdateIngestor
     /**
      * Anchor for (tenant, identity value): identities live on the instance
      * tables (per-constructor), so resolve through them — no global lookups
-     * by telegram id alone (roadmap tenancy contract).
+     * by telegram id alone (roadmap tenancy contract). Constructor
+     * transitions (user → userEmpty for the same telegram id) anchor
+     * through ANY family instance table carrying the identity, so the
+     * namespace keeps exactly one anchor per (tenant, telegram id).
      *
      * @param class-string<TlInstanceModel> $instanceClass
      * @param class-string<TlAnchorModel> $anchorClass
@@ -337,11 +422,44 @@ final class UpdateIngestor
     private function existingAnchorId(string $instanceClass, string $anchorClass, string $column, int|string $value, int $accountId): ?string
     {
         $ids = $instanceClass::query()->where($column, $value)->pluck('id')->all();
+
+        if ($ids === []) {
+            $ownTable = (new $instanceClass())->getTable();
+            foreach (self::familyInstanceTables((new $anchorClass())->getTable()) as $table) {
+                if ($table === $ownTable || !Schema::hasTable($table) || !Schema::hasColumn($table, $column)) {
+                    continue;
+                }
+                $ids = DB::table($table)->where($column, $value)->pluck('id')->all();
+                if ($ids !== []) {
+                    break;
+                }
+            }
+        }
+
         if ($ids === []) {
             return null;
         }
 
         return $this->anchorIdFor($anchorClass, $ids, $accountId);
+    }
+
+    /**
+     * Instance tables sharing an anchor table (the constructor family of a
+     * TL type), straight off the metamodel — exact, no table-name guessing.
+     *
+     * @return list<string>
+     */
+    private static function familyInstanceTables(string $anchorTable): array
+    {
+        if (self::$familyTables === null) {
+            $map = [];
+            foreach (self::constructors() as $ctor) {
+                $map[Naming::anchorTable($ctor->resultType)][] = Naming::instanceTable($ctor->resultType, $ctor->name);
+            }
+            self::$familyTables = $map;
+        }
+
+        return self::$familyTables[$anchorTable] ?? [];
     }
 
     /**
