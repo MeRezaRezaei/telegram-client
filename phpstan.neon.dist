@@ -1,0 +1,8 @@
+parameters:
+    level: 5
+    paths: [src]
+    disallowedFunctionCalls:
+        - function: 'preg_*()'
+          message: 'src/ is regex-free by policy — use sscanf/string functions (mirrors teleproto)'
+includes:
+    - vendor/spaze/phpstan-disallowed-calls/extension.neon
