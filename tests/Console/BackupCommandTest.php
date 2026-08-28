@@ -138,7 +138,7 @@ final class BackupCommandTest extends TestCase
     public function test_unknown_action_fails_loud(): void
     {
         $this->artisan('telegram-client:backup', ['action' => 'explode'])
-            ->expectsOutput('unknown action "explode" — expected run|restore|verify|status.')
+            ->expectsOutput('unknown action "explode" — expected run|restore|verify|status|prune.')
             ->assertExitCode(1);
     }
 
@@ -146,6 +146,42 @@ final class BackupCommandTest extends TestCase
     {
         $this->artisan('telegram-client:backup', ['action' => 'status', '--set' => 'nope'])
             ->expectsOutput('unknown backup set "nope" — configure telegram-client.backup.sets.nope.')
+            ->assertExitCode(1);
+    }
+
+    public function test_prune_gcs_chunks_orphaned_by_a_shrinking_set(): void
+    {
+        $this->artisan('telegram-client:backup', ['action' => 'run', '--passphrase' => 'correct horse'])->assertExitCode(0);
+
+        unlink($this->source . '/a.txt');
+        unlink($this->source . '/b.txt'); // twin content: both must go to orphan their 2 shared chunks
+
+        $this->artisan('telegram-client:backup', ['action' => 'run', '--passphrase' => 'correct horse'])
+            ->expectsOutput('backup set=default {uploaded:0, skipped:3, files:1, bytes:25}')
+            ->assertExitCode(0);
+
+        // 5 chunk messages + 2 manifest messages = 7 walked; 2 orphaned chunk docs die.
+        $this->artisan('telegram-client:backup', ['action' => 'prune'])
+            ->expectsOutput('prune set=default {scanned:7, pruned:2}')
+            ->assertExitCode(0);
+
+        $this->artisan('telegram-client:backup', ['action' => 'prune'])
+            ->expectsOutput('prune set=default {scanned:5, pruned:0}')
+            ->assertExitCode(0);
+
+        $target = sys_get_temp_dir() . '/w13-prune-dst-' . uniqid();
+        $this->artisan('telegram-client:backup', ['action' => 'restore', '--passphrase' => 'correct horse', '--target' => $target])
+            ->expectsOutput("restored set=default {files:1, bytes:25} -> {$target}")
+            ->assertExitCode(0);
+
+        self::assertSame(hash_file('sha256', $this->source . '/sub/c.txt'), hash_file('sha256', $target . '/sub/c.txt'));
+        self::rrmdir($target);
+    }
+
+    public function test_prune_without_manifest_fails_loud(): void
+    {
+        $this->artisan('telegram-client:backup', ['action' => 'prune'])
+            ->expectsOutput('prune needs a manifest first (run).')
             ->assertExitCode(1);
     }
 
@@ -236,5 +272,14 @@ final class HalfMissingVault implements VaultInterface
             'salt' => str_repeat('ab', 16),
             'chunk_hashes' => ['h1', 'h2', 'h3'],
         ];
+    }
+
+    public function findMessagesByName(string $namePrefix): array
+    {
+        return [];
+    }
+
+    public function delete(string $name): void
+    {
     }
 }

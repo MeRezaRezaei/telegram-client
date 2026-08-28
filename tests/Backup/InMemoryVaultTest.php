@@ -64,4 +64,35 @@ final class InMemoryVaultTest extends TestCase
 
         $vault->getChunk('hash-missing');
     }
+
+    public function test_find_messages_by_name_empty_prefix_lists_chunks_and_manifests(): void
+    {
+        $vault = new InMemoryVault();
+        $vault->putChunk('hash-a', 'bytes-a');
+        $vault->putManifest('{"version":1}');
+        $vault->putChunk('hash-b', 'bytes-b');
+
+        $entries = $vault->findMessagesByName('');
+
+        self::assertSame(['hash-a', 'TBMANIFEST1:{"version":1}', 'hash-b'], array_column($entries, 'name'));
+        self::assertSame(['hash-a'], array_column($vault->findMessagesByName('hash-a'), 'name'));
+    }
+
+    public function test_delete_removes_only_the_named_entries(): void
+    {
+        $vault = new InMemoryVault();
+        $vault->putChunk('hash-a', 'bytes-a');
+        $vault->putChunk('hash-b', 'bytes-b');
+        $vault->putManifest('{"version":1}');
+
+        $vault->delete('hash-a');
+
+        self::assertSame('bytes-b', $vault->getChunk('hash-b'), 'other chunks survive the delete');
+        self::assertSame(['version' => 1], $vault->getLatestManifest(), 'manifests survive the delete');
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('hash-a');
+
+        $vault->getChunk('hash-a');
+    }
 }

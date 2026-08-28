@@ -40,4 +40,26 @@ interface VaultInterface
      * @return array<string, mixed>|null null when no manifest was posted yet
      */
     public function getLatestManifest(): ?array;
+
+    /**
+     * List vault entries whose name starts with $namePrefix; an EMPTY
+     * prefix lists everything in the vault (the prune GC walks that —
+     * chunk GC needs a full inventory, and the vault API has no other
+     * list-all surface). TelegramVault backs this with messages.search,
+     * whose empty q returns every message per the Telegram docs, merged
+     * with a realtime getHistory top-up (the channel text index lags).
+     *
+     * @return list<array<string, mixed>> entries carrying at least string
+     *                                    id (opaque) and string name; the
+     *                                    name is the chunk hash for chunk
+     *                                    documents and the message text for
+     *                                    manifest posts
+     */
+    public function findMessagesByName(string $namePrefix): array;
+
+    /**
+     * Delete the entry (chunk document) stored under $name. Idempotent:
+     * an absent name is a no-op, so repeated prunes are safe.
+     */
+    public function delete(string $name): void;
 }

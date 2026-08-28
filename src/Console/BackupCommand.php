@@ -6,6 +6,7 @@ namespace MeRezaRezaei\TelegramClient\Console;
 
 use Illuminate\Console\Command;
 use MeRezaRezaei\TelegramClient\Backup\BackupRunner;
+use MeRezaRezaei\TelegramClient\Backup\Pruner;
 use MeRezaRezaei\TelegramClient\Backup\Restorer;
 use MeRezaRezaei\TelegramClient\Backup\Verifier;
 use MeRezaRezaei\TelegramClient\Backup\VaultInterface;
@@ -33,10 +34,10 @@ final class BackupCommand extends Command
     /** Container seam: callable(string $setId): VaultInterface (provider binds the driver-aware default). */
     public const VAULT_FACTORY_KEY = 'telegram-client.backup.vault-factory';
 
-    private const ACTIONS = ['run', 'restore', 'verify', 'status'];
+    private const ACTIONS = ['run', 'restore', 'verify', 'status', 'prune'];
 
     protected $signature = 'telegram-client:backup
-        {action : run|restore|verify|status}
+        {action : run|restore|verify|status|prune}
         {--set=default : Backup set id (key under telegram-client.backup.sets)}
         {--passphrase= : Vault passphrase — or env TELEGRAM_CLIENT_BACKUP_PASSPHRASE (never logged)}
         {--target= : Restore target directory (restore action)}
@@ -49,7 +50,7 @@ final class BackupCommand extends Command
         $action = (string) $this->argument('action');
 
         if (!in_array($action, self::ACTIONS, true)) {
-            $this->error(sprintf('unknown action "%s" — expected run|restore|verify|status.', $action));
+            $this->error(sprintf('unknown action "%s" — expected run|restore|verify|status|prune.', $action));
 
             return self::FAILURE;
         }
@@ -70,6 +71,7 @@ final class BackupCommand extends Command
                 'run' => $this->runAction($setId, $setConfig),
                 'restore' => $this->restoreAction($setId),
                 'verify' => $this->verifyAction($setId),
+                'prune' => $this->pruneAction($setId),
                 default => $this->statusAction($setId),
             };
         } catch (RuntimeException $e) {
@@ -154,6 +156,33 @@ final class BackupCommand extends Command
         ));
 
         return $result['missing'] > 0 || $result['ok'] < $result['checked'] ? self::FAILURE : self::SUCCESS;
+    }
+
+    /**
+     * Chunk GC (night W1-3, P4-carried M): the latest manifest's
+     * chunk_hashes is the keep-set; every other chunk-shaped vault entry
+     * (files deleted between runs) is deleted. Keyless — chunk names are
+     * plaintext hashes — so it is cron-safe like plain verify.
+     */
+    private function pruneAction(string $setId): int
+    {
+        $vault = $this->vault($setId);
+        $manifest = $vault->getLatestManifest();
+
+        if ($manifest === null) {
+            $this->error('prune needs a manifest first (run).');
+
+            return self::FAILURE;
+        }
+
+        $keepHashes = $manifest['chunk_hashes'] ?? [];
+        $keepHashes = is_array($keepHashes) ? array_values(array_filter($keepHashes, 'is_string')) : [];
+
+        $stats = Pruner::prune($vault, $keepHashes);
+
+        $this->line(sprintf('prune set=%s {scanned:%d, pruned:%d}', $setId, $stats['scanned'], $stats['pruned']));
+
+        return self::SUCCESS;
     }
 
     private function statusAction(string $setId): int

@@ -27,3 +27,5 @@ W5 CHANGELOGs; tag teleproto v1.2.0 + telegram-client v0.2.0 if earned; final re
 SDD per wave (parallel where disjoint); gates green per task; nothing uncommitted at wave ends; no new deps without need; live tests only with env creds (available in ../teleproto/.env).
 
 ## Log (appended as work lands)
+
+- W1-3 [tc] Backup chunk GC landed: `telegram-client:backup prune` + `Pruner` + vault list/delete (`findMessagesByName('')` / `delete`), 319 tests green, phpstan OK — see `.superpowers/night/w1-3.md`.

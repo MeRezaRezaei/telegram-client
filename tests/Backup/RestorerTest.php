@@ -149,4 +149,14 @@ final class CorruptingVault implements VaultInterface
     {
         return $this->inner->getLatestManifest();
     }
+
+    public function findMessagesByName(string $namePrefix): array
+    {
+        return $this->inner->findMessagesByName($namePrefix);
+    }
+
+    public function delete(string $name): void
+    {
+        $this->inner->delete($name);
+    }
 }

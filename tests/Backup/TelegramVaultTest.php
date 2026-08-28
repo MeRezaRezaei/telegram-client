@@ -155,18 +155,72 @@ final class TelegramVaultTest extends TestCase
         $vault->getLatestManifest();
     }
 
-    public function test_scope_api_map_exposes_the_six_callables(): void
+    public function test_scope_api_map_exposes_the_seven_callables(): void
     {
         $map = TelegramVault::scopeApi(new FakeUserScope());
         ksort($map);
 
         self::assertSame(
-            ['createChannel', 'findChannel', 'findMessagesByName', 'sendDocument', 'sendText', 'uploadBytes'],
+            ['createChannel', 'deleteMessages', 'findChannel', 'findMessagesByName', 'sendDocument', 'sendText', 'uploadBytes'],
             array_keys($map)
         );
         foreach ($map as $callable) {
             self::assertIsCallable($callable);
         }
+    }
+
+    public function test_find_messages_by_name_with_empty_prefix_lists_everything(): void
+    {
+        $api = new FakeVaultApi();
+        $channelId = $api->addChannel('teleproto-backup:set1');
+        $api->postDocument($channelId, 'hash-a', 'bytes-a');
+        $api->postDocument($channelId, 'hash-b', 'bytes-b');
+        $api->postText($channelId, 'TBMANIFEST1:' . base64_encode('{"version":1}'));
+
+        $vault = new TelegramVault('set1', $api->map());
+        $names = array_column($vault->findMessagesByName(''), 'name');
+
+        self::assertSame(['TBMANIFEST1:' . base64_encode('{"version":1}'), 'hash-b', 'hash-a'], $names);
+    }
+
+    public function test_delete_removes_exact_name_chunk_via_delete_messages(): void
+    {
+        $api = new FakeVaultApi();
+        $channelId = $api->addChannel('teleproto-backup:set1');
+        $api->postDocument($channelId, 'hash-a', 'bytes-a');
+        $api->postDocument($channelId, 'hash-b', 'bytes-b');
+
+        $vault = new TelegramVault('set1', $api->map());
+
+        $ids = [];
+        foreach ($vault->findMessagesByName('') as $entry) {
+            $ids[$entry['name']] = (int) $entry['id'];
+        }
+
+        $vault->delete('hash-a');
+
+        $delete = $this->callOf($api, 'deleteMessages');
+        self::assertNotNull($delete, 'delete must ride the deleteMessages api call');
+        self::assertSame(
+            ['_' => 'inputPeerChannel', 'channel_id' => 1000, 'access_hash' => 4242],
+            $delete['args'][0]
+        );
+        self::assertSame([$ids['hash-a']], $delete['args'][1], 'only the orphaned name\'s message id is revoked');
+
+        self::assertSame(['hash-b'], array_column($vault->findMessagesByName('hash-'), 'name'), 'kept chunk survives');
+        self::assertSame('bytes-b', $vault->getChunk('hash-b'));
+        $this->expectException(RuntimeException::class);
+        $vault->getChunk('hash-a');
+    }
+
+    public function test_delete_is_idempotent_for_absent_names(): void
+    {
+        $api = new FakeVaultApi();
+        $vault = new TelegramVault('set1', $api->map());
+
+        $vault->delete('never-stored-hash');
+
+        self::assertNull($this->callOf($api, 'deleteMessages'), 'no deleteMessages call when nothing matches');
     }
 
     public function test_constructor_rejects_incomplete_api_map(): void

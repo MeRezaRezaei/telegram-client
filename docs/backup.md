@@ -89,6 +89,7 @@ php artisan telegram-client:backup run      --set=default --passphrase='...'
 php artisan telegram-client:backup status   --set=default
 php artisan telegram-client:backup verify   --set=default --sample=5
 php artisan telegram-client:backup verify   --set=default --passphrase='...'   # full integrity
+php artisan telegram-client:backup prune    --set=default
 php artisan telegram-client:backup restore  --set=default --passphrase='...' --target=/tmp/restore
 ```
 
@@ -96,6 +97,8 @@ php artisan telegram-client:backup restore  --set=default --passphrase='...' --t
   manifest; prints `{uploaded, skipped, files, bytes}`.
 - `status` — latest-manifest summary `{files, bytes, chunks, created}`.
 - `verify` — availability sampling (below); exits non-zero on problems.
+- `prune` — chunk GC (below); keyless, so it is cron-safe like plain
+  verify.
 - `restore` — manifest-first rebuild into `--target`; fails loud on a
   wrong passphrase (`Decryption failed`).
 
@@ -110,6 +113,25 @@ restore time. This keeps the routine staleness check secret-free (cron-
 safe). Pass `--passphrase` to upgrade to `verifyWithKey`: full decrypt +
 plaintext sha256 against the content address, with `corrupt` counting
 decrypt/hash mismatches.
+
+## Pruner semantics — chunk GC
+
+Files deleted (or changed) between runs drop their chunks out of the new
+manifest, but the channel kept them forever — `prune` closes that. The
+latest manifest's `chunk_hashes` is the keep-set; `prune` walks every
+vault message (the vault lists all via `findMessagesByName('')` — for a
+Telegram vault that is `messages.search` with an empty q, which returns
+every message, merged with realtime history) and deletes each entry that
+is chunk-shaped (exactly 64 lowercase hex chars — a sha256 content
+address) yet outside the keep-set. Manifest messages and anything not
+chunk-shaped are structurally immune, `delete` is idempotent, and a
+repeated prune prints `pruned:0` — safe to cron right after every `run`.
+Prints `{scanned, pruned}`; needs no passphrase (chunk names are
+plaintext hashes). Note prune only ever sees the LATEST manifest, so run
+it after a successful `run` — pruning against a stale manifest would
+delete chunks the newest backup still needs (the keep-set comes from the
+manifest, so in practice this means: never prune while a run is mid-
+flight).
 
 ## Security notes
 
@@ -140,10 +162,11 @@ decrypt/hash mismatches.
   `upload.saveFilePart` loop either way.
 - **Dedup scope** is per set (salt reuse is the linchpin: same passphrase +
   same salt → same chunk hashes). Different sets don't share chunks.
-- **No garbage collection**: chunks that drop out of every file list
-  (deleted/changed source files) are never removed from the channel —
-  Telegram storage is the only cost, but a shrinking set never shrinks
-  its channel. Prune manually if that matters.
+- **Garbage collection exists but is manual**: chunks that drop out of
+  every file list (deleted/changed source files) stay in the channel
+  until you run `prune` — it GCs exactly those orphans against the
+  latest manifest (see Pruner semantics above). Telegram storage is the
+  only cost of delaying it.
 - **Telegram-driver coverage**: beyond the offline wiring (fake call
   map), the telegram driver is exercised only by the live-gated smoke
   (`tests/Backup/LiveVaultSmokeTest.php`, skipped unless

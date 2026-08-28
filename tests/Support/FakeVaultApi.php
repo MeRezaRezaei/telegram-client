@@ -12,7 +12,9 @@ use RuntimeException;
  * uploadBytes/sendDocument/sendText, findMessagesByName — against in-memory
  * channel/message stores. findMessagesByName deliberately matches LOOSELY
  * (str_contains) so the vault's own string-function prefix/exact detection
- * is what the offline tests exercise.
+ * is what the offline tests exercise — and an EMPTY prefix returns every
+ * message, the list-all walk the prune GC rides on. deleteMessages drops
+ * the given ids from the store (messages.deleteMessages + revoke).
  */
 final class FakeVaultApi
 {
@@ -143,6 +145,17 @@ final class FakeVaultApi
                 }
 
                 return $entries;
+            },
+            'deleteMessages' => function (array $peer, array $ids): array {
+                $this->calls[] = ['call' => 'deleteMessages', 'args' => [$peer, $ids]];
+
+                $key = $peer['channel_id'] ?? 0;
+                $this->messages[$key] = array_values(array_filter(
+                    $this->messages[$key] ?? [],
+                    static fn (array $message): bool => !in_array($message['id'], $ids, true),
+                ));
+
+                return ['_' => 'updates.affectedMessages', 'pts' => 1, 'pts_count' => count($ids)];
             },
         ];
     }

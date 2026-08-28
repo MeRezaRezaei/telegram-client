@@ -22,7 +22,8 @@ use RuntimeException;
  * Scope/BotAccountScope using teleproto's actual surfaces: the
  * upload.saveFilePart/saveBigFilePart part loop (StorageMedia part math),
  * messages.sendMedia with inputMediaUploadedDocument, messages.sendMes-
- * sage, messages.search and the upload.getFile download loop.
+ * sage, messages.search, messages.deleteMessages and the upload.getFile
+ * download loop.
  */
 final class TelegramVault implements VaultInterface
 {
@@ -34,7 +35,7 @@ final class TelegramVault implements VaultInterface
     private const PART_SIZE = 524288; // 512 KB standard MTProto part size
     private const BIG_FILE_THRESHOLD = 10485760; // > 10 MB switches to saveBigFilePart
 
-    private const API_KEYS = ['findChannel', 'createChannel', 'uploadBytes', 'sendDocument', 'sendText', 'findMessagesByName'];
+    private const API_KEYS = ['findChannel', 'createChannel', 'uploadBytes', 'sendDocument', 'sendText', 'findMessagesByName', 'deleteMessages'];
 
     private ?int $channelId = null;
 
@@ -84,7 +85,12 @@ final class TelegramVault implements VaultInterface
      *     channel text index ingests posts minutes late (found live — the
      *     smoke saw fresh manifests missing from search for 30s+ while
      *     history had them instantly), so search alone cannot back the
-     *     latest-wins manifest lookup.
+     *     latest-wins manifest lookup. An EMPTY namePrefix is valid and
+     *     returns every message: messages.search with an empty q lists
+     *     all of a peer's messages per the Telegram docs (plus the
+     *     history merge) — that is what the prune GC's list-all walk
+     *     rides on.
+     * - deleteMessages(peer, ids): array   messages.deleteMessages (revoke)
      *
      * @param UserAccountScope $scope a BotAccountScope passes as-is (subclass)
      * @return array<string, callable>
@@ -138,7 +144,8 @@ final class TelegramVault implements VaultInterface
                 $peer,
                 $scope->sendMessage($peer, $text)
             ),
-            'findMessagesByName' => fn (array $peer, string $namePrefix, int $limit): array => self::findMessagesByName($scope, $peer, $namePrefix, $limit),
+            'findMessagesByName' => fn (array $peer, string $namePrefix, int $limit): array => self::searchMessagesByName($scope, $peer, $namePrefix, $limit),
+            'deleteMessages' => fn (array $peer, array $ids): array => $scope->deleteMessages($ids, true),
         ];
     }
 
@@ -204,6 +211,41 @@ final class TelegramVault implements VaultInterface
         }
 
         return $decoded;
+    }
+
+    /**
+     * List vault entries by name prefix; '' (the prune GC walk) returns
+     * every entry. Entries are the api-level rows reduced to id + name.
+     *
+     * @return list<array<string, mixed>>
+     */
+    public function findMessagesByName(string $namePrefix): array
+    {
+        $entries = [];
+        foreach ($this->findEntries($namePrefix) as $entry) {
+            $entries[] = ['id' => (string) ($entry['id'] ?? 0), 'name' => (string) ($entry['name'] ?? '')];
+        }
+
+        return $entries;
+    }
+
+    /**
+     * Delete the entry stored under $name (messages.deleteMessages with
+     * revoke on every id carrying that exact name — normally one).
+     * Idempotent: an absent name deletes nothing.
+     */
+    public function delete(string $name): void
+    {
+        $ids = [];
+        foreach ($this->findEntries($name) as $entry) {
+            if (($entry['name'] ?? null) === $name) {
+                $ids[] = (int) $entry['id'];
+            }
+        }
+
+        if ($ids !== []) {
+            ($this->api['deleteMessages'])($this->inputPeer(), $ids);
+        }
     }
 
     /** Lazily resolved (find-or-create) and cached channel id for this set. */
@@ -310,7 +352,7 @@ final class TelegramVault implements VaultInterface
      *
      * @return list<array<string, mixed>>
      */
-    private static function findMessagesByName(UserAccountScope $scope, array $peer, string $namePrefix, int $limit): array
+    private static function searchMessagesByName(UserAccountScope $scope, array $peer, string $namePrefix, int $limit): array
     {
         $rows = self::mergeRowsById(
             self::resultRows($scope->searchMessages($peer, $namePrefix, $limit)),
