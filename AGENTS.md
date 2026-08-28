@@ -44,7 +44,7 @@ TELEPROTO_LIVE=true ... # daemon/backfill/live-wire runs
 
 ## teleproto dev link
 
-`composer.json` pins `merezarezaei/teleproto: dev-main` through a **path repository** (`../teleproto`, symlinked). Consequences:
+`composer.json` requires `merezarezaei/teleproto: ^1.1` from Packagist. For local dev against a teleproto checkout: `composer config repositories.teleproto path ../teleproto` (untracked). Consequences:
 
 - Changes to teleproto's public surface consumed here — `TeleprotoClient`, `UserAccountScope`, `UpdatePollerService` (`pollUser`, `secondsToWait`, `set/getSequenceState`), `UpdateSinkInterface`, `FloodWaitException`/`DcMigrationException`, `SessionData` — require re-running `composer test` here immediately (the suite exercises all of them through injected fakes and the live seams).
 - Wire-level teleproto changes (transport, auth, schema artifacts) additionally require the live gates above before trust.

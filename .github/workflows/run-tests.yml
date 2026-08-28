@@ -26,7 +26,7 @@ jobs:
         uses: actions/checkout@v4
 
       # Dev-mode sibling for the composer path repository (../teleproto,
-      # symlink). Required while teleproto is constrained to dev-main —
+      # (legacy note: teleproto resolves from Packagist ^1.1)
       # drop this step when the constraint flips to ^1.0 for publishing
       # (see CHANGELOG "Release blockers").
       - name: Clone teleproto sibling for the dev path-repo
