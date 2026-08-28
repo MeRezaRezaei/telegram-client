@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace MeRezaRezaei\TelegramClient\Schema\Generator;
 
-use MeRezaRezaei\TelegramClient\Schema\Generator\Model\TlConstructor;
 use MeRezaRezaei\TelegramClient\Schema\Generator\Model\TlScheme;
 
 /**
- * Regeneration engine (spec §7): parses every tracked scheme file, merges
- * them into one combined scheme (later files win ctor-name collisions), runs
- * all four generators, and writes the deterministic manifest gate.
+ * Regeneration engine (spec §7): loads the metamodel from teleproto's
+ * committed schema sources (Task 2 input seam), merges them into one
+ * combined scheme (later files win ctor-name collisions), runs all four
+ * generators, and writes the deterministic manifest gate.
  */
 final class SchemaRegenerator
 {
@@ -20,6 +20,25 @@ final class SchemaRegenerator
     {
         $this->force = $force;
         return $this;
+    }
+
+    /**
+     * Metamodel from teleproto's committed sources (plan Task 2): the dir
+     * defaults to config('telegram-client.schema_sources') / the vendored
+     * teleproto path and can be overridden explicitly (tests, --schemas).
+     */
+    public function loadScheme(?string $sourcesDir = null): TlScheme
+    {
+        $dir = $sourcesDir ?? TeleprotoSchemeLoader::defaultSourcesDir();
+        if (!is_dir($dir)) {
+            throw new TlRegenerateException("teleproto schema sources dir not found: {$dir}");
+        }
+        $files = glob(rtrim($dir, '/') . '/*.tl') ?: [];
+        sort($files);
+        if ($files === []) {
+            throw new TlRegenerateException("no .tl scheme files in {$dir}");
+        }
+        return $this->parseAll($files);
     }
 
     /** @return array{counts: array{types:int,constructors:int,methods:int,files:int,tables:int,fks:int}, manifest: array} */
@@ -79,11 +98,12 @@ final class SchemaRegenerator
     {
         $layer = 0;
         foreach ($files as $file) {
-            $layer = max($layer, self::layerFromFilename($file));
+            $layer = max($layer, TeleprotoSchemeLoader::layerFromFile($file));
         }
         $combined = new TlScheme($layer);
         foreach ($files as $file) {
-            $scheme = TlParser::parseFile($file);
+            $scheme = TeleprotoSchemeLoader::parseFile($file);
+            $layer = max($layer, $scheme->layer);
             foreach ($scheme->types() as $type) {
                 foreach ($type->constructors() as $ctor) {
                     $existing = $combined->types()[$ctor->resultType] ?? null;
@@ -101,28 +121,6 @@ final class SchemaRegenerator
             }
         }
         return $combined;
-    }
-
-    /** Regex-free version tag extraction: 'TL_telegram_v227.tl' / 'api-v229.tdl' → 227 / 229, else 0. */
-    private static function layerFromFilename(string $file): int
-    {
-        $name = basename($file);
-        $ext = '';
-        foreach (['.tl', '.tdl', '.dl', '.l'] as $candidate) {
-            if (str_ends_with($name, $candidate) && strlen($name) > strlen($candidate)) {
-                $ext = $candidate;
-                break;
-            }
-        }
-        if ($ext === '') {
-            return 0;
-        }
-        $stem = substr($name, 0, -strlen($ext));
-        $runStart = strlen($stem) - strspn(strrev($stem), '0123456789');
-        if ($runStart === strlen($stem) || $runStart === 0 || $stem[$runStart - 1] !== 'v') {
-            return 0;
-        }
-        return (int) substr($stem, $runStart);
     }
 
     private function gate(TlScheme $combined, string $outputDir): void

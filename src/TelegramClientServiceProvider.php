@@ -13,6 +13,7 @@ final class TelegramClientServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(SchemaRegenerator::class);
+        $this->mergeConfigFrom(dirname(__DIR__) . '/config/telegram-client.php', 'telegram-client');
     }
 
     public function boot(): void
