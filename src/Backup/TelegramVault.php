@@ -38,6 +38,8 @@ final class TelegramVault implements VaultInterface
 
     private ?int $channelId = null;
 
+    private int $channelAccessHash = 0;
+
     /**
      * @param array<string, callable> $api injectable teleproto call map; see scopeApi()
      *
@@ -76,8 +78,13 @@ final class TelegramVault implements VaultInterface
      * - uploadBytes(name, bytes): array   inputFile-ish (upload part loop)
      * - sendDocument(channelId, inputFile, caption): int msg id
      * - sendText(channelId, text): int    msg id
-     * - findMessagesByName(channelId, namePrefix, limit):
+     * - findMessagesByName(peer, namePrefix, limit):
      *     list<array{id: int, name: string, fetch(name): string}>
+     *     messages.search MERGED with a realtime getHistory top-up: the
+     *     channel text index ingests posts minutes late (found live — the
+     *     smoke saw fresh manifests missing from search for 30s+ while
+     *     history had them instantly), so search alone cannot back the
+     *     latest-wins manifest lookup.
      *
      * @param UserAccountScope $scope a BotAccountScope passes as-is (subclass)
      * @return array<string, callable>
@@ -85,7 +92,7 @@ final class TelegramVault implements VaultInterface
     public static function scopeApi(UserAccountScope $scope): array
     {
         return [
-            'findChannel' => function (string $title) use ($scope): ?int {
+            'findChannel' => function (string $title) use ($scope): ?array {
                 $dialogs = $scope->getDialogs(100);
                 $chats = $dialogs['chats'] ?? [];
                 if (!is_array($chats)) {
@@ -96,25 +103,25 @@ final class TelegramVault implements VaultInterface
                         continue;
                     }
                     if (($chat['title'] ?? null) === $title) {
-                        return (int) $chat['id'];
+                        return ['id' => (int) $chat['id'], 'access_hash' => (int) ($chat['access_hash'] ?? 0)];
                     }
                 }
 
                 return null;
             },
-            'createChannel' => function (string $title, string $about) use ($scope): int {
+            'createChannel' => function (string $title, string $about) use ($scope): array {
                 $updates = $scope->createChannel($title, $about);
                 $chats = $updates['chats'] ?? [];
                 $chat = is_array($chats) ? ($chats[0] ?? null) : null;
                 if (is_array($chat) && isset($chat['id'])) {
-                    return (int) $chat['id'];
+                    return ['id' => (int) $chat['id'], 'access_hash' => (int) ($chat['access_hash'] ?? 0)];
                 }
 
                 throw new RuntimeException("failed to create backup channel {$title}");
             },
             'uploadBytes' => fn (string $name, string $bytes): array => self::uploadBytes($scope, $name, $bytes),
-            'sendDocument' => function (int $channelId, array $inputFile, string $caption) use ($scope): int {
-                $updates = $scope->sendMedia($channelId, [
+            'sendDocument' => function (array $peer, array $inputFile, string $caption) use ($scope): int {
+                $updates = $scope->sendMedia($peer, [
                     '_' => 'inputMediaUploadedDocument',
                     'file' => $inputFile,
                     'mime_type' => 'application/octet-stream',
@@ -124,14 +131,14 @@ final class TelegramVault implements VaultInterface
                     'force_file' => true,
                 ], $caption);
 
-                return self::sentMessageId($scope, $channelId, $updates);
+                return self::sentMessageId($scope, $peer, $updates);
             },
-            'sendText' => fn (int $channelId, string $text): int => self::sentMessageId(
+            'sendText' => fn (array $peer, string $text): int => self::sentMessageId(
                 $scope,
-                $channelId,
-                $scope->sendMessage($channelId, $text)
+                $peer,
+                $scope->sendMessage($peer, $text)
             ),
-            'findMessagesByName' => fn (int $channelId, string $namePrefix, int $limit): array => self::findMessagesByName($scope, $channelId, $namePrefix, $limit),
+            'findMessagesByName' => fn (array $peer, string $namePrefix, int $limit): array => self::findMessagesByName($scope, $peer, $namePrefix, $limit),
         ];
     }
 
@@ -142,7 +149,7 @@ final class TelegramVault implements VaultInterface
             throw new RuntimeException("uploadBytes did not return an inputFile for chunk {$hash}");
         }
 
-        $msgId = ($this->api['sendDocument'])($this->channelId(), $inputFile, $hash);
+        $msgId = ($this->api['sendDocument'])($this->inputPeer(), $inputFile, $hash);
 
         return (string) $msgId;
     }
@@ -163,7 +170,7 @@ final class TelegramVault implements VaultInterface
     public function putManifest(string $json): string
     {
         $text = self::MANIFEST_MARKER . base64_encode($json);
-        $msgId = ($this->api['sendText'])($this->channelId(), $text);
+        $msgId = ($this->api['sendText'])($this->inputPeer(), $text);
 
         return (string) $msgId;
     }
@@ -208,11 +215,21 @@ final class TelegramVault implements VaultInterface
 
         $title = self::channelTitle($this->setId);
         $found = ($this->api['findChannel'])($title);
-        $this->channelId = is_int($found)
-            ? $found
-            : (int) ($this->api['createChannel'])($title, self::CHANNEL_ABOUT);
+        $ref = is_array($found)
+            ? ['id' => (int) $found['id'], 'access_hash' => (int) ($found['access_hash'] ?? 0)]
+            : ($this->api['createChannel'])($title, self::CHANNEL_ABOUT);
+        $this->channelId = (int) $ref['id'];
+        $this->channelAccessHash = (int) ($ref['access_hash'] ?? 0);
 
         return $this->channelId;
+    }
+
+    /** MTProto inputPeerChannel for the vault channel. @return array<string, mixed> */
+    public function inputPeer(): array
+    {
+        $this->channelId();
+
+        return ['_' => 'inputPeerChannel', 'channel_id' => $this->channelId, 'access_hash' => $this->channelAccessHash];
     }
 
     /**
@@ -220,7 +237,7 @@ final class TelegramVault implements VaultInterface
      */
     private function findEntries(string $namePrefix): array
     {
-        $entries = ($this->api['findMessagesByName'])($this->channelId(), $namePrefix, self::SEARCH_LIMIT);
+        $entries = ($this->api['findMessagesByName'])($this->inputPeer(), $namePrefix, self::SEARCH_LIMIT);
 
         return is_array($entries) ? $entries : [];
     }
@@ -267,7 +284,7 @@ final class TelegramVault implements VaultInterface
      * updates reply; updatesTooLong-shaped replies fall back to the
      * newest history row (channels echo channel-post ids there).
      */
-    private static function sentMessageId(UserAccountScope $scope, int $channelId, array $updates): int
+    private static function sentMessageId(UserAccountScope $scope, array $peer, array $updates): int
     {
         $messages = $updates['messages'] ?? null;
         $first = is_array($messages) ? ($messages[0] ?? null) : null;
@@ -276,14 +293,14 @@ final class TelegramVault implements VaultInterface
             return (int) $id;
         }
 
-        $history = $scope->getHistory($channelId, 1);
+        $history = $scope->getHistory($peer, 1);
         $rows = $history['messages'] ?? [];
         $newest = is_array($rows) ? ($rows[0] ?? null) : null;
         if (is_array($newest) && is_numeric($newest['id'] ?? null)) {
             return (int) $newest['id'];
         }
 
-        throw new RuntimeException("cannot resolve sent message id in channel {$channelId}");
+        throw new RuntimeException('cannot resolve sent message id in channel ' . ($peer['channel_id'] ?? '?'));
     }
 
     /**
@@ -293,19 +310,15 @@ final class TelegramVault implements VaultInterface
      *
      * @return list<array<string, mixed>>
      */
-    private static function findMessagesByName(UserAccountScope $scope, int $channelId, string $namePrefix, int $limit): array
+    private static function findMessagesByName(UserAccountScope $scope, array $peer, string $namePrefix, int $limit): array
     {
-        $result = $scope->searchMessages($channelId, $namePrefix, $limit);
-        $rows = $result['messages'] ?? [];
-        if (!is_array($rows)) {
-            return [];
-        }
+        $rows = self::mergeRowsById(
+            self::resultRows($scope->searchMessages($peer, $namePrefix, $limit)),
+            self::resultRows($scope->getHistory($peer, $limit)),
+        );
 
         $entries = [];
         foreach ($rows as $message) {
-            if (!is_array($message)) {
-                continue;
-            }
             $name = self::messageName($message);
             if ($name === null) {
                 continue;
@@ -318,6 +331,34 @@ final class TelegramVault implements VaultInterface
         }
 
         return $entries;
+    }
+
+    /** Message rows of a search/history reply; non-array rows dropped. @return list<array<string, mixed>> */
+    private static function resultRows(array $result): array
+    {
+        $rows = $result['messages'] ?? [];
+
+        return is_array($rows) ? array_values(array_filter($rows, 'is_array')) : [];
+    }
+
+    /**
+     * Search rows first, realtime history rows filling gaps by message id:
+     * the channel text index ingests fresh posts minutes late, so search
+     * alone must not be the find loop's only source.
+     *
+     * @param list<array<string, mixed>> $searchRows
+     * @param list<array<string, mixed>> $historyRows
+     *
+     * @return list<array<string, mixed>>
+     */
+    private static function mergeRowsById(array $searchRows, array $historyRows): array
+    {
+        $merged = [];
+        foreach (array_merge($searchRows, $historyRows) as $row) {
+            $merged[(int) ($row['id'] ?? 0)] = $row;
+        }
+
+        return array_values($merged);
     }
 
     /** Document file name, else the message text; null when neither applies. */

@@ -48,17 +48,17 @@ final class FakeVaultApi
     }
 
     /** Post a raw text message (already in the channel, not via the vault). */
-    public function postText(int $channelId, string $text): int
+    public function postText(array|int $channel, string $text): int
     {
-        return $this->appendMessage($channelId, $text, true);
+        return $this->appendMessage($channel, $text, true);
     }
 
     /** Post a raw document message named $name (already in the channel). */
-    public function postDocument(int $channelId, string $name, string $bytes): int
+    public function postDocument(array|int $channel, string $name, string $bytes): int
     {
         $this->documents[$name] = $bytes;
 
-        return $this->appendMessage($channelId, $name, false);
+        return $this->appendMessage($channel, $name, false);
     }
 
     /** How many times createChannel was invoked through the map. */
@@ -78,16 +78,18 @@ final class FakeVaultApi
     public function map(): array
     {
         return [
-            'findChannel' => function (string $title): ?int {
+            'findChannel' => function (string $title): ?array {
                 $this->calls[] = ['call' => 'findChannel', 'args' => [$title]];
 
-                return $this->channels[$title] ?? null;
+                return isset($this->channels[$title])
+                    ? ['id' => $this->channels[$title], 'access_hash' => 4242]
+                    : null;
             },
-            'createChannel' => function (string $title, string $about): int {
+            'createChannel' => function (string $title, string $about): array {
                 $this->calls[] = ['call' => 'createChannel', 'args' => [$title, $about]];
                 $id = $this->addChannel($title);
 
-                return $id;
+                return ['id' => $id, 'access_hash' => 4242];
             },
             'uploadBytes' => function (string $name, string $bytes): array {
                 $this->calls[] = ['call' => 'uploadBytes', 'args' => [$name, $bytes]];
@@ -101,21 +103,21 @@ final class FakeVaultApi
                     'md5_checksum' => md5($bytes),
                 ];
             },
-            'sendDocument' => function (int $channelId, array $inputFile, string $caption): int {
-                $this->calls[] = ['call' => 'sendDocument', 'args' => [$channelId, $inputFile, $caption]];
+            'sendDocument' => function (array $peer, array $inputFile, string $caption): int {
+                $this->calls[] = ['call' => 'sendDocument', 'args' => [$peer, $inputFile, $caption]];
                 $name = (string) ($inputFile['name'] ?? '');
 
-                return $this->appendMessage($channelId, $name, false);
+                return $this->appendMessage($peer['channel_id'] ?? 0, $name, false);
             },
-            'sendText' => function (int $channelId, string $text): int {
-                $this->calls[] = ['call' => 'sendText', 'args' => [$channelId, $text]];
+            'sendText' => function (array $peer, string $text): int {
+                $this->calls[] = ['call' => 'sendText', 'args' => [$peer, $text]];
 
-                return $this->appendMessage($channelId, $text, true);
+                return $this->appendMessage($peer['channel_id'] ?? 0, $text, true);
             },
-            'findMessagesByName' => function (int $channelId, string $namePrefix, int $limit): array {
-                $this->calls[] = ['call' => 'findMessagesByName', 'args' => [$channelId, $namePrefix, $limit]];
+            'findMessagesByName' => function (array $peer, string $namePrefix, int $limit): array {
+                $this->calls[] = ['call' => 'findMessagesByName', 'args' => [$peer, $namePrefix, $limit]];
 
-                $messages = array_reverse($this->messages[$channelId] ?? []); // newest first
+                $messages = array_reverse($this->messages[$peer['channel_id'] ?? 0] ?? []); // newest first
                 $entries = [];
                 foreach ($messages as $message) {
                     if (count($entries) >= $limit) {
@@ -145,10 +147,11 @@ final class FakeVaultApi
         ];
     }
 
-    private function appendMessage(int $channelId, string $name, bool $isText): int
+    private function appendMessage(array|int $channel, string $name, bool $isText): int
     {
         $id = $this->nextMsgId++;
-        $this->messages[$channelId][] = ['id' => $id, 'name' => $name, 'is_text' => $isText];
+        $key = is_array($channel) ? ($channel['channel_id'] ?? 0) : $channel;
+        $this->messages[$key][] = ['id' => $id, 'name' => $name, 'is_text' => $isText];
 
         return $id;
     }

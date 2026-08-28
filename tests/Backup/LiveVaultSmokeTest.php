@@ -57,6 +57,7 @@ final class LiveVaultSmokeTest extends TestCase
         }
 
         $scope = (new TeleprotoClient($env['apiId'], $env['apiHash']))->fromSession($env['session']);
+        $scope->mtproto->live(); // bare PHPUnit: no app/config — set live mode explicitly
         $vault = TelegramVault::forScope($scope, 'teleproto-smoke-' . date('Y-m-d'));
 
         $bytes = random_bytes(1024);
@@ -66,7 +67,17 @@ final class LiveVaultSmokeTest extends TestCase
 
         $manifest = ['version' => 1, 'kind' => 'live-smoke', 'chunks' => [$hash]];
         $vault->putManifest((string) json_encode($manifest, JSON_THROW_ON_ERROR));
-        self::assertSame($manifest, self::retry(fn (): array => $vault->getLatestManifest() ?? []));
+        $latest = self::retry(function () use ($vault, $hash): array {
+            $current = $vault->getLatestManifest() ?? [];
+            if (!in_array($hash, $current['chunks'] ?? [], true)) {
+                // search index trails writes: a latest manifest that does not
+                // reference the chunk we just posted is stale, not final
+                throw new RuntimeException('search index stale: latest manifest does not reference the fresh chunk yet');
+            }
+
+            return $current;
+        });
+        self::assertSame($manifest, $latest);
     }
 
     /**

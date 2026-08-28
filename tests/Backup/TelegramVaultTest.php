@@ -61,7 +61,11 @@ final class TelegramVaultTest extends TestCase
         self::assertSame(0, $api->createChannelCalls(), 'existing channel must not be recreated');
         $send = $this->callOf($api, 'sendDocument');
         self::assertNotNull($send);
-        self::assertSame(1000, $send['args'][0], 'calls address the found channel id');
+        self::assertSame(
+            ['_' => 'inputPeerChannel', 'channel_id' => 1000, 'access_hash' => 4242],
+            $send['args'][0],
+            'calls address the found channel as an inputPeerChannel with its access hash',
+        );
     }
 
     public function test_chunk_roundtrip_uploads_named_by_hash(): void
