@@ -73,11 +73,11 @@ final class TelegramVault implements VaultInterface
     /**
      * The real teleproto call map (live path; offline tests inject fakes):
      *
-     * - findChannel(title): ?int     dialog scan for an exact-title channel
-     * - createChannel(title, about): int  channels.createChannel broadcast
+     * - findChannel(title): ?array{id,access_hash}   dialog scan for exact-title channel
+     * - createChannel(title, about): array{id,access_hash}  channels.createChannel broadcast
      * - uploadBytes(name, bytes): array   inputFile-ish (upload part loop)
-     * - sendDocument(channelId, inputFile, caption): int msg id
-     * - sendText(channelId, text): int    msg id
+     * - sendDocument(peer, inputFile, caption): int msg id
+     * - sendText(peer, text): int    msg id
      * - findMessagesByName(peer, namePrefix, limit):
      *     list<array{id: int, name: string, fetch(name): string}>
      *     messages.search MERGED with a realtime getHistory top-up: the
