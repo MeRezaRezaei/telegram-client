@@ -41,6 +41,15 @@ use MeRezaRezaei\TelegramClient\Schema\Generator\SchemaRegenerator;
  *
  * Backfill section (Phase 3, Task 4): defaults for
  * telegram-client:backfill when the CLI option is omitted/empty.
+ *
+ * Backup section (Phase 4): encrypted channel vaults. 'driver' picks the
+ * vault transport for telegram-client:backup — 'memory' (default; offline,
+ * nothing persisted: smoke tests only) or 'telegram' (real private-channel
+ * vault via the daemon.accounts registry). 'account' is the daemon.accounts
+ * account_id the telegram driver resolves its session through. 'chunk_size'
+ * is the content-addressed chunk split (4 MiB default; premium 4 GB upload
+ * cap is irrelevant at this size). Each set in 'sets' lists 'paths'
+ * (files/directories, walked recursively) and substring 'excludes'.
  */
 $shipEnv = env('TELEGRAM_CLIENT_SHIP_NAMESPACES');
 
@@ -72,5 +81,21 @@ return [
     'backfill' => [
         'request_budget' => env('TELEGRAM_CLIENT_BACKFILL_BUDGET', 25),
         'flood_cap_seconds' => 3600,
+    ],
+
+    'backup' => [
+        'driver' => env('TELEGRAM_CLIENT_BACKUP_DRIVER', 'memory'),
+        'account' => env('TELEGRAM_CLIENT_BACKUP_ACCOUNT'),
+        'chunk_size' => env('TELEGRAM_CLIENT_BACKUP_CHUNK_SIZE', 4194304),
+        'sets' => [
+            'default' => [
+                'paths' => [
+                    // env('TELEGRAM_CLIENT_BACKUP_PATHS') is a sensible host
+                    // pattern: base_path('...') entries go here — the runner
+                    // requires at least one path before it uploads anything.
+                ],
+                'excludes' => [],
+            ],
+        ],
     ],
 ];

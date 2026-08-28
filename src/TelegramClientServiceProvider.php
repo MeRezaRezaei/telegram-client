@@ -7,9 +7,13 @@ namespace MeRezaRezaei\TelegramClient;
 use Illuminate\Contracts\Config\Repository as ConfigRepository;
 use Illuminate\Redis\RedisManager;
 use Illuminate\Support\ServiceProvider;
+use MeRezaRezaei\TelegramClient\Backup\InMemoryVault;
+use MeRezaRezaei\TelegramClient\Backup\TelegramVault;
+use MeRezaRezaei\TelegramClient\Backup\VaultInterface;
 use MeRezaRezaei\TelegramClient\Bus\LaravelRedisAdapter;
 use MeRezaRezaei\TelegramClient\Bus\RedisConnectionContract;
 use MeRezaRezaei\TelegramClient\Console\BackfillCommand;
+use MeRezaRezaei\TelegramClient\Console\BackupCommand;
 use MeRezaRezaei\TelegramClient\Console\IngestCommand;
 use MeRezaRezaei\TelegramClient\Daemon\AccountWorker;
 use MeRezaRezaei\TelegramClient\Ingest\EntityAggregator;
@@ -108,6 +112,51 @@ final class TelegramClientServiceProvider extends ServiceProvider
             };
         });
 
+        // Backup vault factory (Phase 4, Task 4): callable(string $setId):
+        // VaultInterface for telegram-client:backup. Driver-aware —
+        // 'memory' shares one InMemoryVault per set for the process (so
+        // run→restore round-trips offline; nothing is persisted), while
+        // 'telegram' reuses the P3 SCOPE_RESOLVER_KEY seam (shared
+        // daemon.accounts registry, AccountWorker::buildLiveScope) to
+        // build the real channel-backed TelegramVault.
+        $this->app->bind(BackupCommand::VAULT_FACTORY_KEY, static function ($app): callable {
+            return static function (string $setId) use ($app): VaultInterface {
+                /** @var ConfigRepository $config */
+                $config = $app->make('config');
+                $driver = (string) $config->get('telegram-client.backup.driver', 'memory');
+
+                if ($driver === 'memory') {
+                    $key = 'telegram-client.backup.vault.' . $setId;
+                    if (! $app->bound($key)) {
+                        $app->bind($key, static fn (): VaultInterface => new InMemoryVault(), true);
+                    }
+
+                    /** @var VaultInterface */
+                    return $app->make($key);
+                }
+
+                if ($driver !== 'telegram') {
+                    throw new RuntimeException("unknown backup driver \"{$driver}\" — expected memory|telegram.");
+                }
+
+                $accountId = (int) ($config->get('telegram-client.backup.account') ?? 0);
+                if ($accountId <= 0) {
+                    throw new RuntimeException(
+                        'backup driver "telegram" needs telegram-client.backup.account (a daemon.accounts account_id).',
+                    );
+                }
+
+                $resolver = $app->make(BackfillCommand::SCOPE_RESOLVER_KEY);
+                if (! is_callable($resolver) || is_string($resolver)) {
+                    throw new RuntimeException(
+                        BackfillCommand::SCOPE_RESOLVER_KEY . ' must bind a callable(int): UserAccountScope',
+                    );
+                }
+
+                return TelegramVault::forScope($resolver($accountId), $setId);
+            };
+        });
+
         $this->mergeConfigFrom(dirname(__DIR__) . '/config/telegram-client.php', 'telegram-client');
     }
 
@@ -118,7 +167,7 @@ final class TelegramClientServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__ . '/../migrations');
 
         if ($this->app->runningInConsole()) {
-            $this->commands([RegenerateCommand::class, IngestCommand::class, BackfillCommand::class]);
+            $this->commands([RegenerateCommand::class, IngestCommand::class, BackfillCommand::class, BackupCommand::class]);
         }
     }
 }

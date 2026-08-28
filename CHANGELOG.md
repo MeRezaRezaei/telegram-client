@@ -56,3 +56,32 @@ based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   `backfill` sections.
 - `docs/bus.md`: stream schema, routes + reload protocol, ingest
   command, daemon bootstrap + systemd, backfill semantics.
+
+### Added — Backup Vault (Phase 4)
+
+- `VaultCrypto` (Argon2id13 passphrase → 32-byte key, 16-byte salt;
+  per-chunk XChaCha20-Poly1305 secretstream sealed FINAL) and `Chunker`
+  (fixed-size split, sha256 content addressing, dedup index) — the pure
+  crypto/chunking substrate.
+- `VaultInterface` + `InMemoryVault` (offline fake) + `TelegramVault`:
+  one private channel per set (`teleproto-backup:<setId>`, find-or-
+  create), chunks as hash-named force-file documents, manifests as
+  `TBMANIFEST1:` text messages (latest wins); every teleproto call
+  behind an injectable call map — tests run offline.
+- `BackupRunner` (scan → chunk → encrypt → dedup → upload uniques →
+  manifest last; salt reuse makes the second unchanged run upload zero)
+  and `Restorer` (manifest-first, traversal-proof, mkdir -p rebuild).
+- `Verifier`: keyless availability sampling (`{checked, ok, missing}`,
+  injectable rng for determinism) — integrity is structural (secret-
+  stream FINAL fails loud at restore); `verifyWithKey()` upgrades to
+  full decrypt + sha256 when the passphrase is at hand.
+- `telegram-client:backup` artisan command (`run|restore|verify|status`,
+  `--set/--passphrase/--target/--sample`); vault transport behind the
+  `VAULT_FACTORY_KEY` container seam — `memory` driver (offline default,
+  per-set shared InMemoryVault) or `telegram` via the P3
+  `SCOPE_RESOLVER_KEY`/daemon.accounts registry. Passphrase from
+  `--passphrase` or `TELEGRAM_CLIENT_BACKUP_PASSPHRASE`, never logged.
+- `config/telegram-client.php`: `backup` section (driver, account,
+  chunk_size, sets).
+- `docs/backup.md`: architecture, dedicated-session setup, config, CLI,
+  verifier semantics (availability vs integrity), security notes, limits.
