@@ -343,37 +343,58 @@ final class UpdateIngestor
         }
 
         $identity = self::identityColumn($ctor, $columns);
-        $anchorId = $identity !== null
-            ? $this->existingAnchorId($instanceClass, $anchorClass, $identity[0], $identity[1], $accountId)
-            : $this->contentAnchorId($instanceClass, $anchorClass, $columns, $accountId);
 
-        if ($anchorId === null) {
-            $anchor = new $anchorClass();
-            $anchor->forceFill([
-                'constructor_id' => $ctor->id,
-                'constructor_name' => $name,
-                'account_id' => $accountId,
-            ]);
-            $anchor->save(); // TlAnchorModel::booted assigns the UUIDv7 PK
-
-            $anchorId = (string) $anchor->getKey();
-        } else {
-            // Reused anchor: keep the discriminator truthful when the
-            // constructor changed (user → userEmpty transition) — the
-            // anchor tells the CURRENT constructor of its instance family.
-            $anchorClass::query()->where('id', $anchorId)->where(
-                fn ($q) => $q->where('constructor_id', '!=', $ctor->id)->orWhere('constructor_name', '!=', $name),
-            )->update([
-                'constructor_id' => $ctor->id,
-                'constructor_name' => $name,
-                'updated_at' => now(),
-            ]);
+        // P2 M3: serialize identity resolution + anchor upsert per
+        // (account, identity class, natural id). Identity lives in the
+        // instance tables, so no anchor-side unique constraint can guard
+        // this — without the lock, two concurrent workers both miss the
+        // existing-anchor lookup and mint duplicates for the same
+        // telegram identity. IdentityLock: in-process depth-counted map +
+        // pg advisory xact lock on THIS connection inside THIS transaction.
+        $lockKey = $identity !== null
+            ? 'tl_anchor:' . $accountId . ':' . $identity[0] . ':' . $identity[1]
+            : null;
+        if ($lockKey !== null) {
+            IdentityLock::acquire(DB::connection(), $lockKey);
         }
 
-        $instance = $instanceClass::query()->find($anchorId) ?? new $instanceClass();
-        $instance->setAttribute('id', $anchorId); // shared PK with the anchor (spec §4.2)
-        $instance->fill($columns);
-        $instance->save();
+        try {
+            $anchorId = $identity !== null
+                ? $this->existingAnchorId($instanceClass, $anchorClass, $identity[0], $identity[1], $accountId)
+                : $this->contentAnchorId($instanceClass, $anchorClass, $columns, $accountId);
+
+            if ($anchorId === null) {
+                $anchor = new $anchorClass();
+                $anchor->forceFill([
+                    'constructor_id' => $ctor->id,
+                    'constructor_name' => $name,
+                    'account_id' => $accountId,
+                ]);
+                $anchor->save(); // TlAnchorModel::booted assigns the UUIDv7 PK
+
+                $anchorId = (string) $anchor->getKey();
+            } else {
+                // Reused anchor: keep the discriminator truthful when the
+                // constructor changed (user → userEmpty transition) — the
+                // anchor tells the CURRENT constructor of its instance family.
+                $anchorClass::query()->where('id', $anchorId)->where(
+                    fn ($q) => $q->where('constructor_id', '!=', $ctor->id)->orWhere('constructor_name', '!=', $name),
+                )->update([
+                    'constructor_id' => $ctor->id,
+                    'constructor_name' => $name,
+                    'updated_at' => now(),
+                ]);
+            }
+
+            $instance = $instanceClass::query()->find($anchorId) ?? new $instanceClass();
+            $instance->setAttribute('id', $anchorId); // shared PK with the anchor (spec §4.2)
+            $instance->fill($columns);
+            $instance->save();
+        } finally {
+            if ($lockKey !== null) {
+                IdentityLock::release($lockKey);
+            }
+        }
 
         return $instance;
     }

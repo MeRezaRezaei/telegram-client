@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MeRezaRezaei\TelegramClient\Tests\Ingest;
 
+use MeRezaRezaei\TelegramClient\Ingest\IdentityLock;
 use MeRezaRezaei\TelegramClient\Ingest\UpdateIngestor;
 use MeRezaRezaei\TelegramClient\Schema\Generated\Models\TlUser;
 use MeRezaRezaei\TelegramClient\Schema\Generated\Models\TlUserUser;
@@ -110,6 +111,19 @@ final class UpdateIngestorTest extends IngestTestCase
         self::assertSame(2, TlUserUser::query()->count());
         self::assertSame(1, TlUser::query()->where('account_id', self::ACCOUNT)->count());
         self::assertSame(1, TlUser::query()->where('account_id', 8)->count());
+    }
+
+    public function test_identity_resolution_serializes_and_releases_its_lock(): void
+    {
+        // P2 M3: the identity path runs under IdentityLock — after ingest
+        // (even nested same-identity nodes) the in-process key must be
+        // fully released, never leaked across payloads/accounts.
+        $ingestor = new UpdateIngestor();
+        $ingestor->ingest(self::userPayload(), self::ACCOUNT);
+        $ingestor->ingest(self::userPayload(), self::ACCOUNT);
+
+        self::assertSame(0, IdentityLock::depth('tl_anchor:' . self::ACCOUNT . ':tl_id:501558149'));
+        self::assertSame(1, TlUser::query()->count(), 'guard: idempotent ingest still holds');
     }
 
     public function test_unknown_constructor_fails_loudly(): void
