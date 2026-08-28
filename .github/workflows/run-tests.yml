@@ -1,0 +1,51 @@
+name: run-tests
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    # No services by design: tests run on sqlite :memory: and the Redis
+    # suites fake the connection contract (live Redis is never required
+    # in CI); the 5 live-credential tests self-skip without
+    # TELEGRAM_CLIENT_LIVE=1.
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.2', '8.3', '8.4']
+        stability: [prefer-stable]
+
+    name: P${{ matrix.php }} - ${{ matrix.stability }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Dev-mode sibling for the composer path repository (../teleproto,
+      # symlink). Required while teleproto is constrained to dev-main —
+      # drop this step when the constraint flips to ^1.0 for publishing
+      # (see CHANGELOG "Release blockers").
+      - name: Clone teleproto sibling for the dev path-repo
+        run: git clone --depth 1 https://github.com/MeRezaRezaei/teleproto.git ../teleproto
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, curl, libxml, mbstring, zip, openssl, hash, json, pdo, pdo_sqlite, sqlite3, sodium, pcntl, posix
+          coverage: none
+
+      - name: Validate composer.json and composer.lock
+        run: composer validate --strict
+
+      - name: Install dependencies
+        uses: ramsey/composer-install@v3
+        with:
+          dependency-versions: ${{ matrix.stability }}
+
+      - name: Execute tests
+        run: vendor/bin/phpunit

@@ -1,0 +1,83 @@
+# telegram-client
+
+> Stand-alone Telegram client layer for Laravel (PHP >= 8.2) on top of the
+> teleproto MTProto engine: raw TL updates ingested into idempotent,
+> tenant-scoped Postgres truth (anchor/instance/child rows + Eloquent
+> models + DTOs generated from the official layer schema), a Redis
+> Streams bus with hot-reload routing, a sync multi-account daemon,
+> quota-aware history backfill, and encrypted Telegram-channel backup
+> vaults. MIT.
+
+## Docs
+
+- [README.md](README.md) — package overview
+- [docs/ingest.md](docs/ingest.md) — ingest API, route semantics, idempotency, tenancy
+- [docs/bus.md](docs/bus.md) — Redis stream schema, routing, consumer, daemon, backfill
+- [docs/backup.md](docs/backup.md) — encrypted channel vault: crypto, CLI, verifier, limits
+- [../teleproto/skills/telegram-methods](../teleproto/skills/telegram-methods) — per-method skill files for the underlying engine (dev checkout sibling)
+
+## Quickstart
+
+```bash
+composer require merezarezaei/telegram-client   # engine dep: merezarezaei/teleproto
+# provider auto-discovered; config merges from the package — override by
+# creating config/telegram-client.php in the host app
+```
+
+Ladder position: **teleproto is the engine** (MTProto wire, sessions, pollers,
+typed RPC exceptions); **this package is the client layer** — storage truth,
+bus, supervision, backfill, backup. It never speaks the wire itself; every
+live call goes through teleproto's `UserAccountScope`, and the live wire stays
+behind teleproto's tri-state flag (`TELEPROTO_LIVE=true` plus
+`TELEGRAM_API_ID`/`TELEGRAM_API_HASH`).
+
+Environment (see `config/telegram-client.php`):
+
+- `TELEGRAM_CLIENT_REDIS` — bus redis driver, `predis` (default) or `phpredis`; bus reads/writes through the host app's `bus.connection` (default `default`)
+- `TELEGRAM_SESSION_<ACCOUNT_ID>` — one session string per polled account (credentials: env/secrets only)
+- `TELEGRAM_CLIENT_BACKFILL_BUDGET` — backfill request budget (default 25)
+- `TELEGRAM_CLIENT_BACKUP_DRIVER` — `memory` (default, offline) or `telegram`; `TELEGRAM_CLIENT_BACKUP_ACCOUNT` (daemon.accounts id), `TELEGRAM_CLIENT_BACKUP_CHUNK_SIZE` (4 MiB), `TELEGRAM_CLIENT_BACKUP_PASSPHRASE`
+- `TELEGRAM_CLIENT_SHIP_NAMESPACES` — override the curated migration dial (default `auth,messages,users,channels,updates,help,contacts`)
+- `TELEGRAM_CLIENT_LIVE=1` — gates the live smoke test (`tests/Backup/LiveVaultSmokeTest.php`)
+
+## API
+
+Everything is resolved from the container (singletons bound by the provider):
+
+```php
+$client = app(MeRezaRezaei\TelegramClient\TelegramClient::class);
+
+// Updates ALWAYS become instances — they never touch routes.
+$root = $client->ingest($updateArray, $accountId);            // : TlInstanceModel
+
+// Method responses are route-deduped per (method, sorted-JSON params, account).
+$msgs = $client->ingestResponse('messages.getHistory', $params, $response, $accountId);
+
+// Entity lookup by (tenant, telegram id); null when unseen or deleted.
+$user = $client->user($accountId, 501558149);                 // : ?TlUser
+$user?->currentInstance->first_name;
+$chat = app(EntityAggregator::class)->chat($accountId, $id);   // also ->channel(): same Chat-namespace truth
+```
+
+- `UpdateStored` event (`Ingest\Events\UpdateStored`: committed root model + `accountId`) fires after the root transaction commits — once per actual write pass; route-dedup-skipped responses do not re-fire it. Handlers belong to your app.
+- Bus (`src/Bus`): `RedisStreamSink` (a teleproto `UpdateSinkInterface`) appends canonical `{account_id, update, ts}` entries to stream `tg:stream:updates`; `IngestConsumer::consumeOnce()` drains batches — route match → forwarded verbatim to the target stream; no match → `TelegramClient::ingest`; poison → `tg:stream:dead-letter`; everything acked. `RouteTable` (`tg:bus:routes` hash) matches prefix-only (trailing `*`, first pattern in hash order); `HotReloadRouter` re-reads it on `tg:bus:reload` pings (`listen()`) or on `refresh()`.
+- Consumer CLI: `php artisan telegram-client:ingest [--once] [--max=N]` — 100 ms idle backoff, graceful SIGTERM/SIGINT, exit 0.
+- Daemon (`src/Daemon`): `Daemon` supervises `AccountWorker`s round-robin — 30 s tick per account, FloodWait → interruptible sleep, DC migration → scope rebuild at the new DC, 3 consecutive no-progress failures → account isolated on a 2/5/15/60 s ladder; every account maxed → exit 1 (init system revives). Accounts come from `config('telegram-client.daemon.accounts')` (`{account_id, session_string, dc?, api_id?, api_hash?}`); persist `AccountWorker::lastSequenceState()` (`{pts, date, qts, seq}`) and pass it back as the resume ctor arg. The daemon contains no redis — the bootstrap injects the sink.
+- Backfill: `php artisan telegram-client:backfill --account=<id> --peer=@a [--peer=@b] [--budget=25]` — quota rule: a run issues at most `intdiv(budget, 2)` requests (50 % of the budget always reserved for live traffic); every fetch consumes budget; FLOOD_WAIT sleeps `min(seconds, 3600)`; 5 consecutive failures mark the peer dead. Pages land via plain `ingest` (not route-deduped); v1 is report-only (resume from the printed `offset_id`).
+- Backup CLI: `php artisan telegram-client:backup <run|restore|verify|status> --set=default [--passphrase=...] [--target=DIR] [--sample=5]` — content-addressed 4 MiB chunks (plaintext sha256), Argon2id13 key derivation + XChaCha20-Poly1305 secretstream per chunk, manifest posted last, manifest-first restore with traversal-proof paths; keyless `verify` samples chunk availability, `--passphrase` upgrades it to full decrypt + hash. `memory` driver is offline-only; `telegram` needs a dedicated session registered in `daemon.accounts`.
+
+## Capabilities
+
+- Storage truth: every payload becomes **anchor / instance / child** rows (shared UUIDv7 PK anchor↔instance, per-constructor instance tables, vector child tables) plus per-method **route** tables for response dedup; all generated from the committed layer-227 `.tl` mirror — Eloquent models, spatie DTOs, factories included.
+- Tenancy: every ingest call requires `account_id`; identities resolve per tenant — same telegram id under two accounts is two anchors, two instance sets. No cross-tenant reads.
+- Idempotency: re-ingesting an identical update is byte-stable (fill-only upserts, content aggregation); constructor transitions (user → userEmpty) reuse the anchor family; `currentInstance` resolves the latest non-deleted constructor.
+- One Redis stream fans in all accounts (multi-account daemon), hot prefix routing fans updates out to app-specific streams without restarts.
+- sqlite (in-memory, logic tests) and Postgres (production truth, native uuid + deferrable FKs) from the same generated migrations; bottom-up write order satisfies immediate FKs on both.
+
+## Constraints
+
+- Sync PHP only: no event loop, no amphp — the daemon is a round-robin supervisor; long waits are chunked interruptible sleeps.
+- Curated migration dial: `migrations/` ships **112** of the **635** generated migrations (dial namespaces above); the full mirror always stays in `generated/migrations/`. Extend the dial, never hand-edit generated files — regenerate (`php bin/regenerate --ship`).
+- Handlers and business logic belong to the host app; this package emits Laravel events (`UpdateStored`) and stores truth — no handler DSL.
+- Zero `preg_*()` in `src/` (phpstan-disallowed-calls gate); string functions and sscanf only.
+- Session strings are credentials — never committed; tests never require real credentials. Live tests run only behind `TELEGRAM_CLIENT_LIVE=1` with a real session.

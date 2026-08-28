@@ -1,8 +1,34 @@
 {
     "name": "merezarezaei/telegram-client",
-    "description": "Stand-alone Telegram client for Laravel — update ingestion into Postgres truth, Redis hot-reload bus, backfill, encrypted channel backups, DTOs & Eloquent from the official schema",
+    "description": "Telegram client for Laravel — Postgres update truth, Redis hot-reload bus, daemon, backfill, backups",
     "type": "library",
     "license": "MIT",
+    "keywords": [
+        "telegram",
+        "laravel",
+        "mtproto",
+        "eloquent",
+        "postgres",
+        "redis",
+        "updates",
+        "daemon",
+        "backfill",
+        "backup",
+        "dto",
+        "multi-account"
+    ],
+    "homepage": "https://github.com/MeRezaRezaei/telegram-client",
+    "support": {
+        "issues": "https://github.com/MeRezaRezaei/telegram-client/issues",
+        "source": "https://github.com/MeRezaRezaei/telegram-client/tree/main",
+        "docs": "https://github.com/MeRezaRezaei/telegram-client#readme",
+        "security": "https://github.com/MeRezaRezaei/telegram-client/security/advisories"
+    },
+    "authors": [
+        {
+            "name": "MeRezaRezaei"
+        }
+    ],
     "require": {
         "php": ">=8.2",
         "ext-pdo": "*",
@@ -15,7 +41,7 @@
         "spatie/laravel-data": "^4.0",
         "laravel/prompts": "^0.3",
         "symfony/uid": "^6.0|^7.0",
-        "illuminate/redis": "*",
+        "illuminate/redis": "^10.0|^11.0|^12.0",
         "predis/predis": "^3.6"
     },
     "require-dev": {

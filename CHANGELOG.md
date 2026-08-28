@@ -5,6 +5,46 @@ based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Release blockers — read before publishing v0.1.0
+
+- **Tag teleproto v1.1.0 before publishing.** `merezarezaei/teleproto` is
+  currently constrained to `dev-main` because local `main` carries
+  untagged fixes this package depends on (schema mirror bootstrapping,
+  mirror gap-filling, double-codec & TL serializer fixes — ahead of the
+  only existing tag `v1.0.0`). Before the first Packagist release:
+  1. tag & push teleproto `v1.1.0`,
+  2. flip the constraint here from `dev-main` to `^1.0`,
+  3. move the `repositories` path-repo entry (`../teleproto`, symlink)
+     out of the published manifest — it is a dev-mode-only convenience
+     for the sibling checkout and does not exist for Packagist consumers
+     (the wire engine resolves from Packagist as
+     `merezarezaei/teleproto`).
+- **Create the GitHub repository** `MeRezaRezaei/telegram-client`
+  (homepage / support / issue templates all point at it — no remote is
+  configured locally yet) and register the package on Packagist.
+
+## [0.1.0] - 2026-08-29
+
+First public cut: a schema-mirroring Telegram client for Laravel —
+updates land as rows in Postgres truth, flow through a Redis hot-reload
+bus, are kept warm by a multi-account daemon + backfill queue, and the
+store is vaulted into a private Telegram channel with client-side
+encryption. Four phases shipped (P1–P4).
+
+### Added — Schema Mirror (Phase 1)
+
+- Generators ported from the owner's teleproto fork (MIT, re-namespaced)
+  and driven by teleproto's committed official-schema sources: a
+  full layer-227 mirror — 3,678 tables, 1,535 FKs — as generated
+  migrations, DTOs and Eloquent models under `generated/`
+  (3,116 spatie/laravel-data DTO classes, 2,928 models) plus factories.
+- Golden regeneration gate: `composer test` fails if committed mirror
+  artifacts drift from what the generators produce.
+- Curated migration dial: 635 migrations generated, 112 shipped by
+  default (namespaces `auth`, `messages`, `users`, `channels`,
+  `updates`, `help`, `contacts`); `telegram-client:regenerate --ship`
+  widens the dial on purpose.
+
 ### Added — Ingest (Phase 2)
 
 - `TelegramClient` public facade: `ingest(update, accountId)`,

@@ -1,0 +1,28 @@
+name: 💡 Feature Request
+description: Propose a new feature for the schema mirror, bus, daemon, backfill or backup vault
+labels: ['enhancement']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Have an idea or need a specific capability added to telegram-client? Let us know!
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem / Motivation
+      description: Is your feature request related to a problem or a missing capability?
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution / API Idea
+      description: Describe the solution or code syntax you would like to see.
+      placeholder: |
+        ```php
+        app(TelegramClient::class)->someNewSurface(...);
+        ```
+    validations:
+      required: true
