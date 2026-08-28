@@ -49,9 +49,22 @@ redis-cli publish tg:bus:reload 'reload'
 - Matched entries are forwarded **verbatim** to the target stream and
   acked (tenancy metadata travels inside the entry).
 - Unmatched entries are ingested (`TelegramClient::ingest`) under the
-  entry's own `account_id` and acked; poison (undecodable) entries go to
-  `tg:stream:dead-letter` and are acked — one bad entry never wedges the
-  group.
+  entry's own `account_id` and acked.
+- **Poison handling** — one bad entry never wedges the group:
+  - *undecodable* entries (bad JSON / non-canonical shape) are posted
+    verbatim to `tg:stream:dead-letter` and acked on first sight;
+  - *ingest-failures* (entry decodes but the ingest path throws —
+    unknown TL constructor against this build, transient DB hiccup,
+    throwing `onStored` hook) are left un-acked and retried on each
+    `consumeOnce()` cycle; after **3 consecutive throws** the entry is
+    dead-lettered with `reason=ingest-failed`, the error message and
+    the original fields, then acked. Transient faults that clear
+    within the budget are ingested normally and never dead-lettered.
+    The strike counter is per-process (in-memory on the consumer
+    instance): the long-lived `artisan telegram-client:ingest` loop /
+    daemon reaches the cap in-process, while a fresh process restarts
+    the count — which only delays the dead-letter, never the group's
+    progress (pending retries drain before new entries each cycle).
 - Reload: publish to `tg:bus:reload`; a `HotReloadRouter` (push style,
   for daemons) re-reads the table on each ping; the consumer reads the
   table fresh per entry, so routing is hot without any signal at all —

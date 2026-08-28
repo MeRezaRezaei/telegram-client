@@ -105,6 +105,96 @@ final class IngestConsumerTest extends IngestTestCase
         self::assertSame(['processed' => 0, 'forwarded' => 0], $this->consumer->consumeOnce());
     }
 
+    public function test_persistent_ingest_failure_dead_letters_on_the_third_cycle_and_unwedges_the_group(): void
+    {
+        $sink = new RedisStreamSink($this->redis, self::ACCOUNT);
+
+        // Decodes fine, but the deep constructor is unknown to this build —
+        // ingest() throws deterministically on every attempt.
+        $sink->handle(
+            ['_' => 'updateNewMessage', 'message' => ['_' => 'messageDefinitelyNotInThisBuild', 'id' => 7]],
+            (string) self::ACCOUNT,
+        );
+
+        // A healthy entry appended after the throwing one must not be
+        // stranded behind it in the same batch.
+        $sink->handle($this->userUpdate(), (string) self::ACCOUNT);
+
+        // Cycle 1: the throwing entry stays pending; the healthy tail lands
+        self::assertSame(['processed' => 1, 'forwarded' => 0], $this->consumer->consumeOnce());
+        self::assertSame([], $this->redis->streamEntries(StreamSchema::DL));
+
+        $client = $this->app->make(TelegramClient::class);
+        self::assertSame('Reza', $client->user(self::ACCOUNT, self::USER_ID)?->currentInstance?->first_name);
+
+        // Cycle 2: retry throws again — still pending, still no dead-letter
+        self::assertSame(['processed' => 0, 'forwarded' => 0], $this->consumer->consumeOnce());
+        self::assertSame([], $this->redis->streamEntries(StreamSchema::DL));
+
+        // Cycle 3: third consecutive strike → dead-lettered with the
+        // original payload plus reason/error, acked, group free to move
+        self::assertSame(['processed' => 1, 'forwarded' => 0], $this->consumer->consumeOnce());
+
+        $dead = $this->redis->streamEntries(StreamSchema::DL);
+        self::assertCount(1, $dead);
+        self::assertSame('ingest-failed', $dead[0][1]['reason']);
+        self::assertStringContainsString('messageDefinitelyNotInThisBuild', $dead[0][1]['error']);
+        self::assertSame(
+            ['_' => 'updateNewMessage', 'message' => ['_' => 'messageDefinitelyNotInThisBuild', 'id' => 7]],
+            StreamSchema::decode($dead[0][1]['update'])['update'],
+        );
+        self::assertSame((string) self::ACCOUNT, $dead[0][1]['account_id']);
+
+        // Nothing stays pending for this consumer
+        self::assertSame([], $this->redis->xreadgroup(
+            StreamSchema::GROUP,
+            StreamSchema::CONSUMER,
+            [StreamSchema::STREAM => 10],
+            '0',
+        ));
+
+        // The group keeps moving after the wedge is broken
+        $sink->handle($this->userUpdate(), (string) self::ACCOUNT);
+        self::assertSame(['processed' => 1, 'forwarded' => 0], $this->consumer->consumeOnce());
+    }
+
+    public function test_transient_ingest_path_failure_is_retried_without_dead_lettering(): void
+    {
+        $attempts = 0;
+        $stored = [];
+        $consumer = new IngestConsumer(
+            $this->redis,
+            $this->app->make(TelegramClient::class),
+            static function (TlInstanceModel $root, int $accountId) use (&$attempts, &$stored): void {
+                $attempts++;
+                if ($attempts < 3) {
+                    throw new \RuntimeException('transient hiccup after the row committed');
+                }
+                $stored[] = $accountId;
+            },
+        );
+
+        $sink = new RedisStreamSink($this->redis, self::ACCOUNT);
+        $sink->handle($this->userUpdate(), (string) self::ACCOUNT);
+
+        // Two transient failures: the entry is retried, never dead-lettered
+        self::assertSame(['processed' => 0, 'forwarded' => 0], $consumer->consumeOnce());
+        self::assertSame(['processed' => 0, 'forwarded' => 0], $consumer->consumeOnce());
+        self::assertSame([], $this->redis->streamEntries(StreamSchema::DL));
+
+        // Third attempt succeeds → handled, acked, hook observed the landing
+        self::assertSame(['processed' => 1, 'forwarded' => 0], $consumer->consumeOnce());
+        self::assertSame([self::ACCOUNT], $stored);
+        self::assertSame([], $this->redis->streamEntries(StreamSchema::DL));
+
+        self::assertSame([], $this->redis->xreadgroup(
+            StreamSchema::GROUP,
+            StreamSchema::CONSUMER,
+            [StreamSchema::STREAM => 10],
+            '0',
+        ));
+    }
+
     public function test_on_stored_fires_for_default_path_only(): void
     {
         $table = new RouteTable($this->redis);
