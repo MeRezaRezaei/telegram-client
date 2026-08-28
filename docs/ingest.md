@@ -40,6 +40,14 @@ resolve the same rows, `channel()` being the intent-revealing one.
 after the write transaction commits; nested nodes, refs and vectors land in
 their own tables (bottom-up write order satisfies immediate FKs).
 
+Sidecar entities: schema v227 `Peer` fields carry bare ids only — the
+`user`/`chat`/`channel` objects themselves arrive via the difference
+vectors `updates.getDifference` delivers alongside an update
+(`other_updates`, `new_messages`, and the `users`/`chats` vectors of
+method responses). `ingest()` handles them as delivered: the sidecar
+payloads create the entity anchors, while peers keep only their id
+references.
+
 ## Tenancy model
 
 Every anchor row carries `account_id`; **every ingest call requires it** —

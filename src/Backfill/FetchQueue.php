@@ -68,6 +68,22 @@ final class FetchQueue
     }
 
     /**
+     * Re-queue a claimed peer WITHOUT attempt accounting: the job was not
+     * failed, merely deferred (e.g. the backfill command's budget stop —
+     * the peer keeps its front position for the next run's resume).
+     */
+    public function requeue(string $peer): void
+    {
+        if (! isset($this->attempts[$peer])) {
+            $this->attempts[$peer] = 0;
+        }
+
+        if (! in_array($peer, $this->pending, true)) {
+            array_unshift($this->pending, $peer);
+        }
+    }
+
+    /**
      * Record a failed run for a claimed peer: attempts++, then re-queue —
      * unless this was the MAX_ATTEMPTS-th failure, which dead-letters the
      * peer with $reason instead (mirrors the fork's fail()).

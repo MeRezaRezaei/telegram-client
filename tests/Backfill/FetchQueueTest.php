@@ -47,6 +47,24 @@ final class FetchQueueTest extends TestCase
         self::assertNull($queue->pop());
     }
 
+    public function test_requeue_restores_a_claimed_peer_without_attempt_accounting(): void
+    {
+        $queue = new FetchQueue();
+        $queue->push('@a');
+        $queue->push('@b');
+        $queue->fail('@a', 'earlier failure'); // attempts: 1
+
+        self::assertSame('@a', $queue->pop());
+        $queue->requeue('@a'); // deferred, not failed
+
+        self::assertSame('@a', $queue->pop(), 'requeued peer keeps its front position');
+        self::assertSame('@b', $queue->pop());
+        self::assertSame(1, $queue->attemptsFor('@a'), 'requeue neither counts nor clears attempts');
+        $queue->requeue('@a');
+        $queue->requeue('@a');
+        self::assertSame(1, $queue->counts()['pending'], 'requeue is idempotent');
+    }
+
     public function test_fail_requeues_until_five_attempts_then_dead_letters(): void
     {
         $queue = new FetchQueue();

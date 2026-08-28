@@ -26,3 +26,33 @@ based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   commits with the committed model and account id.
 - `docs/ingest.md`: API, tenancy model, events, route semantics,
   idempotency guarantees, sqlite-vs-PG notes.
+
+### Added — Bus, Daemon & Backfill (Phase 3)
+
+- Bus: `StreamSchema` (canonical entry codec + wire names),
+  `RedisStreamSink` (teleproto sink → `tg:stream:updates`),
+  `RedisConnectionContract` + `LaravelRedisAdapter` (predis/phpredis),
+  `RouteTable` (prefix-only routes, zero regex), `HotReloadRouter`
+  (`tg:bus:reload` push signal), `IngestConsumer` (group reader →
+  forward / ingest / dead-letter, ack-per-entry).
+- `telegram-client:ingest` artisan command (`--once` / `--max` loop,
+  pcntl-graceful).
+- `AccountWorker`: one account's supervised teleproto poll loop —
+  FloodWait → interruptible sleep, DC migration → scope rebuild at the
+  new DC, 3-strike-unexpected → rethrow; difference cursor survives
+  restarts (`lastSequenceState()`).
+- `Daemon`: sequential multi-account supervisor — round-robin time
+  slices, per-account failure isolation with a 2/5/15/60s backoff
+  ladder, SIGTERM/SIGINT graceful (exit 0), all-fail exit 1 for the init
+  system; no redis inside (sinks injected by the host bootstrap —
+  pattern + systemd unit in docs/bus.md).
+- `telegram-client:backfill` artisan command: FetchQueue + quota-sliced
+  `BackfillWorker` (fork port) per peer — headroom rule, flood-aware,
+  dead-lettering; pages stored via the P2 ingest surface. v1
+  report-only (offset cursors printed, not persisted).
+- `FetchQueue::requeue()`: deferred-claim primitive (budget stop keeps
+  the peer at the queue front without attempt accounting).
+- `config/telegram-client.php`: `bus`, `daemon` (account registry) and
+  `backfill` sections.
+- `docs/bus.md`: stream schema, routes + reload protocol, ingest
+  command, daemon bootstrap + systemd, backfill semantics.
