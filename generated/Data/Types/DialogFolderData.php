@@ -12,9 +12,14 @@ use Spatie\LaravelData\Data;
  */
 final class DialogFolderData extends TlDialogAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'pinned' => ['flags', 2],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $pinned,
+    public ?bool $pinned,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlFolderAbstractData $folder,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlPeerAbstractData $peer,
     public int $topMessage,

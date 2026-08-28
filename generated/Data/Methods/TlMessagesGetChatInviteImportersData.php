@@ -20,11 +20,11 @@ final class TlMessagesGetChatInviteImportersData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $requested,
-    public bool $subscriptionExpired,
+    public ?bool $requested,
+    public ?bool $subscriptionExpired,
     public mixed $peer,
-    public string $link,
-    public string $q,
+    public ?string $link,
+    public ?string $q,
     public int $offsetDate,
     public mixed $offsetUser,
     public int $limit,

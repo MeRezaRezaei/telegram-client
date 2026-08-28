@@ -14,7 +14,7 @@ final class UpdateReadChannelInboxData extends TlUpdateAbstractData
 {
     public function __construct(
     public int $flags,
-    public int $folderId,
+    public ?int $folderId,
     public int $channelId,
     public int $maxId,
     public int $stillUnreadCount,

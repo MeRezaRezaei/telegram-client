@@ -20,13 +20,13 @@ final class TlMessagesRequestSimpleWebViewData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $fromSwitchWebview,
-    public bool $fromSideMenu,
-    public bool $compact,
-    public bool $fullscreen,
+    public ?bool $fromSwitchWebview,
+    public ?bool $fromSideMenu,
+    public ?bool $compact,
+    public ?bool $fullscreen,
     public mixed $bot,
-    public string $url,
-    public string $startParam,
+    public ?string $url,
+    public ?string $startParam,
     public mixed $themeParams,
     public string $platform,
     ) {

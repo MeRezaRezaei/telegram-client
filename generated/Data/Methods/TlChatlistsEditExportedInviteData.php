@@ -22,7 +22,7 @@ final class TlChatlistsEditExportedInviteData extends Data
     public int $flags,
     public mixed $chatlist,
     public string $slug,
-    public string $title,
+    public ?string $title,
     public ?array $peers,
     ) {
     }

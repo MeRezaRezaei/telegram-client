@@ -16,11 +16,11 @@ final class TlAuthSentCodeTypeFirebaseSmsData extends TlAuthSentCodeTypeAbstract
 {
     public function __construct(
     public int $flags,
-    public string $nonce,
-    public int $playIntegrityProjectId,
-    public string $playIntegrityNonce,
-    public string $receipt,
-    public int $pushTimeout,
+    public ?string $nonce,
+    public ?int $playIntegrityProjectId,
+    public ?string $playIntegrityNonce,
+    public ?string $receipt,
+    public ?int $pushTimeout,
     public int $length,
     ) {
     }

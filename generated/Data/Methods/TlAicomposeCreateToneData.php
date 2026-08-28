@@ -20,7 +20,7 @@ final class TlAicomposeCreateToneData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $displayAuthor,
+    public ?bool $displayAuthor,
     public int $emojiId,
     public string $title,
     public string $prompt,

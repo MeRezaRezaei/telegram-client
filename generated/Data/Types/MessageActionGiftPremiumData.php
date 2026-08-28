@@ -17,8 +17,8 @@ final class MessageActionGiftPremiumData extends TlMessageActionAbstractData
     public string $currency,
     public int $amount,
     public int $days,
-    public string $cryptoCurrency,
-    public int $cryptoAmount,
+    public ?string $cryptoCurrency,
+    public ?int $cryptoAmount,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlTextWithEntitiesAbstractData $message,
     ) {
     }

@@ -21,9 +21,9 @@ final class InputMediaInvoiceData extends TlInputMediaAbstractData
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlInputWebDocumentAbstractData $photo,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlInvoiceAbstractData $invoice,
     public string $payload,
-    public string $provider,
+    public ?string $provider,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlDataJSONAbstractData $providerData,
-    public string $startParam,
+    public ?string $startParam,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlInputMediaAbstractData $extendedMedia,
     ) {
     }

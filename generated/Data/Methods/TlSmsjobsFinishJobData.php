@@ -21,7 +21,7 @@ final class TlSmsjobsFinishJobData extends Data
     public function __construct(
     public int $flags,
     public string $jobId,
-    public string $error,
+    public ?string $error,
     ) {
     }
 }

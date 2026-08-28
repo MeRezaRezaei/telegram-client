@@ -20,7 +20,7 @@ final class TlPaymentsValidateRequestedInfoData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $save,
+    public ?bool $save,
     public mixed $invoice,
     public mixed $info,
     ) {

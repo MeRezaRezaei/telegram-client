@@ -12,17 +12,23 @@ use Spatie\LaravelData\Data;
  */
 final class WallPaperSettingsData extends TlWallPaperSettingsAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'blur' => ['flags', 1],
+        'motion' => ['flags', 2],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $blur,
-    public bool $motion,
-    public int $backgroundColor,
-    public int $secondBackgroundColor,
-    public int $thirdBackgroundColor,
-    public int $fourthBackgroundColor,
-    public int $intensity,
-    public int $rotation,
-    public string $emoticon,
+    public ?bool $blur,
+    public ?bool $motion,
+    public ?int $backgroundColor,
+    public ?int $secondBackgroundColor,
+    public ?int $thirdBackgroundColor,
+    public ?int $fourthBackgroundColor,
+    public ?int $intensity,
+    public ?int $rotation,
+    public ?string $emoticon,
     ) {
     }
 }

@@ -21,7 +21,7 @@ final class TlMessagesReadMentionsData extends Data
     public function __construct(
     public int $flags,
     public mixed $peer,
-    public int $topMsgId,
+    public ?int $topMsgId,
     ) {
     }
 }

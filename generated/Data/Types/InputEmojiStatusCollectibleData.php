@@ -15,7 +15,7 @@ final class InputEmojiStatusCollectibleData extends TlEmojiStatusAbstractData
     public function __construct(
     public int $flags,
     public int $collectibleId,
-    public int $until,
+    public ?int $until,
     ) {
     }
 }

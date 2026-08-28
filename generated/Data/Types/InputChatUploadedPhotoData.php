@@ -16,7 +16,7 @@ final class InputChatUploadedPhotoData extends TlInputChatPhotoAbstractData
     public int $flags,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlInputFileAbstractData $file,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlInputFileAbstractData $video,
-    public float $videoStartTs,
+    public ?float $videoStartTs,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlVideoSizeAbstractData $videoEmojiMarkup,
     ) {
     }

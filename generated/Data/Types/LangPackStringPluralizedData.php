@@ -15,11 +15,11 @@ final class LangPackStringPluralizedData extends TlLangPackStringAbstractData
     public function __construct(
     public int $flags,
     public string $key,
-    public string $zeroValue,
-    public string $oneValue,
-    public string $twoValue,
-    public string $fewValue,
-    public string $manyValue,
+    public ?string $zeroValue,
+    public ?string $oneValue,
+    public ?string $twoValue,
+    public ?string $fewValue,
+    public ?string $manyValue,
     public string $otherValue,
     ) {
     }

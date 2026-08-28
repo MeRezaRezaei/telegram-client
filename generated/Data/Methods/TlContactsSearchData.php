@@ -20,8 +20,8 @@ final class TlContactsSearchData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $broadcasts,
-    public bool $bots,
+    public ?bool $broadcasts,
+    public ?bool $bots,
     public string $q,
     public int $limit,
     ) {

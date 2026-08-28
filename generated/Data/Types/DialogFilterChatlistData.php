@@ -12,14 +12,20 @@ use Spatie\LaravelData\Data;
  */
 final class DialogFilterChatlistData extends TlDialogFilterAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'hasMyInvites' => ['flags', 26],
+        'titleNoanimate' => ['flags', 28],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $hasMyInvites,
-    public bool $titleNoanimate,
+    public ?bool $hasMyInvites,
+    public ?bool $titleNoanimate,
     public int $id,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlTextWithEntitiesAbstractData $title,
-    public string $emoticon,
-    public int $color,
+    public ?string $emoticon,
+    public ?int $color,
     public array $pinnedPeers,
     public array $includePeers,
     ) {

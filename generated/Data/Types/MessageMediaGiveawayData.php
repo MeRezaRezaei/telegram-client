@@ -12,16 +12,22 @@ use Spatie\LaravelData\Data;
  */
 final class MessageMediaGiveawayData extends TlMessageMediaAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'onlyNewSubscribers' => ['flags', 0],
+        'winnersAreVisible' => ['flags', 2],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $onlyNewSubscribers,
-    public bool $winnersAreVisible,
+    public ?bool $onlyNewSubscribers,
+    public ?bool $winnersAreVisible,
     public array $channels,
     public ?array $countriesIso2,
-    public string $prizeDescription,
+    public ?string $prizeDescription,
     public int $quantity,
-    public int $months,
-    public int $stars,
+    public ?int $months,
+    public ?int $stars,
     public int $untilDate,
     ) {
     }

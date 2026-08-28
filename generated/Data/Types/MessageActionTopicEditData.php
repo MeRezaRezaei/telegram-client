@@ -14,8 +14,8 @@ final class MessageActionTopicEditData extends TlMessageActionAbstractData
 {
     public function __construct(
     public int $flags,
-    public string $title,
-    public int $iconEmojiId,
+    public ?string $title,
+    public ?int $iconEmojiId,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlBoolAbstractData $closed,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlBoolAbstractData $hidden,
     ) {

@@ -15,7 +15,7 @@ final class MessageActionGroupCallData extends TlMessageActionAbstractData
     public function __construct(
     public int $flags,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlInputGroupCallAbstractData $call,
-    public int $duration,
+    public ?int $duration,
     ) {
     }
 }

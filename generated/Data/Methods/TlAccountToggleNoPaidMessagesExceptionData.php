@@ -20,8 +20,8 @@ final class TlAccountToggleNoPaidMessagesExceptionData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $refundCharged,
-    public bool $requirePayment,
+    public ?bool $refundCharged,
+    public ?bool $requirePayment,
     public mixed $parentPeer,
     public mixed $userId,
     ) {

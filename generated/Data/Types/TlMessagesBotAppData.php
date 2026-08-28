@@ -12,11 +12,18 @@ use Spatie\LaravelData\Data;
  */
 final class TlMessagesBotAppData extends TlMessagesBotAppAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'inactive' => ['flags', 0],
+        'requestWriteAccess' => ['flags', 1],
+        'hasSettings' => ['flags', 2],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $inactive,
-    public bool $requestWriteAccess,
-    public bool $hasSettings,
+    public ?bool $inactive,
+    public ?bool $requestWriteAccess,
+    public ?bool $hasSettings,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlBotAppAbstractData $app,
     ) {
     }

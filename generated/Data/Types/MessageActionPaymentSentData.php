@@ -12,14 +12,20 @@ use Spatie\LaravelData\Data;
  */
 final class MessageActionPaymentSentData extends TlMessageActionAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'recurringInit' => ['flags', 2],
+        'recurringUsed' => ['flags', 3],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $recurringInit,
-    public bool $recurringUsed,
+    public ?bool $recurringInit,
+    public ?bool $recurringUsed,
     public string $currency,
     public int $totalAmount,
-    public string $invoiceSlug,
-    public int $subscriptionUntilDate,
+    public ?string $invoiceSlug,
+    public ?int $subscriptionUntilDate,
     ) {
     }
 }

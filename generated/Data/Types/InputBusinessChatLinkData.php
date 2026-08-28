@@ -16,7 +16,7 @@ final class InputBusinessChatLinkData extends TlInputBusinessChatLinkAbstractDat
     public int $flags,
     public string $message,
     public ?array $entities,
-    public string $title,
+    public ?string $title,
     ) {
     }
 }

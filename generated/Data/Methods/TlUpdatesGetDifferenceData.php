@@ -21,11 +21,11 @@ final class TlUpdatesGetDifferenceData extends Data
     public function __construct(
     public int $flags,
     public int $pts,
-    public int $ptsLimit,
-    public int $ptsTotalLimit,
+    public ?int $ptsLimit,
+    public ?int $ptsTotalLimit,
     public int $date,
     public int $qts,
-    public int $qtsLimit,
+    public ?int $qtsLimit,
     ) {
     }
 }

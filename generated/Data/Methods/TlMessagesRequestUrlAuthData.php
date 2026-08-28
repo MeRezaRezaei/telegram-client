@@ -21,10 +21,10 @@ final class TlMessagesRequestUrlAuthData extends Data
     public function __construct(
     public int $flags,
     public mixed $peer,
-    public int $msgId,
-    public int $buttonId,
-    public string $url,
-    public string $inAppOrigin,
+    public ?int $msgId,
+    public ?int $buttonId,
+    public ?string $url,
+    public ?string $inAppOrigin,
     ) {
     }
 }

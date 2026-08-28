@@ -12,11 +12,18 @@ use Spatie\LaravelData\Data;
  */
 final class DialogData extends TlDialogAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'pinned' => ['flags', 2],
+        'unreadMark' => ['flags', 3],
+        'viewForumAsMessages' => ['flags', 6],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $pinned,
-    public bool $unreadMark,
-    public bool $viewForumAsMessages,
+    public ?bool $pinned,
+    public ?bool $unreadMark,
+    public ?bool $viewForumAsMessages,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlPeerAbstractData $peer,
     public int $topMessage,
     public int $readInboxMaxId,
@@ -26,10 +33,10 @@ final class DialogData extends TlDialogAbstractData
     public int $unreadReactionsCount,
     public int $unreadPollVotesCount,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlPeerNotifySettingsAbstractData $notifySettings,
-    public int $pts,
+    public ?int $pts,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlDraftMessageAbstractData $draft,
-    public int $folderId,
-    public int $ttlPeriod,
+    public ?int $folderId,
+    public ?int $ttlPeriod,
     ) {
     }
 }

@@ -20,14 +20,14 @@ final class TlMessagesSaveDraftData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $noWebpage,
-    public bool $invertMedia,
+    public ?bool $noWebpage,
+    public ?bool $invertMedia,
     public mixed $replyTo,
     public mixed $peer,
     public string $message,
     public ?array $entities,
     public mixed $media,
-    public int $effect,
+    public ?int $effect,
     public mixed $suggestedPost,
     public mixed $richMessage,
     ) {

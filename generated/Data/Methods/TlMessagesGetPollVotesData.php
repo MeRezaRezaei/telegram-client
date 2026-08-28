@@ -22,8 +22,8 @@ final class TlMessagesGetPollVotesData extends Data
     public int $flags,
     public mixed $peer,
     public int $id,
-    public string $option,
-    public string $offset,
+    public ?string $option,
+    public ?string $offset,
     public int $limit,
     ) {
     }

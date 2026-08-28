@@ -12,10 +12,16 @@ use Spatie\LaravelData\Data;
  */
 final class WebPageAttributeStickerSetData extends TlWebPageAttributeAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'emojis' => ['flags', 0],
+        'textColor' => ['flags', 1],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $emojis,
-    public bool $textColor,
+    public ?bool $emojis,
+    public ?bool $textColor,
     public array $stickers,
     ) {
     }

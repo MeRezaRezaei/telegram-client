@@ -14,7 +14,7 @@ final class TlAuthSentCodeTypeSmsPhraseData extends TlAuthSentCodeTypeAbstractDa
 {
     public function __construct(
     public int $flags,
-    public string $beginning,
+    public ?string $beginning,
     ) {
     }
 }

@@ -22,9 +22,9 @@ final class TlBotsSetBotInfoData extends Data
     public int $flags,
     public mixed $bot,
     public string $langCode,
-    public string $name,
-    public string $about,
-    public string $description,
+    public ?string $name,
+    public ?string $about,
+    public ?string $description,
     ) {
     }
 }

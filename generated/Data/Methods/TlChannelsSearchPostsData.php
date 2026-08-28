@@ -20,13 +20,13 @@ final class TlChannelsSearchPostsData extends Data
 
     public function __construct(
     public int $flags,
-    public string $hashtag,
-    public string $query,
+    public ?string $hashtag,
+    public ?string $query,
     public int $offsetRate,
     public mixed $offsetPeer,
     public int $offsetId,
     public int $limit,
-    public int $allowPaidStars,
+    public ?int $allowPaidStars,
     ) {
     }
 }

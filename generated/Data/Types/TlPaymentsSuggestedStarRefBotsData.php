@@ -17,7 +17,7 @@ final class TlPaymentsSuggestedStarRefBotsData extends TlPaymentsSuggestedStarRe
     public int $count,
     public array $suggestedBots,
     public array $users,
-    public string $nextOffset,
+    public ?string $nextOffset,
     ) {
     }
 }

@@ -20,7 +20,7 @@ final class TlMessagesTogglePeerTranslationsData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $disabled,
+    public ?bool $disabled,
     public mixed $peer,
     ) {
     }

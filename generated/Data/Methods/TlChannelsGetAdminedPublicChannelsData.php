@@ -20,9 +20,9 @@ final class TlChannelsGetAdminedPublicChannelsData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $byLocation,
-    public bool $checkLimit,
-    public bool $forPersonal,
+    public ?bool $byLocation,
+    public ?bool $checkLimit,
+    public ?bool $forPersonal,
     ) {
     }
 }

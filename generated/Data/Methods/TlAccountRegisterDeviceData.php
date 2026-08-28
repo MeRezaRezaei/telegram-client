@@ -20,7 +20,7 @@ final class TlAccountRegisterDeviceData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $noMuted,
+    public ?bool $noMuted,
     public int $tokenType,
     public string $token,
     public mixed $appSandbox,

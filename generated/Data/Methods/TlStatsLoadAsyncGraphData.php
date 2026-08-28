@@ -21,7 +21,7 @@ final class TlStatsLoadAsyncGraphData extends Data
     public function __construct(
     public int $flags,
     public string $token,
-    public int $x,
+    public ?int $x,
     ) {
     }
 }

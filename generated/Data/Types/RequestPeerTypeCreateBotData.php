@@ -12,11 +12,16 @@ use Spatie\LaravelData\Data;
  */
 final class RequestPeerTypeCreateBotData extends TlRequestPeerTypeAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'botManaged' => ['flags', 0],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $botManaged,
-    public string $suggestedName,
-    public string $suggestedUsername,
+    public ?bool $botManaged,
+    public ?string $suggestedName,
+    public ?string $suggestedUsername,
     ) {
     }
 }

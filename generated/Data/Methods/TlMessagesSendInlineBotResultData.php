@@ -20,19 +20,19 @@ final class TlMessagesSendInlineBotResultData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $silent,
-    public bool $background,
-    public bool $clearDraft,
-    public bool $hideVia,
+    public ?bool $silent,
+    public ?bool $background,
+    public ?bool $clearDraft,
+    public ?bool $hideVia,
     public mixed $peer,
     public mixed $replyTo,
     public int $randomId,
     public int $queryId,
     public string $id,
-    public int $scheduleDate,
+    public ?int $scheduleDate,
     public mixed $sendAs,
     public mixed $quickReplyShortcut,
-    public int $allowPaidStars,
+    public ?int $allowPaidStars,
     ) {
     }
 }

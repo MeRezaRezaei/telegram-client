@@ -20,12 +20,12 @@ final class TlPhotosUploadContactProfilePhotoData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $suggest,
-    public bool $save,
+    public ?bool $suggest,
+    public ?bool $save,
     public mixed $userId,
     public mixed $file,
     public mixed $video,
-    public float $videoStartTs,
+    public ?float $videoStartTs,
     public mixed $videoEmojiMarkup,
     ) {
     }

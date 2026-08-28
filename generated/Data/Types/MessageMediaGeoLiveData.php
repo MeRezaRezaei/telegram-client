@@ -15,9 +15,9 @@ final class MessageMediaGeoLiveData extends TlMessageMediaAbstractData
     public function __construct(
     public int $flags,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlGeoPointAbstractData $geo,
-    public int $heading,
+    public ?int $heading,
     public int $period,
-    public int $proximityNotificationRadius,
+    public ?int $proximityNotificationRadius,
     ) {
     }
 }

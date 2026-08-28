@@ -20,16 +20,16 @@ final class TlStoriesStartLiveData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $pinned,
-    public bool $noforwards,
-    public bool $rtmpStream,
+    public ?bool $pinned,
+    public ?bool $noforwards,
+    public ?bool $rtmpStream,
     public mixed $peer,
-    public string $caption,
+    public ?string $caption,
     public ?array $entities,
     public array $privacyRules,
     public int $randomId,
     public mixed $messagesEnabled,
-    public int $sendPaidMessagesStars,
+    public ?int $sendPaidMessagesStars,
     ) {
     }
 }

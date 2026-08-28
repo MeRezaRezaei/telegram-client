@@ -15,7 +15,7 @@ final class SavedReactionTagData extends TlSavedReactionTagAbstractData
     public function __construct(
     public int $flags,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlReactionAbstractData $reaction,
-    public string $title,
+    public ?string $title,
     public int $count,
     ) {
     }

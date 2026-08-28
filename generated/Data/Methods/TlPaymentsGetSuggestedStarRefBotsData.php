@@ -20,8 +20,8 @@ final class TlPaymentsGetSuggestedStarRefBotsData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $orderByRevenue,
-    public bool $orderByDate,
+    public ?bool $orderByRevenue,
+    public ?bool $orderByDate,
     public mixed $peer,
     public string $offset,
     public int $limit,

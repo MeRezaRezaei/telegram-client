@@ -12,9 +12,14 @@ use Spatie\LaravelData\Data;
  */
 final class KeyboardButtonSwitchInlineData extends TlKeyboardButtonAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'samePeer' => ['flags', 0],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $samePeer,
+    public ?bool $samePeer,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlKeyboardButtonStyleAbstractData $style,
     public string $text,
     public string $query,

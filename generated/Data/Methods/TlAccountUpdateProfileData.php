@@ -20,9 +20,9 @@ final class TlAccountUpdateProfileData extends Data
 
     public function __construct(
     public int $flags,
-    public string $firstName,
-    public string $lastName,
-    public string $about,
+    public ?string $firstName,
+    public ?string $lastName,
+    public ?string $about,
     ) {
     }
 }

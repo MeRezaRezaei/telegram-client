@@ -18,7 +18,7 @@ final class TlStoriesStoryReactionsListData extends TlStoriesStoryReactionsListA
     public array $reactions,
     public array $chats,
     public array $users,
-    public string $nextOffset,
+    public ?string $nextOffset,
     ) {
     }
 }

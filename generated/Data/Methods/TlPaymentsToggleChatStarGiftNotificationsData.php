@@ -20,7 +20,7 @@ final class TlPaymentsToggleChatStarGiftNotificationsData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $enabled,
+    public ?bool $enabled,
     public mixed $peer,
     ) {
     }

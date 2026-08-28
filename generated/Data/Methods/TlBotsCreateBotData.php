@@ -20,7 +20,7 @@ final class TlBotsCreateBotData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $viaDeeplink,
+    public ?bool $viaDeeplink,
     public string $name,
     public string $username,
     public mixed $managerId,

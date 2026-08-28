@@ -20,8 +20,8 @@ final class TlMessagesSetInlineGameScoreData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $editMessage,
-    public bool $force,
+    public ?bool $editMessage,
+    public ?bool $force,
     public mixed $id,
     public mixed $userId,
     public int $score,

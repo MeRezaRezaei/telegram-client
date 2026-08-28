@@ -12,20 +12,28 @@ use Spatie\LaravelData\Data;
  */
 final class StarsSubscriptionData extends TlStarsSubscriptionAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'canceled' => ['flags', 0],
+        'canRefulfill' => ['flags', 1],
+        'missingBalance' => ['flags', 2],
+        'botCanceled' => ['flags', 7],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $canceled,
-    public bool $canRefulfill,
-    public bool $missingBalance,
-    public bool $botCanceled,
+    public ?bool $canceled,
+    public ?bool $canRefulfill,
+    public ?bool $missingBalance,
+    public ?bool $botCanceled,
     public string $id,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlPeerAbstractData $peer,
     public int $untilDate,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlStarsSubscriptionPricingAbstractData $pricing,
-    public string $chatInviteHash,
-    public string $title,
+    public ?string $chatInviteHash,
+    public ?string $title,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlWebDocumentAbstractData $photo,
-    public string $invoiceSlug,
+    public ?string $invoiceSlug,
     ) {
     }
 }

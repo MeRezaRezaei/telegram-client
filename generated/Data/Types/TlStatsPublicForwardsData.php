@@ -16,7 +16,7 @@ final class TlStatsPublicForwardsData extends TlStatsPublicForwardsAbstractData
     public int $flags,
     public int $count,
     public array $forwards,
-    public string $nextOffset,
+    public ?string $nextOffset,
     public array $chats,
     public array $users,
     ) {

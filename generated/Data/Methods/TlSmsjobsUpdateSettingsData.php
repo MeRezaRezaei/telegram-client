@@ -20,7 +20,7 @@ final class TlSmsjobsUpdateSettingsData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $allowInternational,
+    public ?bool $allowInternational,
     ) {
     }
 }

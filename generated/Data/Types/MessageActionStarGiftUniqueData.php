@@ -12,27 +12,39 @@ use Spatie\LaravelData\Data;
  */
 final class MessageActionStarGiftUniqueData extends TlMessageActionAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'upgrade' => ['flags', 0],
+        'transferred' => ['flags', 1],
+        'saved' => ['flags', 2],
+        'refunded' => ['flags', 5],
+        'prepaidUpgrade' => ['flags', 11],
+        'assigned' => ['flags', 13],
+        'fromOffer' => ['flags', 14],
+        'craft' => ['flags', 16],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $upgrade,
-    public bool $transferred,
-    public bool $saved,
-    public bool $refunded,
-    public bool $prepaidUpgrade,
-    public bool $assigned,
-    public bool $fromOffer,
-    public bool $craft,
+    public ?bool $upgrade,
+    public ?bool $transferred,
+    public ?bool $saved,
+    public ?bool $refunded,
+    public ?bool $prepaidUpgrade,
+    public ?bool $assigned,
+    public ?bool $fromOffer,
+    public ?bool $craft,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlStarGiftAbstractData $gift,
-    public int $canExportAt,
-    public int $transferStars,
+    public ?int $canExportAt,
+    public ?int $transferStars,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlPeerAbstractData $fromId,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlPeerAbstractData $peer,
-    public int $savedId,
+    public ?int $savedId,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlStarsAmountAbstractData $resaleAmount,
-    public int $canTransferAt,
-    public int $canResellAt,
-    public int $dropOriginalDetailsStars,
-    public int $canCraftAt,
+    public ?int $canTransferAt,
+    public ?int $canResellAt,
+    public ?int $dropOriginalDetailsStars,
+    public ?int $canCraftAt,
     ) {
     }
 }

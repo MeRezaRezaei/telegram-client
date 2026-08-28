@@ -20,7 +20,7 @@ final class TlPaymentsBotCancelStarsSubscriptionData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $restore,
+    public ?bool $restore,
     public mixed $userId,
     public string $chargeId,
     ) {

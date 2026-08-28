@@ -12,15 +12,20 @@ use Spatie\LaravelData\Data;
  */
 final class TlSmsjobsStatusData extends TlSmsjobsStatusAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'allowInternational' => ['flags', 0],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $allowInternational,
+    public ?bool $allowInternational,
     public int $recentSent,
     public int $recentSince,
     public int $recentRemains,
     public int $totalSent,
     public int $totalSince,
-    public string $lastGiftSlug,
+    public ?string $lastGiftSlug,
     public string $termsUrl,
     ) {
     }

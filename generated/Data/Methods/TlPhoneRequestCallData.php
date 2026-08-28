@@ -20,7 +20,7 @@ final class TlPhoneRequestCallData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $video,
+    public ?bool $video,
     public mixed $userId,
     public int $randomId,
     public string $gAHash,

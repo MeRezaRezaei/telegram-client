@@ -16,10 +16,10 @@ final class TlPaymentsStarsStatusData extends TlPaymentsStarsStatusAbstractData
     public int $flags,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlStarsAmountAbstractData $balance,
     public ?array $subscriptions,
-    public string $subscriptionsNextOffset,
-    public int $subscriptionsMissingBalance,
+    public ?string $subscriptionsNextOffset,
+    public ?int $subscriptionsMissingBalance,
     public ?array $history,
-    public string $nextOffset,
+    public ?string $nextOffset,
     public array $chats,
     public array $users,
     ) {

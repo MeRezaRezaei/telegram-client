@@ -22,9 +22,9 @@ final class TlAicomposeUpdateToneData extends Data
     public int $flags,
     public mixed $tone,
     public mixed $displayAuthor,
-    public int $emojiId,
-    public string $title,
-    public string $prompt,
+    public ?int $emojiId,
+    public ?string $title,
+    public ?string $prompt,
     ) {
     }
 }

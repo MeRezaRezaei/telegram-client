@@ -21,7 +21,7 @@ final class TlMessagesGetSponsoredMessagesData extends Data
     public function __construct(
     public int $flags,
     public mixed $peer,
-    public int $msgId,
+    public ?int $msgId,
     ) {
     }
 }

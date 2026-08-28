@@ -12,9 +12,14 @@ use Spatie\LaravelData\Data;
  */
 final class MessageEntityBlockquoteData extends TlMessageEntityAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'collapsed' => ['flags', 0],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $collapsed,
+    public ?bool $collapsed,
     public int $offset,
     public int $length,
     ) {

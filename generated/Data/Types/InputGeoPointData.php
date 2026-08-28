@@ -16,7 +16,7 @@ final class InputGeoPointData extends TlInputGeoPointAbstractData
     public int $flags,
     public float $lat,
     public float $long,
-    public int $accuracyRadius,
+    public ?int $accuracyRadius,
     ) {
     }
 }

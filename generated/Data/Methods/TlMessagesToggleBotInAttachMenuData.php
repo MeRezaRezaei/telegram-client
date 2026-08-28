@@ -20,7 +20,7 @@ final class TlMessagesToggleBotInAttachMenuData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $writeAllowed,
+    public ?bool $writeAllowed,
     public mixed $bot,
     public mixed $enabled,
     ) {

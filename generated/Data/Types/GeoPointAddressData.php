@@ -15,9 +15,9 @@ final class GeoPointAddressData extends TlGeoPointAddressAbstractData
     public function __construct(
     public int $flags,
     public string $countryIso2,
-    public string $state,
-    public string $city,
-    public string $street,
+    public ?string $state,
+    public ?string $city,
+    public ?string $street,
     ) {
     }
 }

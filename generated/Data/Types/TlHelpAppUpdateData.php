@@ -12,15 +12,20 @@ use Spatie\LaravelData\Data;
  */
 final class TlHelpAppUpdateData extends TlHelpAppUpdateAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'canNotSkip' => ['flags', 0],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $canNotSkip,
+    public ?bool $canNotSkip,
     public int $id,
     public string $version,
     public string $text,
     public array $entities,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlDocumentAbstractData $document,
-    public string $url,
+    public ?string $url,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlDocumentAbstractData $sticker,
     ) {
     }

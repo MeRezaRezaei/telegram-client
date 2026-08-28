@@ -12,9 +12,14 @@ use Spatie\LaravelData\Data;
  */
 final class UserStatusLastMonthData extends TlUserStatusAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'byMe' => ['flags', 0],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $byMe,
+    public ?bool $byMe,
     ) {
     }
 }

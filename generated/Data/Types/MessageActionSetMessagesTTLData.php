@@ -15,7 +15,7 @@ final class MessageActionSetMessagesTTLData extends TlMessageActionAbstractData
     public function __construct(
     public int $flags,
     public int $period,
-    public int $autoSettingFrom,
+    public ?int $autoSettingFrom,
     ) {
     }
 }

@@ -12,11 +12,18 @@ use Spatie\LaravelData\Data;
  */
 final class ChatFullData extends TlChatFullAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'canSetUsername' => ['flags', 7],
+        'hasScheduled' => ['flags', 8],
+        'translationsDisabled' => ['flags', 19],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $canSetUsername,
-    public bool $hasScheduled,
-    public bool $translationsDisabled,
+    public ?bool $canSetUsername,
+    public ?bool $hasScheduled,
+    public ?bool $translationsDisabled,
     public int $id,
     public string $about,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlChatParticipantsAbstractData $participants,
@@ -24,16 +31,16 @@ final class ChatFullData extends TlChatFullAbstractData
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlPeerNotifySettingsAbstractData $notifySettings,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlExportedChatInviteAbstractData $exportedInvite,
     public ?array $botInfo,
-    public int $pinnedMsgId,
-    public int $folderId,
+    public ?int $pinnedMsgId,
+    public ?int $folderId,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlInputGroupCallAbstractData $call,
-    public int $ttlPeriod,
+    public ?int $ttlPeriod,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlPeerAbstractData $groupcallDefaultJoinAs,
-    public string $themeEmoticon,
-    public int $requestsPending,
+    public ?string $themeEmoticon,
+    public ?int $requestsPending,
     public ?array $recentRequesters,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlChatReactionsAbstractData $availableReactions,
-    public int $reactionsLimit,
+    public ?int $reactionsLimit,
     ) {
     }
 }

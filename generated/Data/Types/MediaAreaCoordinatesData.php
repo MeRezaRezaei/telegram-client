@@ -19,7 +19,7 @@ final class MediaAreaCoordinatesData extends TlMediaAreaCoordinatesAbstractData
     public float $w,
     public float $h,
     public float $rotation,
-    public float $radius,
+    public ?float $radius,
     ) {
     }
 }

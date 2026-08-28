@@ -17,7 +17,7 @@ final class UpdateReadMessagesContentsData extends TlUpdateAbstractData
     public array $messages,
     public int $pts,
     public int $ptsCount,
-    public int $date,
+    public ?int $date,
     ) {
     }
 }

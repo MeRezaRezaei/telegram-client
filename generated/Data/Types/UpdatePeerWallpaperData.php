@@ -12,9 +12,14 @@ use Spatie\LaravelData\Data;
  */
 final class UpdatePeerWallpaperData extends TlUpdateAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'wallpaperOverridden' => ['flags', 1],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $wallpaperOverridden,
+    public ?bool $wallpaperOverridden,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlPeerAbstractData $peer,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlWallPaperAbstractData $wallpaper,
     ) {

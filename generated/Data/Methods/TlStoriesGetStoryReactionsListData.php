@@ -20,11 +20,11 @@ final class TlStoriesGetStoryReactionsListData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $forwardsFirst,
+    public ?bool $forwardsFirst,
     public mixed $peer,
     public int $id,
     public mixed $reaction,
-    public string $offset,
+    public ?string $offset,
     public int $limit,
     ) {
     }

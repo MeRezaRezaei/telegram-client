@@ -20,8 +20,8 @@ final class TlStoriesActivateStealthModeData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $past,
-    public bool $future,
+    public ?bool $past,
+    public ?bool $future,
     ) {
     }
 }

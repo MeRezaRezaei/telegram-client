@@ -20,11 +20,11 @@ final class TlMessagesCreateForumTopicData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $titleMissing,
+    public ?bool $titleMissing,
     public mixed $peer,
     public string $title,
-    public int $iconColor,
-    public int $iconEmojiId,
+    public ?int $iconColor,
+    public ?int $iconEmojiId,
     public int $randomId,
     public mixed $sendAs,
     ) {

@@ -20,10 +20,10 @@ final class TlChannelsUpdateColorData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $forProfile,
+    public ?bool $forProfile,
     public mixed $channel,
-    public int $color,
-    public int $backgroundEmojiId,
+    public ?int $color,
+    public ?int $backgroundEmojiId,
     ) {
     }
 }

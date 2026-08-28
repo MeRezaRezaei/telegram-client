@@ -12,12 +12,17 @@ use Spatie\LaravelData\Data;
  */
 final class InputKeyboardButtonUrlAuthData extends TlKeyboardButtonAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'requestWriteAccess' => ['flags', 0],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $requestWriteAccess,
+    public ?bool $requestWriteAccess,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlKeyboardButtonStyleAbstractData $style,
     public string $text,
-    public string $fwdText,
+    public ?string $fwdText,
     public string $url,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlInputUserAbstractData $bot,
     ) {

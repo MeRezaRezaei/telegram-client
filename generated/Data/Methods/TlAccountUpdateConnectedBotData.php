@@ -20,7 +20,7 @@ final class TlAccountUpdateConnectedBotData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $deleted,
+    public ?bool $deleted,
     public mixed $rights,
     public mixed $bot,
     public mixed $recipients,

@@ -18,7 +18,7 @@ final class TlAccountAuthorizationFormData extends TlAccountAuthorizationFormAbs
     public array $values,
     public array $errors,
     public array $users,
-    public string $privacyPolicyUrl,
+    public ?string $privacyPolicyUrl,
     ) {
     }
 }

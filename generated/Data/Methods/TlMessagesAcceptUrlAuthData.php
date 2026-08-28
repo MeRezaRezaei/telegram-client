@@ -20,13 +20,13 @@ final class TlMessagesAcceptUrlAuthData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $writeAllowed,
-    public bool $sharePhoneNumber,
+    public ?bool $writeAllowed,
+    public ?bool $sharePhoneNumber,
     public mixed $peer,
-    public int $msgId,
-    public int $buttonId,
-    public string $url,
-    public string $matchCode,
+    public ?int $msgId,
+    public ?int $buttonId,
+    public ?string $url,
+    public ?string $matchCode,
     ) {
     }
 }

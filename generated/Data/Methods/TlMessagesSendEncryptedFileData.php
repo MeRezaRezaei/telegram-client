@@ -20,7 +20,7 @@ final class TlMessagesSendEncryptedFileData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $silent,
+    public ?bool $silent,
     public mixed $peer,
     public int $randomId,
     public string $data,

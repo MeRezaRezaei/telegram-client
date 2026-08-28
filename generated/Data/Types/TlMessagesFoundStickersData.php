@@ -14,7 +14,7 @@ final class TlMessagesFoundStickersData extends TlMessagesFoundStickersAbstractD
 {
     public function __construct(
     public int $flags,
-    public int $nextOffset,
+    public ?int $nextOffset,
     public int $hash,
     public array $stickers,
     ) {

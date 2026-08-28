@@ -21,9 +21,9 @@ final class TlStickersChangeStickerData extends Data
     public function __construct(
     public int $flags,
     public mixed $sticker,
-    public string $emoji,
+    public ?string $emoji,
     public mixed $maskCoords,
-    public string $keywords,
+    public ?string $keywords,
     ) {
     }
 }

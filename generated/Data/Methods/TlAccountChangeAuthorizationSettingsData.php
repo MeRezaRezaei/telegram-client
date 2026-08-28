@@ -20,7 +20,7 @@ final class TlAccountChangeAuthorizationSettingsData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $confirmed,
+    public ?bool $confirmed,
     public int $hash,
     public mixed $encryptedRequestsDisabled,
     public mixed $callRequestsDisabled,

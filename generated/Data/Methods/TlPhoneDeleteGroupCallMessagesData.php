@@ -20,7 +20,7 @@ final class TlPhoneDeleteGroupCallMessagesData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $reportSpam,
+    public ?bool $reportSpam,
     public mixed $call,
     public array $messages,
     ) {

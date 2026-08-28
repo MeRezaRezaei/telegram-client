@@ -16,7 +16,7 @@ final class PeerNotifySettingsData extends TlPeerNotifySettingsAbstractData
     public int $flags,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlBoolAbstractData $showPreviews,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlBoolAbstractData $silent,
-    public int $muteUntil,
+    public ?int $muteUntil,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlNotificationSoundAbstractData $iosSound,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlNotificationSoundAbstractData $androidSound,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlNotificationSoundAbstractData $otherSound,

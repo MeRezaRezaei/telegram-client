@@ -14,8 +14,8 @@ final class PeerColorData extends TlPeerColorAbstractData
 {
     public function __construct(
     public int $flags,
-    public int $color,
-    public int $backgroundEmojiId,
+    public ?int $color,
+    public ?int $backgroundEmojiId,
     ) {
     }
 }

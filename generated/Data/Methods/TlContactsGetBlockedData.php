@@ -20,7 +20,7 @@ final class TlContactsGetBlockedData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $myStoriesFrom,
+    public ?bool $myStoriesFrom,
     public int $offset,
     public int $limit,
     ) {

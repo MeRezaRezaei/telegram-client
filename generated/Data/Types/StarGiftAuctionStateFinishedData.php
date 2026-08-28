@@ -17,9 +17,9 @@ final class StarGiftAuctionStateFinishedData extends TlStarGiftAuctionStateAbstr
     public int $startDate,
     public int $endDate,
     public int $averagePrice,
-    public int $listedCount,
-    public int $fragmentListedCount,
-    public string $fragmentListedUrl,
+    public ?int $listedCount,
+    public ?int $fragmentListedCount,
+    public ?string $fragmentListedUrl,
     ) {
     }
 }

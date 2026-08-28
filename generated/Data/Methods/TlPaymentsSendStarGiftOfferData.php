@@ -25,7 +25,7 @@ final class TlPaymentsSendStarGiftOfferData extends Data
     public mixed $price,
     public int $duration,
     public int $randomId,
-    public int $allowPaidStars,
+    public ?int $allowPaidStars,
     ) {
     }
 }

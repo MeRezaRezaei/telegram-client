@@ -20,9 +20,9 @@ final class TlMessagesUpdatePinnedMessageData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $silent,
-    public bool $unpin,
-    public bool $pmOneside,
+    public ?bool $silent,
+    public ?bool $unpin,
+    public ?bool $pmOneside,
     public mixed $peer,
     public int $id,
     ) {

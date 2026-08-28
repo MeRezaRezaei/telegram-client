@@ -12,9 +12,14 @@ use Spatie\LaravelData\Data;
  */
 final class TlMessagesForumTopicsData extends TlMessagesForumTopicsAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'orderByCreateDate' => ['flags', 0],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $orderByCreateDate,
+    public ?bool $orderByCreateDate,
     public int $count,
     public array $topics,
     public array $messages,

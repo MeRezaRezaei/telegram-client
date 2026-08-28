@@ -16,8 +16,8 @@ final class PremiumGiftCodeOptionData extends TlPremiumGiftCodeOptionAbstractDat
     public int $flags,
     public int $users,
     public int $months,
-    public string $storeProduct,
-    public int $storeQuantity,
+    public ?string $storeProduct,
+    public ?int $storeQuantity,
     public string $currency,
     public int $amount,
     ) {

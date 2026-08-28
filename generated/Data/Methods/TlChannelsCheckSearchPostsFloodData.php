@@ -20,7 +20,7 @@ final class TlChannelsCheckSearchPostsFloodData extends Data
 
     public function __construct(
     public int $flags,
-    public string $query,
+    public ?string $query,
     ) {
     }
 }

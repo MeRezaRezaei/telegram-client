@@ -18,7 +18,7 @@ final class VideoSizeData extends TlVideoSizeAbstractData
     public int $w,
     public int $h,
     public int $size,
-    public float $videoStartTs,
+    public ?float $videoStartTs,
     ) {
     }
 }

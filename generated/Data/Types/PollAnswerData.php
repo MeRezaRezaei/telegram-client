@@ -20,7 +20,7 @@ final class PollAnswerData extends TlPollAnswerAbstractData
     public string $option,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlMessageMediaAbstractData $media,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlPeerAbstractData $addedBy,
-    public int $date,
+    public ?int $date,
     ) {
     }
 }

@@ -12,12 +12,17 @@ use Spatie\LaravelData\Data;
  */
 final class SearchPostsFloodData extends TlSearchPostsFloodAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'queryIsFree' => ['flags', 0],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $queryIsFree,
+    public ?bool $queryIsFree,
     public int $totalDaily,
     public int $remains,
-    public int $waitTill,
+    public ?int $waitTill,
     public int $starsAmount,
     ) {
     }

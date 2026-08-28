@@ -18,8 +18,8 @@ final class BotInlineMediaResultData extends TlBotInlineResultAbstractData
     public string $type,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlPhotoAbstractData $photo,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlDocumentAbstractData $document,
-    public string $title,
-    public string $description,
+    public ?string $title,
+    public ?string $description,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlBotInlineMessageAbstractData $sendMessage,
     ) {
     }

@@ -20,7 +20,7 @@ final class TlMessagesDeletePhoneCallHistoryData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $revoke,
+    public ?bool $revoke,
     ) {
     }
 }

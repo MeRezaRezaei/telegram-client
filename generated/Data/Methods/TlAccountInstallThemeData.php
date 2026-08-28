@@ -20,9 +20,9 @@ final class TlAccountInstallThemeData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $dark,
+    public ?bool $dark,
     public mixed $theme,
-    public string $format,
+    public ?string $format,
     public mixed $baseTheme,
     ) {
     }

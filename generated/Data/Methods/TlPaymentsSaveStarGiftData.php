@@ -20,7 +20,7 @@ final class TlPaymentsSaveStarGiftData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $unsave,
+    public ?bool $unsave,
     public mixed $stargift,
     ) {
     }

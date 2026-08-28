@@ -20,13 +20,13 @@ final class TlMessagesEditExportedChatInviteData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $revoked,
+    public ?bool $revoked,
     public mixed $peer,
     public string $link,
-    public int $expireDate,
-    public int $usageLimit,
+    public ?int $expireDate,
+    public ?int $usageLimit,
     public mixed $requestNeeded,
-    public string $title,
+    public ?string $title,
     ) {
     }
 }

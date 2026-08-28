@@ -17,14 +17,14 @@ final class InputReplyToMessageData extends TlInputReplyToAbstractData
     public function __construct(
     public int $flags,
     public int $replyToMsgId,
-    public int $topMsgId,
+    public ?int $topMsgId,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlInputPeerAbstractData $replyToPeerId,
-    public string $quoteText,
+    public ?string $quoteText,
     public ?array $quoteEntities,
-    public int $quoteOffset,
+    public ?int $quoteOffset,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlInputPeerAbstractData $monoforumPeerId,
-    public int $todoItemId,
-    public string $pollOption,
+    public ?int $todoItemId,
+    public ?string $pollOption,
     ) {
     }
 }

@@ -20,8 +20,8 @@ final class TlUploadGetFileData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $precise,
-    public bool $cdnSupported,
+    public ?bool $precise,
+    public ?bool $cdnSupported,
     public mixed $location,
     public int $offset,
     public int $limit,

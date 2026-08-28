@@ -20,8 +20,8 @@ final class TlMessagesSendReactionData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $big,
-    public bool $addToRecent,
+    public ?bool $big,
+    public ?bool $addToRecent,
     public mixed $peer,
     public int $msgId,
     public ?array $reaction,

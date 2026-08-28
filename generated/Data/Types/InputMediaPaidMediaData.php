@@ -16,7 +16,7 @@ final class InputMediaPaidMediaData extends TlInputMediaAbstractData
     public int $flags,
     public int $starsAmount,
     public array $extendedMedia,
-    public string $payload,
+    public ?string $payload,
     ) {
     }
 }

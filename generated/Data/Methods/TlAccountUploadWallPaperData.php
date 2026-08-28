@@ -20,7 +20,7 @@ final class TlAccountUploadWallPaperData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $forChat,
+    public ?bool $forChat,
     public mixed $file,
     public string $mimeType,
     public mixed $settings,

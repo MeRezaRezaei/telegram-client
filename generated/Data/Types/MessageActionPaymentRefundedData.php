@@ -19,7 +19,7 @@ final class MessageActionPaymentRefundedData extends TlMessageActionAbstractData
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlPeerAbstractData $peer,
     public string $currency,
     public int $totalAmount,
-    public string $payload,
+    public ?string $payload,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlPaymentChargeAbstractData $charge,
     ) {
     }

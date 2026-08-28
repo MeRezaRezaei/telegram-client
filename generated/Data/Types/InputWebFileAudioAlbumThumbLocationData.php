@@ -12,12 +12,17 @@ use Spatie\LaravelData\Data;
  */
 final class InputWebFileAudioAlbumThumbLocationData extends TlInputWebFileLocationAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'small' => ['flags', 2],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $small,
+    public ?bool $small,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlInputDocumentAbstractData $document,
-    public string $title,
-    public string $performer,
+    public ?string $title,
+    public ?string $performer,
     ) {
     }
 }

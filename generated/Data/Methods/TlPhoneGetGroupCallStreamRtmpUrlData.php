@@ -20,7 +20,7 @@ final class TlPhoneGetGroupCallStreamRtmpUrlData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $liveStory,
+    public ?bool $liveStory,
     public mixed $peer,
     public mixed $revoke,
     ) {

@@ -14,7 +14,7 @@ final class UrlAuthResultAcceptedData extends TlUrlAuthResultAbstractData
 {
     public function __construct(
     public int $flags,
-    public string $url,
+    public ?string $url,
     ) {
     }
 }

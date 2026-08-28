@@ -21,7 +21,7 @@ final class TlMessagesUpdateSavedReactionTagData extends Data
     public function __construct(
     public int $flags,
     public mixed $reaction,
-    public string $title,
+    public ?string $title,
     ) {
     }
 }

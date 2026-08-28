@@ -20,7 +20,7 @@ final class TlChannelsUpdatePaidMessagesPriceData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $broadcastMessagesAllowed,
+    public ?bool $broadcastMessagesAllowed,
     public mixed $channel,
     public int $sendPaidMessagesStars,
     ) {

@@ -12,10 +12,16 @@ use Spatie\LaravelData\Data;
  */
 final class StoryViewData extends TlStoryViewAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'blocked' => ['flags', 0],
+        'blockedMyStoriesFrom' => ['flags', 1],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $blocked,
-    public bool $blockedMyStoriesFrom,
+    public ?bool $blocked,
+    public ?bool $blockedMyStoriesFrom,
     public int $userId,
     public int $date,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlReactionAbstractData $reaction,

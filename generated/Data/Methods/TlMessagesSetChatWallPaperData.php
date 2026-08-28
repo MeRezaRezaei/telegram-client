@@ -20,12 +20,12 @@ final class TlMessagesSetChatWallPaperData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $forBoth,
-    public bool $revert,
+    public ?bool $forBoth,
+    public ?bool $revert,
     public mixed $peer,
     public mixed $wallpaper,
     public mixed $settings,
-    public int $id,
+    public ?int $id,
     ) {
     }
 }

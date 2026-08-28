@@ -12,13 +12,18 @@ use Spatie\LaravelData\Data;
  */
 final class StoryViewsData extends TlStoryViewsAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'hasViewers' => ['flags', 1],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $hasViewers,
+    public ?bool $hasViewers,
     public int $viewsCount,
-    public int $forwardsCount,
+    public ?int $forwardsCount,
     public ?array $reactions,
-    public int $reactionsCount,
+    public ?int $reactionsCount,
     public ?array $recentViewers,
     ) {
     }

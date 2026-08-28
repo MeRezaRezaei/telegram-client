@@ -12,16 +12,22 @@ use Spatie\LaravelData\Data;
  */
 final class ChannelParticipantAdminData extends TlChannelParticipantAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'canEdit' => ['flags', 0],
+        'self' => ['flags', 1],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $canEdit,
-    public bool $self,
+    public ?bool $canEdit,
+    public ?bool $self,
     public int $userId,
-    public int $inviterId,
+    public ?int $inviterId,
     public int $promotedBy,
     public int $date,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlChatAdminRightsAbstractData $adminRights,
-    public string $rank,
+    public ?string $rank,
     ) {
     }
 }

@@ -17,7 +17,7 @@ final class GeoPointData extends TlGeoPointAbstractData
     public float $long,
     public float $lat,
     public int $accessHash,
-    public int $accuracyRadius,
+    public ?int $accuracyRadius,
     ) {
     }
 }

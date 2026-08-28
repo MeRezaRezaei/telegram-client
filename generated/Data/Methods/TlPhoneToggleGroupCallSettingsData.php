@@ -20,11 +20,11 @@ final class TlPhoneToggleGroupCallSettingsData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $resetInviteHash,
+    public ?bool $resetInviteHash,
     public mixed $call,
     public mixed $joinMuted,
     public mixed $messagesEnabled,
-    public int $sendPaidMessagesStars,
+    public ?int $sendPaidMessagesStars,
     ) {
     }
 }

@@ -20,12 +20,12 @@ final class TlMessagesDeleteHistoryData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $justClear,
-    public bool $revoke,
+    public ?bool $justClear,
+    public ?bool $revoke,
     public mixed $peer,
     public int $maxId,
-    public int $minDate,
-    public int $maxDate,
+    public ?int $minDate,
+    public ?int $maxDate,
     ) {
     }
 }

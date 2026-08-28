@@ -12,10 +12,16 @@ use Spatie\LaravelData\Data;
  */
 final class MonoForumDialogData extends TlSavedDialogAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'unreadMark' => ['flags', 3],
+        'nopaidMessagesException' => ['flags', 4],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $unreadMark,
-    public bool $nopaidMessagesException,
+    public ?bool $unreadMark,
+    public ?bool $nopaidMessagesException,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlPeerAbstractData $peer,
     public int $topMessage,
     public int $readInboxMaxId,

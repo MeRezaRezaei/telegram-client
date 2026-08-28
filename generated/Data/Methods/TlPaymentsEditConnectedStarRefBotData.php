@@ -20,7 +20,7 @@ final class TlPaymentsEditConnectedStarRefBotData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $revoked,
+    public ?bool $revoked,
     public mixed $peer,
     public string $link,
     ) {

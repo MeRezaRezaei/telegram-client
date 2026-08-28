@@ -22,7 +22,7 @@ final class UpdateBusinessBotCallbackQueryData extends TlUpdateAbstractData
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlMessageAbstractData $message,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlMessageAbstractData $replyToMessage,
     public int $chatInstance,
-    public string $data,
+    public ?string $data,
     ) {
     }
 }

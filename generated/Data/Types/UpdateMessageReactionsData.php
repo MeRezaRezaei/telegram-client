@@ -16,7 +16,7 @@ final class UpdateMessageReactionsData extends TlUpdateAbstractData
     public int $flags,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlPeerAbstractData $peer,
     public int $msgId,
-    public int $topMsgId,
+    public ?int $topMsgId,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlPeerAbstractData $savedPeerId,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlMessageReactionsAbstractData $reactions,
     ) {

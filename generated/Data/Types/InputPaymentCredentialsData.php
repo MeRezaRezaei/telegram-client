@@ -12,9 +12,14 @@ use Spatie\LaravelData\Data;
  */
 final class InputPaymentCredentialsData extends TlInputPaymentCredentialsAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'save' => ['flags', 0],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $save,
+    public ?bool $save,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlDataJSONAbstractData $data,
     ) {
     }

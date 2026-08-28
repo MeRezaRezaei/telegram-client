@@ -15,7 +15,7 @@ final class EmojiStatusData extends TlEmojiStatusAbstractData
     public function __construct(
     public int $flags,
     public int $documentId,
-    public int $until,
+    public ?int $until,
     ) {
     }
 }

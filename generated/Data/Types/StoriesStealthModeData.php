@@ -14,8 +14,8 @@ final class StoriesStealthModeData extends TlStoriesStealthModeAbstractData
 {
     public function __construct(
     public int $flags,
-    public int $activeUntilDate,
-    public int $cooldownUntilDate,
+    public ?int $activeUntilDate,
+    public ?int $cooldownUntilDate,
     ) {
     }
 }

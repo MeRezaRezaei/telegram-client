@@ -23,7 +23,7 @@ final class TlPhoneSendGroupCallMessageData extends Data
     public mixed $call,
     public int $randomId,
     public mixed $message,
-    public int $allowPaidStars,
+    public ?int $allowPaidStars,
     public mixed $sendAs,
     ) {
     }

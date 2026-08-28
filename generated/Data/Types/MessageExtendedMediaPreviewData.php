@@ -14,10 +14,10 @@ final class MessageExtendedMediaPreviewData extends TlMessageExtendedMediaAbstra
 {
     public function __construct(
     public int $flags,
-    public int $w,
-    public int $h,
+    public ?int $w,
+    public ?int $h,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlPhotoSizeAbstractData $thumb,
-    public int $videoDuration,
+    public ?int $videoDuration,
     ) {
     }
 }

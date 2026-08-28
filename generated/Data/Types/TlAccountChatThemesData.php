@@ -18,7 +18,7 @@ final class TlAccountChatThemesData extends TlAccountChatThemesAbstractData
     public array $themes,
     public array $chats,
     public array $users,
-    public string $nextOffset,
+    public ?string $nextOffset,
     ) {
     }
 }

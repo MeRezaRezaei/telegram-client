@@ -15,7 +15,7 @@ final class PeerStoriesData extends TlPeerStoriesAbstractData
     public function __construct(
     public int $flags,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlPeerAbstractData $peer,
-    public int $maxReadId,
+    public ?int $maxReadId,
     public array $stories,
     ) {
     }

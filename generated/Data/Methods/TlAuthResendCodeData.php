@@ -22,7 +22,7 @@ final class TlAuthResendCodeData extends Data
     public int $flags,
     public string $phoneNumber,
     public string $phoneCodeHash,
-    public string $reason,
+    public ?string $reason,
     ) {
     }
 }

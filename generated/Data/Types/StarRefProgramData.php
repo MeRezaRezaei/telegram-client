@@ -16,8 +16,8 @@ final class StarRefProgramData extends TlStarRefProgramAbstractData
     public int $flags,
     public int $botId,
     public int $commissionPermille,
-    public int $durationMonths,
-    public int $endDate,
+    public ?int $durationMonths,
+    public ?int $endDate,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlStarsAmountAbstractData $dailyRevenuePerUser,
     ) {
     }

@@ -20,10 +20,10 @@ final class TlBotsSetCustomVerificationData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $enabled,
+    public ?bool $enabled,
     public mixed $bot,
     public mixed $peer,
-    public string $customDescription,
+    public ?string $customDescription,
     ) {
     }
 }

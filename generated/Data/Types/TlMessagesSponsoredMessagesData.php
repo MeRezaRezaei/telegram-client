@@ -14,9 +14,9 @@ final class TlMessagesSponsoredMessagesData extends TlMessagesSponsoredMessagesA
 {
     public function __construct(
     public int $flags,
-    public int $postsBetween,
-    public int $startDelay,
-    public int $betweenDelay,
+    public ?int $postsBetween,
+    public ?int $startDelay,
+    public ?int $betweenDelay,
     public array $messages,
     public array $chats,
     public array $users,

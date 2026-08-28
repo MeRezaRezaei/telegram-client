@@ -12,9 +12,14 @@ use Spatie\LaravelData\Data;
  */
 final class ChatReactionsAllData extends TlChatReactionsAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'allowCustom' => ['flags', 0],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $allowCustom,
+    public ?bool $allowCustom,
     ) {
     }
 }

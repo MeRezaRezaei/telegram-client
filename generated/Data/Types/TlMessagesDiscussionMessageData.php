@@ -15,9 +15,9 @@ final class TlMessagesDiscussionMessageData extends TlMessagesDiscussionMessageA
     public function __construct(
     public int $flags,
     public array $messages,
-    public int $maxId,
-    public int $readInboxMaxId,
-    public int $readOutboxMaxId,
+    public ?int $maxId,
+    public ?int $readInboxMaxId,
+    public ?int $readOutboxMaxId,
     public int $unreadCount,
     public array $chats,
     public array $users,

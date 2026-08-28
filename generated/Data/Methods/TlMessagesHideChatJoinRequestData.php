@@ -20,7 +20,7 @@ final class TlMessagesHideChatJoinRequestData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $approved,
+    public ?bool $approved,
     public mixed $peer,
     public mixed $userId,
     ) {

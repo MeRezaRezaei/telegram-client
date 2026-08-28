@@ -12,13 +12,19 @@ use Spatie\LaravelData\Data;
  */
 final class InputMediaUploadedPhotoData extends TlInputMediaAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'spoiler' => ['flags', 2],
+        'livePhoto' => ['flags', 3],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $spoiler,
-    public bool $livePhoto,
+    public ?bool $spoiler,
+    public ?bool $livePhoto,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlInputFileAbstractData $file,
     public ?array $stickers,
-    public int $ttlSeconds,
+    public ?int $ttlSeconds,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlInputDocumentAbstractData $video,
     ) {
     }

@@ -20,7 +20,7 @@ final class TlAccountToggleWebBrowserSettingsExceptionData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $delete,
+    public ?bool $delete,
     public mixed $openExternalBrowser,
     public string $url,
     ) {

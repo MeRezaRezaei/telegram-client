@@ -12,11 +12,17 @@ use Spatie\LaravelData\Data;
  */
 final class WallPaperNoFileData extends TlWallPaperAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'default' => ['flags', 1],
+        'dark' => ['flags', 4],
+    ];
+
     public function __construct(
     public int $id,
     public int $flags,
-    public bool $default,
-    public bool $dark,
+    public ?bool $default,
+    public ?bool $dark,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlWallPaperSettingsAbstractData $settings,
     ) {
     }

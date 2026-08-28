@@ -12,11 +12,16 @@ use Spatie\LaravelData\Data;
  */
 final class TlChatlistsChatlistInviteData extends TlChatlistsChatlistInviteAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'titleNoanimate' => ['flags', 1],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $titleNoanimate,
+    public ?bool $titleNoanimate,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlTextWithEntitiesAbstractData $title,
-    public string $emoticon,
+    public ?string $emoticon,
     public array $peers,
     public array $chats,
     public array $users,

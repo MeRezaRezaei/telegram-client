@@ -20,8 +20,8 @@ final class TlChannelsGetSendAsData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $forPaidReactions,
-    public bool $forLiveStories,
+    public ?bool $forPaidReactions,
+    public ?bool $forLiveStories,
     public mixed $peer,
     ) {
     }

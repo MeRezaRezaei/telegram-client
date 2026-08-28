@@ -22,7 +22,7 @@ final class TlStoriesUpdateAlbumData extends Data
     public int $flags,
     public mixed $peer,
     public int $albumId,
-    public string $title,
+    public ?string $title,
     public ?array $deleteStories,
     public ?array $addStories,
     public ?array $order,

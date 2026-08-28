@@ -122,12 +122,6 @@ final class ModelGenerator
             'use MeRezaRezaei\TelegramClient\Schema\Eloquent\TlInstanceModel;',
             'use Illuminate\Database\Eloquent\Relations\HasMany;',
         ];
-
-        $uses = [
-            'use MeRezaRezaei\TelegramClient\Schema\Eloquent\HasTlChildren;',
-            'use MeRezaRezaei\TelegramClient\Schema\Eloquent\TlInstanceModel;',
-            'use Illuminate\Database\Eloquent\Relations\HasMany;',
-        ];
         foreach ($childUses as $use) {
             $uses[] = 'use ' . self::NS . '\\' . $use . ';';
         }

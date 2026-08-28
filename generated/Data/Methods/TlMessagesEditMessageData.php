@@ -20,17 +20,17 @@ final class TlMessagesEditMessageData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $noWebpage,
-    public bool $invertMedia,
+    public ?bool $noWebpage,
+    public ?bool $invertMedia,
     public mixed $peer,
     public int $id,
-    public string $message,
+    public ?string $message,
     public mixed $media,
     public mixed $replyMarkup,
     public ?array $entities,
-    public int $scheduleDate,
-    public int $scheduleRepeatPeriod,
-    public int $quickReplyShortcutId,
+    public ?int $scheduleDate,
+    public ?int $scheduleRepeatPeriod,
+    public ?int $quickReplyShortcutId,
     public mixed $richMessage,
     ) {
     }

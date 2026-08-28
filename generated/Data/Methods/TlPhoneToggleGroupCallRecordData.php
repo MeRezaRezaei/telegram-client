@@ -20,10 +20,10 @@ final class TlPhoneToggleGroupCallRecordData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $start,
-    public bool $video,
+    public ?bool $start,
+    public ?bool $video,
     public mixed $call,
-    public string $title,
+    public ?string $title,
     public mixed $videoPortrait,
     ) {
     }

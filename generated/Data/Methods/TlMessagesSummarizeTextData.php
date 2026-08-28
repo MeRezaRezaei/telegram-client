@@ -22,8 +22,8 @@ final class TlMessagesSummarizeTextData extends Data
     public int $flags,
     public mixed $peer,
     public int $id,
-    public string $toLang,
-    public string $tone,
+    public ?string $toLang,
+    public ?string $tone,
     ) {
     }
 }

@@ -20,7 +20,7 @@ final class TlMessagesProlongWebViewData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $silent,
+    public ?bool $silent,
     public mixed $peer,
     public mixed $bot,
     public int $queryId,

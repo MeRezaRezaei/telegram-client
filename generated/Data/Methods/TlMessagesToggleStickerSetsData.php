@@ -20,9 +20,9 @@ final class TlMessagesToggleStickerSetsData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $uninstall,
-    public bool $archive,
-    public bool $unarchive,
+    public ?bool $uninstall,
+    public ?bool $archive,
+    public ?bool $unarchive,
     public array $stickersets,
     ) {
     }

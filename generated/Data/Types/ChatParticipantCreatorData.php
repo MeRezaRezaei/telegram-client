@@ -15,7 +15,7 @@ final class ChatParticipantCreatorData extends TlChatParticipantAbstractData
     public function __construct(
     public int $flags,
     public int $userId,
-    public string $rank,
+    public ?string $rank,
     ) {
     }
 }

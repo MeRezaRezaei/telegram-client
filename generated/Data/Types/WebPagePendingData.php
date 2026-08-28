@@ -15,7 +15,7 @@ final class WebPagePendingData extends TlWebPageAbstractData
     public function __construct(
     public int $flags,
     public int $id,
-    public string $url,
+    public ?string $url,
     public int $date,
     ) {
     }

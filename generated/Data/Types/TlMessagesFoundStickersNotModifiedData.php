@@ -14,7 +14,7 @@ final class TlMessagesFoundStickersNotModifiedData extends TlMessagesFoundSticke
 {
     public function __construct(
     public int $flags,
-    public int $nextOffset,
+    public ?int $nextOffset,
     ) {
     }
 }

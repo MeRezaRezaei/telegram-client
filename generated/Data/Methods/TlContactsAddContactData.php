@@ -20,7 +20,7 @@ final class TlContactsAddContactData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $addPhonePrivacyException,
+    public ?bool $addPhonePrivacyException,
     public mixed $id,
     public string $firstName,
     public string $lastName,

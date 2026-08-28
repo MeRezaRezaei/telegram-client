@@ -21,7 +21,7 @@ final class TlAccountUpdateBusinessLocationData extends Data
     public function __construct(
     public int $flags,
     public mixed $geoPoint,
-    public string $address,
+    public ?string $address,
     ) {
     }
 }

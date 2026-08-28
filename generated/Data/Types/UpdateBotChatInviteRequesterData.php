@@ -20,7 +20,7 @@ final class UpdateBotChatInviteRequesterData extends TlUpdateAbstractData
     public string $about,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlExportedChatInviteAbstractData $invite,
     public int $qts,
-    public int $queryId,
+    public ?int $queryId,
     ) {
     }
 }

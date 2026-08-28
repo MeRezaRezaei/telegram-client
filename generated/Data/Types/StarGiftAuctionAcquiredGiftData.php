@@ -12,16 +12,21 @@ use Spatie\LaravelData\Data;
  */
 final class StarGiftAuctionAcquiredGiftData extends TlStarGiftAuctionAcquiredGiftAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'nameHidden' => ['flags', 0],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $nameHidden,
+    public ?bool $nameHidden,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlPeerAbstractData $peer,
     public int $date,
     public int $bidAmount,
     public int $round,
     public int $pos,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlTextWithEntitiesAbstractData $message,
-    public int $giftNum,
+    public ?int $giftNum,
     ) {
     }
 }

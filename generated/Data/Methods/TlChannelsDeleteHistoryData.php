@@ -20,7 +20,7 @@ final class TlChannelsDeleteHistoryData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $forEveryone,
+    public ?bool $forEveryone,
     public mixed $channel,
     public int $maxId,
     ) {

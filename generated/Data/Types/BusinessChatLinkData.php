@@ -17,7 +17,7 @@ final class BusinessChatLinkData extends TlBusinessChatLinkAbstractData
     public string $link,
     public string $message,
     public ?array $entities,
-    public string $title,
+    public ?string $title,
     public int $views,
     ) {
     }

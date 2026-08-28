@@ -16,7 +16,7 @@ final class InputPeerNotifySettingsData extends TlInputPeerNotifySettingsAbstrac
     public int $flags,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlBoolAbstractData $showPreviews,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlBoolAbstractData $silent,
-    public int $muteUntil,
+    public ?int $muteUntil,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlNotificationSoundAbstractData $sound,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlBoolAbstractData $storiesMuted,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlBoolAbstractData $storiesHideSender,

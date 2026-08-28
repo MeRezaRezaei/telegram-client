@@ -12,11 +12,16 @@ use Spatie\LaravelData\Data;
  */
 final class InputMediaPhotoExternalData extends TlInputMediaAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'spoiler' => ['flags', 1],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $spoiler,
+    public ?bool $spoiler,
     public string $url,
-    public int $ttlSeconds,
+    public ?int $ttlSeconds,
     ) {
     }
 }

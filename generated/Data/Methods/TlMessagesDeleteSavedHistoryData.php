@@ -23,8 +23,8 @@ final class TlMessagesDeleteSavedHistoryData extends Data
     public mixed $parentPeer,
     public mixed $peer,
     public int $maxId,
-    public int $minDate,
-    public int $maxDate,
+    public ?int $minDate,
+    public ?int $maxDate,
     ) {
     }
 }

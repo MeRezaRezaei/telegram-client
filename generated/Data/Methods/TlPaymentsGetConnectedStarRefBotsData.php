@@ -21,8 +21,8 @@ final class TlPaymentsGetConnectedStarRefBotsData extends Data
     public function __construct(
     public int $flags,
     public mixed $peer,
-    public int $offsetDate,
-    public string $offsetLink,
+    public ?int $offsetDate,
+    public ?string $offsetLink,
     public int $limit,
     ) {
     }

@@ -20,11 +20,11 @@ final class TlPhoneCreateGroupCallData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $rtmpStream,
+    public ?bool $rtmpStream,
     public mixed $peer,
     public int $randomId,
-    public string $title,
-    public int $scheduleDate,
+    public ?string $title,
+    public ?int $scheduleDate,
     ) {
     }
 }

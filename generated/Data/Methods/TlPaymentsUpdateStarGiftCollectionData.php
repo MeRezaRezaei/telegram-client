@@ -22,7 +22,7 @@ final class TlPaymentsUpdateStarGiftCollectionData extends Data
     public int $flags,
     public mixed $peer,
     public int $collectionId,
-    public string $title,
+    public ?string $title,
     public ?array $deleteStargift,
     public ?array $addStargift,
     public ?array $order,

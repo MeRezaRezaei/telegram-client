@@ -12,13 +12,20 @@ use Spatie\LaravelData\Data;
  */
 final class MessageActionConferenceCallData extends TlMessageActionAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'missed' => ['flags', 0],
+        'active' => ['flags', 1],
+        'video' => ['flags', 4],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $missed,
-    public bool $active,
-    public bool $video,
+    public ?bool $missed,
+    public ?bool $active,
+    public ?bool $video,
     public int $callId,
-    public int $duration,
+    public ?int $duration,
     public ?array $otherParticipants,
     ) {
     }

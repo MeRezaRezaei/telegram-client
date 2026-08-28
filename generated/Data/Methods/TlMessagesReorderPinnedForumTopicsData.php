@@ -20,7 +20,7 @@ final class TlMessagesReorderPinnedForumTopicsData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $force,
+    public ?bool $force,
     public mixed $peer,
     public array $order,
     ) {

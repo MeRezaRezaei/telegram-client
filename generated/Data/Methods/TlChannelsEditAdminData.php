@@ -23,7 +23,7 @@ final class TlChannelsEditAdminData extends Data
     public mixed $channel,
     public mixed $userId,
     public mixed $adminRights,
-    public string $rank,
+    public ?string $rank,
     ) {
     }
 }

@@ -24,7 +24,7 @@ final class TlStoriesEditStoryData extends Data
     public int $id,
     public mixed $media,
     public ?array $mediaAreas,
-    public string $caption,
+    public ?string $caption,
     public ?array $entities,
     public ?array $privacyRules,
     public mixed $music,

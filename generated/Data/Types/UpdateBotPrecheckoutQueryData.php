@@ -20,7 +20,7 @@ final class UpdateBotPrecheckoutQueryData extends TlUpdateAbstractData
     public int $userId,
     public string $payload,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlPaymentRequestedInfoAbstractData $info,
-    public string $shippingOptionId,
+    public ?string $shippingOptionId,
     public string $currency,
     public int $totalAmount,
     ) {

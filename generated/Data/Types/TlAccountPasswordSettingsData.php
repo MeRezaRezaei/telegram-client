@@ -14,7 +14,7 @@ final class TlAccountPasswordSettingsData extends TlAccountPasswordSettingsAbstr
 {
     public function __construct(
     public int $flags,
-    public string $email,
+    public ?string $email,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlSecureSecretSettingsAbstractData $secureSettings,
     ) {
     }

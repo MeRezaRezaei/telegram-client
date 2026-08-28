@@ -20,9 +20,9 @@ final class TlContactsBlockFromRepliesData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $deleteMessage,
-    public bool $deleteHistory,
-    public bool $reportSpam,
+    public ?bool $deleteMessage,
+    public ?bool $deleteHistory,
+    public ?bool $reportSpam,
     public int $msgId,
     ) {
     }

@@ -20,7 +20,7 @@ final class TlMessagesReorderPinnedDialogsData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $force,
+    public ?bool $force,
     public int $folderId,
     public array $order,
     ) {

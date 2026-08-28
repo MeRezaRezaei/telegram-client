@@ -14,9 +14,14 @@ use Spatie\LaravelData\Data;
  */
 final class PhoneCallAcceptedData extends TlPhoneCallAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'video' => ['flags', 6],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $video,
+    public ?bool $video,
     public int $id,
     public int $accessHash,
     public int $date,

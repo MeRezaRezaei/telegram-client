@@ -12,12 +12,17 @@ use Spatie\LaravelData\Data;
  */
 final class StoryFwdHeaderData extends TlStoryFwdHeaderAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'modified' => ['flags', 3],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $modified,
+    public ?bool $modified,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlPeerAbstractData $from,
-    public string $fromName,
-    public int $storyId,
+    public ?string $fromName,
+    public ?int $storyId,
     ) {
     }
 }

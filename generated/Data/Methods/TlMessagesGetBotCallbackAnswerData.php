@@ -20,10 +20,10 @@ final class TlMessagesGetBotCallbackAnswerData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $game,
+    public ?bool $game,
     public mixed $peer,
     public int $msgId,
-    public string $data,
+    public ?string $data,
     public mixed $password,
     ) {
     }

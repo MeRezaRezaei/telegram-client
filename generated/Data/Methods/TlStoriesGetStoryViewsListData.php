@@ -20,11 +20,11 @@ final class TlStoriesGetStoryViewsListData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $justContacts,
-    public bool $reactionsFirst,
-    public bool $forwardsFirst,
+    public ?bool $justContacts,
+    public ?bool $reactionsFirst,
+    public ?bool $forwardsFirst,
     public mixed $peer,
-    public string $q,
+    public ?string $q,
     public int $id,
     public string $offset,
     public int $limit,

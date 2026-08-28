@@ -17,7 +17,7 @@ final class TlPaymentsSavedStarGiftsData extends TlPaymentsSavedStarGiftsAbstrac
     public int $count,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlBoolAbstractData $chatNotificationsEnabled,
     public array $gifts,
-    public string $nextOffset,
+    public ?string $nextOffset,
     public array $chats,
     public array $users,
     ) {

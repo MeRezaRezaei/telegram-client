@@ -12,12 +12,19 @@ use Spatie\LaravelData\Data;
  */
 final class KeyboardButtonStyleData extends TlKeyboardButtonStyleAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'bgPrimary' => ['flags', 0],
+        'bgDanger' => ['flags', 1],
+        'bgSuccess' => ['flags', 2],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $bgPrimary,
-    public bool $bgDanger,
-    public bool $bgSuccess,
-    public int $icon,
+    public ?bool $bgPrimary,
+    public ?bool $bgDanger,
+    public ?bool $bgSuccess,
+    public ?int $icon,
     ) {
     }
 }

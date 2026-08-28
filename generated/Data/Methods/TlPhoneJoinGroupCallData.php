@@ -20,13 +20,13 @@ final class TlPhoneJoinGroupCallData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $muted,
-    public bool $videoStopped,
+    public ?bool $muted,
+    public ?bool $videoStopped,
     public mixed $call,
     public mixed $joinAs,
-    public string $inviteHash,
-    public string $publicKey,
-    public string $block,
+    public ?string $inviteHash,
+    public ?string $publicKey,
+    public ?string $block,
     public mixed $params,
     ) {
     }

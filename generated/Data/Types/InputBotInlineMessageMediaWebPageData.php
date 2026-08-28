@@ -12,12 +12,20 @@ use Spatie\LaravelData\Data;
  */
 final class InputBotInlineMessageMediaWebPageData extends TlInputBotInlineMessageAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'invertMedia' => ['flags', 3],
+        'forceLargeMedia' => ['flags', 4],
+        'forceSmallMedia' => ['flags', 5],
+        'optional' => ['flags', 6],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $invertMedia,
-    public bool $forceLargeMedia,
-    public bool $forceSmallMedia,
-    public bool $optional,
+    public ?bool $invertMedia,
+    public ?bool $forceLargeMedia,
+    public ?bool $forceSmallMedia,
+    public ?bool $optional,
     public string $message,
     public ?array $entities,
     public string $url,

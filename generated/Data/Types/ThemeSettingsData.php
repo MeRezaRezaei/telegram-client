@@ -12,12 +12,17 @@ use Spatie\LaravelData\Data;
  */
 final class ThemeSettingsData extends TlThemeSettingsAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'messageColorsAnimated' => ['flags', 2],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $messageColorsAnimated,
+    public ?bool $messageColorsAnimated,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlBaseThemeAbstractData $baseTheme,
     public int $accentColor,
-    public int $outboxAccentColor,
+    public ?int $outboxAccentColor,
     public ?array $messageColors,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlWallPaperAbstractData $wallpaper,
     ) {

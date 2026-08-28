@@ -12,16 +12,22 @@ use Spatie\LaravelData\Data;
  */
 final class TlPaymentsGiveawayInfoResultsData extends TlPaymentsGiveawayInfoAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'winner' => ['flags', 0],
+        'refunded' => ['flags', 1],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $winner,
-    public bool $refunded,
+    public ?bool $winner,
+    public ?bool $refunded,
     public int $startDate,
-    public string $giftCodeSlug,
-    public int $starsPrize,
+    public ?string $giftCodeSlug,
+    public ?int $starsPrize,
     public int $finishDate,
     public int $winnersCount,
-    public int $activatedCount,
+    public ?int $activatedCount,
     ) {
     }
 }

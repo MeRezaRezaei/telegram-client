@@ -12,9 +12,14 @@ use Spatie\LaravelData\Data;
  */
 final class TlHelpDeepLinkInfoData extends TlHelpDeepLinkInfoAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'updateApp' => ['flags', 0],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $updateApp,
+    public ?bool $updateApp,
     public string $message,
     public ?array $entities,
     ) {

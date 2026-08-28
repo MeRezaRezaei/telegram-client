@@ -16,7 +16,7 @@ final class TlPremiumBoostsListData extends TlPremiumBoostsListAbstractData
     public int $flags,
     public int $count,
     public array $boosts,
-    public string $nextOffset,
+    public ?string $nextOffset,
     public array $users,
     ) {
     }

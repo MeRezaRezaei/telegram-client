@@ -15,7 +15,7 @@ final class UpdateChannelTooLongData extends TlUpdateAbstractData
     public function __construct(
     public int $flags,
     public int $channelId,
-    public int $pts,
+    public ?int $pts,
     ) {
     }
 }

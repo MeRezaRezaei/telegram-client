@@ -21,7 +21,7 @@ final class TlStoriesStoryViewsListData extends TlStoriesStoryViewsListAbstractD
     public array $views,
     public array $chats,
     public array $users,
-    public string $nextOffset,
+    public ?string $nextOffset,
     ) {
     }
 }

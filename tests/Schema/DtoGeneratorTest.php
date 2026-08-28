@@ -24,7 +24,7 @@ final class DtoGeneratorTest extends TestCase
         $base = $files['Types/TlUserAbstractData.php'];
         self::assertStringContainsString('abstract class TlUserAbstractData extends Data', $base);
         self::assertStringContainsString("'userEmpty' => \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\UserEmptyData::class,", $base);
-        self::assertStringContainsString('public static function fromWire(array $payload): static', $base);
+        self::assertStringContainsString('public static function hydrate(array $payload): static', $base);
     }
 
     public function test_ctor_dto_properties(): void

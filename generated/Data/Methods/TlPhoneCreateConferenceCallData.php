@@ -20,12 +20,12 @@ final class TlPhoneCreateConferenceCallData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $muted,
-    public bool $videoStopped,
-    public bool $join,
+    public ?bool $muted,
+    public ?bool $videoStopped,
+    public ?bool $join,
     public int $randomId,
-    public string $publicKey,
-    public string $block,
+    public ?string $publicKey,
+    public ?string $block,
     public mixed $params,
     ) {
     }

@@ -12,10 +12,16 @@ use Spatie\LaravelData\Data;
  */
 final class PageListItemBlocksData extends TlPageListItemAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'checkbox' => ['flags', 0],
+        'checked' => ['flags', 1],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $checkbox,
-    public bool $checked,
+    public ?bool $checkbox,
+    public ?bool $checked,
     public array $blocks,
     ) {
     }

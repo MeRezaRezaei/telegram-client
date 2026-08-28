@@ -20,10 +20,10 @@ final class TlMessagesComposeMessageWithAIData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $proofread,
-    public bool $emojify,
+    public ?bool $proofread,
+    public ?bool $emojify,
     public mixed $text,
-    public string $translateToLang,
+    public ?string $translateToLang,
     public mixed $tone,
     ) {
     }

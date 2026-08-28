@@ -20,12 +20,12 @@ final class TlMessagesSetInlineBotResultsData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $gallery,
-    public bool $private,
+    public ?bool $gallery,
+    public ?bool $private,
     public int $queryId,
     public array $results,
     public int $cacheTime,
-    public string $nextOffset,
+    public ?string $nextOffset,
     public mixed $switchPm,
     public mixed $switchWebview,
     ) {

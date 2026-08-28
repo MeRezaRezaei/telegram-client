@@ -20,8 +20,8 @@ final class TlPaymentsClearSavedInfoData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $credentials,
-    public bool $info,
+    public ?bool $credentials,
+    public ?bool $info,
     ) {
     }
 }

@@ -16,11 +16,11 @@ final class BotAppSettingsData extends TlBotAppSettingsAbstractData
 {
     public function __construct(
     public int $flags,
-    public string $placeholderPath,
-    public int $backgroundColor,
-    public int $backgroundDarkColor,
-    public int $headerColor,
-    public int $headerDarkColor,
+    public ?string $placeholderPath,
+    public ?int $backgroundColor,
+    public ?int $backgroundDarkColor,
+    public ?int $headerColor,
+    public ?int $headerDarkColor,
     ) {
     }
 }

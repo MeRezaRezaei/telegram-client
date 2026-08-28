@@ -20,7 +20,7 @@ final class TlMessagesReportMessagesDeliveryData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $push,
+    public ?bool $push,
     public mixed $peer,
     public array $id,
     ) {

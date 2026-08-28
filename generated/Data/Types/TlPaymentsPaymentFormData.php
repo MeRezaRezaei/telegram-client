@@ -12,10 +12,16 @@ use Spatie\LaravelData\Data;
  */
 final class TlPaymentsPaymentFormData extends TlPaymentsPaymentFormAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'canSaveCredentials' => ['flags', 2],
+        'passwordMissing' => ['flags', 3],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $canSaveCredentials,
-    public bool $passwordMissing,
+    public ?bool $canSaveCredentials,
+    public ?bool $passwordMissing,
     public int $formId,
     public int $botId,
     public string $title,
@@ -24,7 +30,7 @@ final class TlPaymentsPaymentFormData extends TlPaymentsPaymentFormAbstractData
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlInvoiceAbstractData $invoice,
     public int $providerId,
     public string $url,
-    public string $nativeProvider,
+    public ?string $nativeProvider,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlDataJSONAbstractData $nativeParams,
     public ?array $additionalMethods,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlPaymentRequestedInfoAbstractData $savedInfo,

@@ -23,7 +23,7 @@ final class EmojiStatusCollectibleData extends TlEmojiStatusAbstractData
     public int $edgeColor,
     public int $patternColor,
     public int $textColor,
-    public int $until,
+    public ?int $until,
     ) {
     }
 }

@@ -22,8 +22,8 @@ final class TlMessagesEditForumTopicData extends Data
     public int $flags,
     public mixed $peer,
     public int $topicId,
-    public string $title,
-    public int $iconEmojiId,
+    public ?string $title,
+    public ?int $iconEmojiId,
     public mixed $closed,
     public mixed $hidden,
     ) {

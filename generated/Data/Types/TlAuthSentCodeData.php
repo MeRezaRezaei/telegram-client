@@ -17,7 +17,7 @@ final class TlAuthSentCodeData extends TlAuthSentCodeAbstractData
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlAuthSentCodeTypeAbstractData $type,
     public string $phoneCodeHash,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlAuthCodeTypeAbstractData $nextType,
-    public int $timeout,
+    public ?int $timeout,
     ) {
     }
 }

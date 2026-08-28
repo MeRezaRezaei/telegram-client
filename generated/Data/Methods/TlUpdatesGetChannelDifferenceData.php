@@ -20,7 +20,7 @@ final class TlUpdatesGetChannelDifferenceData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $force,
+    public ?bool $force,
     public mixed $channel,
     public mixed $filter,
     public int $pts,

@@ -22,7 +22,7 @@ final class TlMessagesSetChatAvailableReactionsData extends Data
     public int $flags,
     public mixed $peer,
     public mixed $availableReactions,
-    public int $reactionsLimit,
+    public ?int $reactionsLimit,
     public mixed $paidEnabled,
     ) {
     }

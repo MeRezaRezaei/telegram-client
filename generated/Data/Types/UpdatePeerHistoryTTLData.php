@@ -15,7 +15,7 @@ final class UpdatePeerHistoryTTLData extends TlUpdateAbstractData
     public function __construct(
     public int $flags,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlPeerAbstractData $peer,
-    public int $ttlPeriod,
+    public ?int $ttlPeriod,
     ) {
     }
 }

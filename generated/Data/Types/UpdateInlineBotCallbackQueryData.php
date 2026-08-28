@@ -20,8 +20,8 @@ final class UpdateInlineBotCallbackQueryData extends TlUpdateAbstractData
     public int $userId,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlInputBotInlineMessageIDAbstractData $msgId,
     public int $chatInstance,
-    public string $data,
-    public string $gameShortName,
+    public ?string $data,
+    public ?string $gameShortName,
     ) {
     }
 }

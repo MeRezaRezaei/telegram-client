@@ -22,7 +22,7 @@ final class TlMessagesCreateChatData extends Data
     public int $flags,
     public array $users,
     public string $title,
-    public int $ttlPeriod,
+    public ?int $ttlPeriod,
     ) {
     }
 }

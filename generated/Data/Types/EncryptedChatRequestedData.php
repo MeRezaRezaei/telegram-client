@@ -16,7 +16,7 @@ final class EncryptedChatRequestedData extends TlEncryptedChatAbstractData
 {
     public function __construct(
     public int $flags,
-    public int $folderId,
+    public ?int $folderId,
     public int $id,
     public int $accessHash,
     public int $date,

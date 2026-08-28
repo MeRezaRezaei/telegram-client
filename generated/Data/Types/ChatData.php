@@ -12,14 +12,24 @@ use Spatie\LaravelData\Data;
  */
 final class ChatData extends TlChatAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'creator' => ['flags', 0],
+        'left' => ['flags', 2],
+        'deactivated' => ['flags', 5],
+        'callActive' => ['flags', 23],
+        'callNotEmpty' => ['flags', 24],
+        'noforwards' => ['flags', 25],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $creator,
-    public bool $left,
-    public bool $deactivated,
-    public bool $callActive,
-    public bool $callNotEmpty,
-    public bool $noforwards,
+    public ?bool $creator,
+    public ?bool $left,
+    public ?bool $deactivated,
+    public ?bool $callActive,
+    public ?bool $callNotEmpty,
+    public ?bool $noforwards,
     public int $id,
     public string $title,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlChatPhotoAbstractData $photo,

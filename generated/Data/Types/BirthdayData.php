@@ -16,7 +16,7 @@ final class BirthdayData extends TlBirthdayAbstractData
     public int $flags,
     public int $day,
     public int $month,
-    public int $year,
+    public ?int $year,
     ) {
     }
 }

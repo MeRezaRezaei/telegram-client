@@ -23,7 +23,7 @@ final class TlMessagesGetMessageReactionsListData extends Data
     public mixed $peer,
     public int $id,
     public mixed $reaction,
-    public string $offset,
+    public ?string $offset,
     public int $limit,
     ) {
     }

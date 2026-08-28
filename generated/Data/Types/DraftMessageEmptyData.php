@@ -14,7 +14,7 @@ final class DraftMessageEmptyData extends TlDraftMessageAbstractData
 {
     public function __construct(
     public int $flags,
-    public int $date,
+    public ?int $date,
     ) {
     }
 }

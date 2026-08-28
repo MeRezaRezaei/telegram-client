@@ -22,7 +22,7 @@ final class TlMessagesToggleNoForwardsData extends Data
     public int $flags,
     public mixed $peer,
     public mixed $enabled,
-    public int $requestMsgId,
+    public ?int $requestMsgId,
     ) {
     }
 }

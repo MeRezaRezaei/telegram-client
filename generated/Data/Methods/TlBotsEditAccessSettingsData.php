@@ -20,7 +20,7 @@ final class TlBotsEditAccessSettingsData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $restricted,
+    public ?bool $restricted,
     public mixed $bot,
     public ?array $addUsers,
     ) {

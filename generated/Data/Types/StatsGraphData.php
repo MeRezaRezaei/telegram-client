@@ -15,7 +15,7 @@ final class StatsGraphData extends TlStatsGraphAbstractData
     public function __construct(
     public int $flags,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlDataJSONAbstractData $json,
-    public string $zoomToken,
+    public ?string $zoomToken,
     ) {
     }
 }

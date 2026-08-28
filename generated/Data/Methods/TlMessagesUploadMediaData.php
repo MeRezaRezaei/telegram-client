@@ -20,7 +20,7 @@ final class TlMessagesUploadMediaData extends Data
 
     public function __construct(
     public int $flags,
-    public string $businessConnectionId,
+    public ?string $businessConnectionId,
     public mixed $peer,
     public mixed $media,
     ) {

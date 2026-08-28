@@ -16,8 +16,8 @@ final class ChannelParticipantData extends TlChannelParticipantAbstractData
     public int $flags,
     public int $userId,
     public int $date,
-    public int $subscriptionUntilDate,
-    public string $rank,
+    public ?int $subscriptionUntilDate,
+    public ?string $rank,
     ) {
     }
 }

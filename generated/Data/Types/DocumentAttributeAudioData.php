@@ -14,13 +14,18 @@ use Spatie\LaravelData\Data;
  */
 final class DocumentAttributeAudioData extends TlDocumentAttributeAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'voice' => ['flags', 10],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $voice,
+    public ?bool $voice,
     public int $duration,
-    public string $title,
-    public string $performer,
-    public string $waveform,
+    public ?string $title,
+    public ?string $performer,
+    public ?string $waveform,
     ) {
     }
 }

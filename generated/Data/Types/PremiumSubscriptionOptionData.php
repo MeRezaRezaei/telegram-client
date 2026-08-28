@@ -12,16 +12,22 @@ use Spatie\LaravelData\Data;
  */
 final class PremiumSubscriptionOptionData extends TlPremiumSubscriptionOptionAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'current' => ['flags', 1],
+        'canPurchaseUpgrade' => ['flags', 2],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $current,
-    public bool $canPurchaseUpgrade,
-    public string $transaction,
+    public ?bool $current,
+    public ?bool $canPurchaseUpgrade,
+    public ?string $transaction,
     public int $months,
     public string $currency,
     public int $amount,
     public string $botUrl,
-    public string $storeProduct,
+    public ?string $storeProduct,
     ) {
     }
 }

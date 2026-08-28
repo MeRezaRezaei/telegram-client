@@ -20,8 +20,8 @@ final class TlChannelsToggleSignaturesData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $signaturesEnabled,
-    public bool $profilesEnabled,
+    public ?bool $signaturesEnabled,
+    public ?bool $profilesEnabled,
     public mixed $channel,
     ) {
     }

@@ -20,11 +20,11 @@ final class TlPaymentsGetResaleStarGiftsData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $sortByPrice,
-    public bool $sortByNum,
-    public bool $forCraft,
-    public bool $starsOnly,
-    public int $attributesHash,
+    public ?bool $sortByPrice,
+    public ?bool $sortByNum,
+    public ?bool $forCraft,
+    public ?bool $starsOnly,
+    public ?int $attributesHash,
     public int $giftId,
     public ?array $attributes,
     public string $offset,

@@ -12,13 +12,18 @@ use Spatie\LaravelData\Data;
  */
 final class TlMessagesTranscribedAudioData extends TlMessagesTranscribedAudioAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'pending' => ['flags', 0],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $pending,
+    public ?bool $pending,
     public int $transcriptionId,
     public string $text,
-    public int $trialRemainsNum,
-    public int $trialRemainsUntilDate,
+    public ?int $trialRemainsNum,
+    public ?int $trialRemainsUntilDate,
     ) {
     }
 }

@@ -41,6 +41,8 @@ config/telegram-client.php        (dial: curate ship-subset, paths)
 
 **Interfaces — Produces:** namespace `MeRezaRezaei\TelegramClient\Schema\{Generator,Eloquent}`; `RegenerateCommand` signature `telegram-client:regenerate {--force} {--all-tracked}`; Eloquent bases `TlAnchorModel/TlInstanceModel/HasTlChildren` unchanged APIs.
 
+> **Deviation (shipped):** the regenerate CLI exposes `--schemas/--out/--ship` instead of `--all-tracked` — same tracked-mirror goal, explicit source/output dirs (see `bin/regenerate`).
+
 - [ ] **Step 1** Copy fork src → `src/Schema/` (exclude vendor/). Scripted port: replace namespace `MeRezaRezaei\LaravelTelegramSchema` → `MeRezaRezaei\TelegramClient\Schema`, fix internal `use` lines; strip any AGPL/danog header lines; keep strict_types.
 - [ ] **Step 2** New provider registering RegenerateCommand (+ later ingest). Smoke test asserting classes exist + are final/readonly where fork had them:
 ```php

@@ -17,7 +17,7 @@ final class WebDomainExceptionData extends TlWebDomainExceptionAbstractData
     public string $domain,
     public string $url,
     public string $title,
-    public int $favicon,
+    public ?int $favicon,
     ) {
     }
 }

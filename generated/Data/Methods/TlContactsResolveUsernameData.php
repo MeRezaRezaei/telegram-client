@@ -21,7 +21,7 @@ final class TlContactsResolveUsernameData extends Data
     public function __construct(
     public int $flags,
     public string $username,
-    public string $referer,
+    public ?string $referer,
     ) {
     }
 }

@@ -22,10 +22,10 @@ final class TlPaymentsSendPaymentFormData extends Data
     public int $flags,
     public int $formId,
     public mixed $invoice,
-    public string $requestedInfoId,
-    public string $shippingOptionId,
+    public ?string $requestedInfoId,
+    public ?string $shippingOptionId,
     public mixed $credentials,
-    public int $tipAmount,
+    public ?int $tipAmount,
     ) {
     }
 }

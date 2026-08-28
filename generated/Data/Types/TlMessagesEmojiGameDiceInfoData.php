@@ -18,7 +18,7 @@ final class TlMessagesEmojiGameDiceInfoData extends TlMessagesEmojiGameInfoAbstr
     public int $prevStake,
     public int $currentStreak,
     public array $params,
-    public int $playsLeft,
+    public ?int $playsLeft,
     ) {
     }
 }

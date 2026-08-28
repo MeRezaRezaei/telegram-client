@@ -18,7 +18,7 @@ final class MyBoostData extends TlMyBoostAbstractData
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlPeerAbstractData $peer,
     public int $date,
     public int $expires,
-    public int $cooldownUntilDate,
+    public ?int $cooldownUntilDate,
     ) {
     }
 }

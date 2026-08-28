@@ -22,7 +22,7 @@ final class TlAuthSignInData extends Data
     public int $flags,
     public string $phoneNumber,
     public string $phoneCodeHash,
-    public string $phoneCode,
+    public ?string $phoneCode,
     public mixed $emailVerification,
     ) {
     }

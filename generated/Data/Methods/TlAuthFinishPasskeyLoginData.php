@@ -21,8 +21,8 @@ final class TlAuthFinishPasskeyLoginData extends Data
     public function __construct(
     public int $flags,
     public mixed $credential,
-    public int $fromDcId,
-    public int $fromAuthKeyId,
+    public ?int $fromDcId,
+    public ?int $fromAuthKeyId,
     ) {
     }
 }

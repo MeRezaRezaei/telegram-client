@@ -19,7 +19,7 @@ final class PeerColorCollectibleData extends TlPeerColorAbstractData
     public int $backgroundEmojiId,
     public int $accentColor,
     public array $colors,
-    public int $darkAccentColor,
+    public ?int $darkAccentColor,
     public ?array $darkColors,
     ) {
     }

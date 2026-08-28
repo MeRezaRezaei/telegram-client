@@ -15,8 +15,8 @@ final class RequestedPeerChannelData extends TlRequestedPeerAbstractData
     public function __construct(
     public int $flags,
     public int $channelId,
-    public string $title,
-    public string $username,
+    public ?string $title,
+    public ?string $username,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlPhotoAbstractData $photo,
     ) {
     }

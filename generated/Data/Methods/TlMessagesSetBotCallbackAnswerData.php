@@ -20,10 +20,10 @@ final class TlMessagesSetBotCallbackAnswerData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $alert,
+    public ?bool $alert,
     public int $queryId,
-    public string $message,
-    public string $url,
+    public ?string $message,
+    public ?string $url,
     public int $cacheTime,
     ) {
     }

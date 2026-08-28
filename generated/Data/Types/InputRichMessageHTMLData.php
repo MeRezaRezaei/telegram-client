@@ -12,10 +12,16 @@ use Spatie\LaravelData\Data;
  */
 final class InputRichMessageHTMLData extends TlInputRichMessageAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'rtl' => ['flags', 0],
+        'noautolink' => ['flags', 1],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $rtl,
-    public bool $noautolink,
+    public ?bool $rtl,
+    public ?bool $noautolink,
     public string $html,
     public ?array $files,
     ) {

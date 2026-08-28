@@ -14,11 +14,16 @@ use Spatie\LaravelData\Data;
  */
 final class ChatPhotoData extends TlChatPhotoAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'hasVideo' => ['flags', 0],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $hasVideo,
+    public ?bool $hasVideo,
     public int $photoId,
-    public string $strippedThumb,
+    public ?string $strippedThumb,
     public int $dcId,
     ) {
     }

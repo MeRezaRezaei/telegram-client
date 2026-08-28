@@ -20,7 +20,7 @@ final class TlStoriesSendReactionData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $addToRecent,
+    public ?bool $addToRecent,
     public mixed $peer,
     public int $storyId,
     public mixed $reaction,

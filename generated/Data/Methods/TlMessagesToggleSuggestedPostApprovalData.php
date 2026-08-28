@@ -20,11 +20,11 @@ final class TlMessagesToggleSuggestedPostApprovalData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $reject,
+    public ?bool $reject,
     public mixed $peer,
     public int $msgId,
-    public int $scheduleDate,
-    public string $rejectComment,
+    public ?int $scheduleDate,
+    public ?string $rejectComment,
     ) {
     }
 }

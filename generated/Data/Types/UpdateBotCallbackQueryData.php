@@ -21,8 +21,8 @@ final class UpdateBotCallbackQueryData extends TlUpdateAbstractData
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlPeerAbstractData $peer,
     public int $msgId,
     public int $chatInstance,
-    public string $data,
-    public string $gameShortName,
+    public ?string $data,
+    public ?string $gameShortName,
     ) {
     }
 }

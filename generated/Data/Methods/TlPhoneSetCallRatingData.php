@@ -20,7 +20,7 @@ final class TlPhoneSetCallRatingData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $userInitiative,
+    public ?bool $userInitiative,
     public mixed $peer,
     public int $rating,
     public string $comment,

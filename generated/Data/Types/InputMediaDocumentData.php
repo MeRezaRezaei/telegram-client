@@ -12,14 +12,19 @@ use Spatie\LaravelData\Data;
  */
 final class InputMediaDocumentData extends TlInputMediaAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'spoiler' => ['flags', 2],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $spoiler,
+    public ?bool $spoiler,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlInputDocumentAbstractData $id,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlInputPhotoAbstractData $videoCover,
-    public int $videoTimestamp,
-    public int $ttlSeconds,
-    public string $query,
+    public ?int $videoTimestamp,
+    public ?int $ttlSeconds,
+    public ?string $query,
     ) {
     }
 }

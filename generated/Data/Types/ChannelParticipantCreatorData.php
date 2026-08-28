@@ -16,7 +16,7 @@ final class ChannelParticipantCreatorData extends TlChannelParticipantAbstractDa
     public int $flags,
     public int $userId,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlChatAdminRightsAbstractData $adminRights,
-    public string $rank,
+    public ?string $rank,
     ) {
     }
 }

@@ -17,7 +17,7 @@ final class StarsRatingData extends TlStarsRatingAbstractData
     public int $level,
     public int $currentLevelStars,
     public int $stars,
-    public int $nextLevelStars,
+    public ?int $nextLevelStars,
     ) {
     }
 }

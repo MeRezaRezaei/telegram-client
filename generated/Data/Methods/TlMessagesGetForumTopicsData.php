@@ -21,7 +21,7 @@ final class TlMessagesGetForumTopicsData extends Data
     public function __construct(
     public int $flags,
     public mixed $peer,
-    public string $q,
+    public ?string $q,
     public int $offsetDate,
     public int $offsetId,
     public int $offsetTopic,

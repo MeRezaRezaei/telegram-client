@@ -15,7 +15,7 @@ final class WebPageEmptyData extends TlWebPageAbstractData
     public function __construct(
     public int $flags,
     public int $id,
-    public string $url,
+    public ?string $url,
     ) {
     }
 }

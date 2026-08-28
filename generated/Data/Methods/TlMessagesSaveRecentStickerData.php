@@ -20,7 +20,7 @@ final class TlMessagesSaveRecentStickerData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $attached,
+    public ?bool $attached,
     public mixed $id,
     public mixed $unsave,
     ) {

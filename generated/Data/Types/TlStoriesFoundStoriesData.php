@@ -16,7 +16,7 @@ final class TlStoriesFoundStoriesData extends TlStoriesFoundStoriesAbstractData
     public int $flags,
     public int $count,
     public array $stories,
-    public string $nextOffset,
+    public ?string $nextOffset,
     public array $chats,
     public array $users,
     ) {

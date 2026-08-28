@@ -12,13 +12,18 @@ use Spatie\LaravelData\Data;
  */
 final class TlHelpPromoDataData extends TlHelpPromoDataAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'proxy' => ['flags', 0],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $proxy,
+    public ?bool $proxy,
     public int $expires,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlPeerAbstractData $peer,
-    public string $psaType,
-    public string $psaMessage,
+    public ?string $psaType,
+    public ?string $psaMessage,
     public array $pendingSuggestions,
     public array $dismissedSuggestions,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlPendingSuggestionAbstractData $customPendingSuggestion,

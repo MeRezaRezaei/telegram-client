@@ -20,7 +20,7 @@ final class TlAuthSignUpData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $noJoinedNotifications,
+    public ?bool $noJoinedNotifications,
     public string $phoneNumber,
     public string $phoneCodeHash,
     public string $firstName,

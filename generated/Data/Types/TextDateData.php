@@ -12,14 +12,24 @@ use Spatie\LaravelData\Data;
  */
 final class TextDateData extends TlRichTextAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'relative' => ['flags', 0],
+        'shortTime' => ['flags', 1],
+        'longTime' => ['flags', 2],
+        'shortDate' => ['flags', 3],
+        'longDate' => ['flags', 4],
+        'dayOfWeek' => ['flags', 5],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $relative,
-    public bool $shortTime,
-    public bool $longTime,
-    public bool $shortDate,
-    public bool $longDate,
-    public bool $dayOfWeek,
+    public ?bool $relative,
+    public ?bool $shortTime,
+    public ?bool $longTime,
+    public ?bool $shortDate,
+    public ?bool $longDate,
+    public ?bool $dayOfWeek,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlRichTextAbstractData $text,
     public int $date,
     ) {

@@ -24,7 +24,7 @@ final class TlMessagesTranslateTextData extends Data
     public ?array $id,
     public ?array $text,
     public string $toLang,
-    public string $tone,
+    public ?string $tone,
     ) {
     }
 }

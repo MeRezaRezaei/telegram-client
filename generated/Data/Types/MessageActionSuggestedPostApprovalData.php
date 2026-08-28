@@ -12,12 +12,18 @@ use Spatie\LaravelData\Data;
  */
 final class MessageActionSuggestedPostApprovalData extends TlMessageActionAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'rejected' => ['flags', 0],
+        'balanceTooLow' => ['flags', 1],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $rejected,
-    public bool $balanceTooLow,
-    public string $rejectComment,
-    public int $scheduleDate,
+    public ?bool $rejected,
+    public ?bool $balanceTooLow,
+    public ?string $rejectComment,
+    public ?int $scheduleDate,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlStarsAmountAbstractData $price,
     ) {
     }

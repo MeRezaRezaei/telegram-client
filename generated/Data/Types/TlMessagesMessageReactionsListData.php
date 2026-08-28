@@ -18,7 +18,7 @@ final class TlMessagesMessageReactionsListData extends TlMessagesMessageReaction
     public array $reactions,
     public array $chats,
     public array $users,
-    public string $nextOffset,
+    public ?string $nextOffset,
     ) {
     }
 }

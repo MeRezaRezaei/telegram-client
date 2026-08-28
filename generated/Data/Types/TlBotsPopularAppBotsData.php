@@ -14,7 +14,7 @@ final class TlBotsPopularAppBotsData extends TlBotsPopularAppBotsAbstractData
 {
     public function __construct(
     public int $flags,
-    public string $nextOffset,
+    public ?string $nextOffset,
     public array $users,
     ) {
     }

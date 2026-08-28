@@ -20,7 +20,7 @@ final class TlMessagesToggleSavedDialogPinData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $pinned,
+    public ?bool $pinned,
     public mixed $peer,
     ) {
     }

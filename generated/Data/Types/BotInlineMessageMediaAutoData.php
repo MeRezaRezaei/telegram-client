@@ -12,9 +12,14 @@ use Spatie\LaravelData\Data;
  */
 final class BotInlineMessageMediaAutoData extends TlBotInlineMessageAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'invertMedia' => ['flags', 3],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $invertMedia,
+    public ?bool $invertMedia,
     public string $message,
     public ?array $entities,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlReplyMarkupAbstractData $replyMarkup,

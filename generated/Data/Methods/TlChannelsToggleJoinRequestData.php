@@ -20,7 +20,7 @@ final class TlChannelsToggleJoinRequestData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $applyToInvites,
+    public ?bool $applyToInvites,
     public mixed $channel,
     public mixed $enabled,
     public mixed $guardBot,

@@ -20,7 +20,7 @@ final class TlPaymentsResolveStarGiftOfferData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $decline,
+    public ?bool $decline,
     public int $offerMsgId,
     ) {
     }

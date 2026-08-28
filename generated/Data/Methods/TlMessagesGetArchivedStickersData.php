@@ -20,8 +20,8 @@ final class TlMessagesGetArchivedStickersData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $masks,
-    public bool $emojis,
+    public ?bool $masks,
+    public ?bool $emojis,
     public int $offsetId,
     public int $limit,
     ) {

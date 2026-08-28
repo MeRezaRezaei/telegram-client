@@ -14,7 +14,7 @@ final class MessageActionGiveawayLaunchData extends TlMessageActionAbstractData
 {
     public function __construct(
     public int $flags,
-    public int $stars,
+    public ?int $stars,
     ) {
     }
 }

@@ -20,7 +20,7 @@ final class TlAccountFinishTakeoutSessionData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $success,
+    public ?bool $success,
     ) {
     }
 }

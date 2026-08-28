@@ -12,10 +12,16 @@ use Spatie\LaravelData\Data;
  */
 final class MissingInviteeData extends TlMissingInviteeAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'premiumWouldAllowInvite' => ['flags', 0],
+        'premiumRequiredForPm' => ['flags', 1],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $premiumWouldAllowInvite,
-    public bool $premiumRequiredForPm,
+    public ?bool $premiumWouldAllowInvite,
+    public ?bool $premiumRequiredForPm,
     public int $userId,
     ) {
     }

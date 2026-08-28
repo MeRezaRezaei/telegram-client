@@ -14,7 +14,7 @@ final class UpdatePinnedDialogsData extends TlUpdateAbstractData
 {
     public function __construct(
     public int $flags,
-    public int $folderId,
+    public ?int $folderId,
     public ?array $order,
     ) {
     }

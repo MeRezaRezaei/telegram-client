@@ -22,7 +22,7 @@ final class TlMessagesGetSearchCountersData extends Data
     public int $flags,
     public mixed $peer,
     public mixed $savedPeerId,
-    public int $topMsgId,
+    public ?int $topMsgId,
     public array $filters,
     ) {
     }

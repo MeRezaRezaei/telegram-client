@@ -14,7 +14,7 @@ final class TlPaymentsValidatedRequestedInfoData extends TlPaymentsValidatedRequ
 {
     public function __construct(
     public int $flags,
-    public string $id,
+    public ?string $id,
     public ?array $shippingOptions,
     ) {
     }

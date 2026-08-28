@@ -14,8 +14,8 @@ final class MessageViewsData extends TlMessageViewsAbstractData
 {
     public function __construct(
     public int $flags,
-    public int $views,
-    public int $forwards,
+    public ?int $views,
+    public ?int $forwards,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlMessageRepliesAbstractData $replies,
     ) {
     }

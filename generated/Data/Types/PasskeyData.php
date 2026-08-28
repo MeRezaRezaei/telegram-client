@@ -17,8 +17,8 @@ final class PasskeyData extends TlPasskeyAbstractData
     public string $id,
     public string $name,
     public int $date,
-    public int $softwareEmojiId,
-    public int $lastUsageDate,
+    public ?int $softwareEmojiId,
+    public ?int $lastUsageDate,
     ) {
     }
 }

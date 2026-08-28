@@ -18,8 +18,8 @@ final class SponsoredPeerData extends TlSponsoredPeerAbstractData
     public int $flags,
     public string $randomId,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlPeerAbstractData $peer,
-    public string $sponsorInfo,
-    public string $additionalInfo,
+    public ?string $sponsorInfo,
+    public ?string $additionalInfo,
     ) {
     }
 }

@@ -14,8 +14,8 @@ final class ChannelParticipantsMentionsData extends TlChannelParticipantsFilterA
 {
     public function __construct(
     public int $flags,
-    public string $q,
-    public int $topMsgId,
+    public ?string $q,
+    public ?int $topMsgId,
     ) {
     }
 }

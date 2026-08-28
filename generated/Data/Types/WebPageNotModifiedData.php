@@ -14,7 +14,7 @@ final class WebPageNotModifiedData extends TlWebPageAbstractData
 {
     public function __construct(
     public int $flags,
-    public int $cachedPageViews,
+    public ?int $cachedPageViews,
     ) {
     }
 }

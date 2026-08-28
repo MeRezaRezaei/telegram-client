@@ -20,7 +20,7 @@ final class TlPhoneInviteConferenceCallParticipantData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $video,
+    public ?bool $video,
     public mixed $call,
     public mixed $userId,
     ) {

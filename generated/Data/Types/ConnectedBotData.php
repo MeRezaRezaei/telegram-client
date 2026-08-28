@@ -17,9 +17,9 @@ final class ConnectedBotData extends TlConnectedBotAbstractData
     public int $botId,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlBusinessBotRecipientsAbstractData $recipients,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlBusinessBotRightsAbstractData $rights,
-    public string $device,
-    public int $date,
-    public string $location,
+    public ?string $device,
+    public ?int $date,
+    public ?string $location,
     ) {
     }
 }

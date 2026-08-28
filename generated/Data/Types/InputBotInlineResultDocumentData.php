@@ -16,8 +16,8 @@ final class InputBotInlineResultDocumentData extends TlInputBotInlineResultAbstr
     public int $flags,
     public string $id,
     public string $type,
-    public string $title,
-    public string $description,
+    public ?string $title,
+    public ?string $description,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlInputDocumentAbstractData $document,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlInputBotInlineMessageAbstractData $sendMessage,
     ) {

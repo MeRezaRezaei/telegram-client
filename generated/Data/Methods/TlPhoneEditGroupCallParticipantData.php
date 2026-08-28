@@ -23,7 +23,7 @@ final class TlPhoneEditGroupCallParticipantData extends Data
     public mixed $call,
     public mixed $participant,
     public mixed $muted,
-    public int $volume,
+    public ?int $volume,
     public mixed $raiseHand,
     public mixed $videoStopped,
     public mixed $videoPaused,

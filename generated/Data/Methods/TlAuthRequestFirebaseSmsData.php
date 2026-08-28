@@ -22,9 +22,9 @@ final class TlAuthRequestFirebaseSmsData extends Data
     public int $flags,
     public string $phoneNumber,
     public string $phoneCodeHash,
-    public string $safetyNetToken,
-    public string $playIntegrityToken,
-    public string $iosPushSecret,
+    public ?string $safetyNetToken,
+    public ?string $playIntegrityToken,
+    public ?string $iosPushSecret,
     ) {
     }
 }

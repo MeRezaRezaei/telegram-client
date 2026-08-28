@@ -12,13 +12,20 @@ use Spatie\LaravelData\Data;
  */
 final class TlMessagesBotCallbackAnswerData extends TlMessagesBotCallbackAnswerAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'alert' => ['flags', 1],
+        'hasUrl' => ['flags', 3],
+        'nativeUi' => ['flags', 4],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $alert,
-    public bool $hasUrl,
-    public bool $nativeUi,
-    public string $message,
-    public string $url,
+    public ?bool $alert,
+    public ?bool $hasUrl,
+    public ?bool $nativeUi,
+    public ?string $message,
+    public ?string $url,
     public int $cacheTime,
     ) {
     }

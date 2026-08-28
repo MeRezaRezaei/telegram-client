@@ -20,7 +20,7 @@ final class TlMessagesDiscardEncryptionData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $deleteHistory,
+    public ?bool $deleteHistory,
     public int $chatId,
     ) {
     }

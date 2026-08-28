@@ -20,8 +20,8 @@ final class TlAccountUpdateWebBrowserSettingsData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $openExternalBrowser,
-    public bool $displayCloseButton,
+    public ?bool $openExternalBrowser,
+    public ?bool $displayCloseButton,
     ) {
     }
 }

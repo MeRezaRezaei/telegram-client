@@ -12,9 +12,14 @@ use Spatie\LaravelData\Data;
  */
 final class TlStoriesAllStoriesData extends TlStoriesAllStoriesAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'hasMore' => ['flags', 0],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $hasMore,
+    public ?bool $hasMore,
     public int $count,
     public string $state,
     public array $peerStories,

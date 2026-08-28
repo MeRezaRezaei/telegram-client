@@ -20,9 +20,9 @@ final class TlStoriesGetAllStoriesData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $next,
-    public bool $hidden,
-    public string $state,
+    public ?bool $next,
+    public ?bool $hidden,
+    public ?string $state,
     ) {
     }
 }

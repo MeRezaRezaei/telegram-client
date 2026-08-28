@@ -14,9 +14,9 @@ final class UpdateReadHistoryInboxData extends TlUpdateAbstractData
 {
     public function __construct(
     public int $flags,
-    public int $folderId,
+    public ?int $folderId,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlPeerAbstractData $peer,
-    public int $topMsgId,
+    public ?int $topMsgId,
     public int $maxId,
     public int $stillUnreadCount,
     public int $pts,

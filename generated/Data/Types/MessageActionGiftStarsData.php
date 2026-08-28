@@ -17,9 +17,9 @@ final class MessageActionGiftStarsData extends TlMessageActionAbstractData
     public string $currency,
     public int $amount,
     public int $stars,
-    public string $cryptoCurrency,
-    public int $cryptoAmount,
-    public string $transactionId,
+    public ?string $cryptoCurrency,
+    public ?int $cryptoAmount,
+    public ?string $transactionId,
     ) {
     }
 }

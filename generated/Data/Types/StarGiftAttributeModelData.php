@@ -12,9 +12,14 @@ use Spatie\LaravelData\Data;
  */
 final class StarGiftAttributeModelData extends TlStarGiftAttributeAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'crafted' => ['flags', 0],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $crafted,
+    public ?bool $crafted,
     public string $name,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlDocumentAbstractData $document,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlStarGiftAttributeRarityAbstractData $rarity,

@@ -12,23 +12,36 @@ use Spatie\LaravelData\Data;
  */
 final class StoryItemData extends TlStoryItemAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'pinned' => ['flags', 5],
+        'public' => ['flags', 7],
+        'closeFriends' => ['flags', 8],
+        'min' => ['flags', 9],
+        'noforwards' => ['flags', 10],
+        'edited' => ['flags', 11],
+        'contacts' => ['flags', 12],
+        'selectedContacts' => ['flags', 13],
+        'out' => ['flags', 16],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $pinned,
-    public bool $public,
-    public bool $closeFriends,
-    public bool $min,
-    public bool $noforwards,
-    public bool $edited,
-    public bool $contacts,
-    public bool $selectedContacts,
-    public bool $out,
+    public ?bool $pinned,
+    public ?bool $public,
+    public ?bool $closeFriends,
+    public ?bool $min,
+    public ?bool $noforwards,
+    public ?bool $edited,
+    public ?bool $contacts,
+    public ?bool $selectedContacts,
+    public ?bool $out,
     public int $id,
     public int $date,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlPeerAbstractData $fromId,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlStoryFwdHeaderAbstractData $fwdFrom,
     public int $expireDate,
-    public string $caption,
+    public ?string $caption,
     public ?array $entities,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlMessageMediaAbstractData $media,
     public ?array $mediaAreas,

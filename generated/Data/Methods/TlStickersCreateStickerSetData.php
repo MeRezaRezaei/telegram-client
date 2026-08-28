@@ -20,15 +20,15 @@ final class TlStickersCreateStickerSetData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $masks,
-    public bool $emojis,
-    public bool $textColor,
+    public ?bool $masks,
+    public ?bool $emojis,
+    public ?bool $textColor,
     public mixed $userId,
     public string $title,
     public string $shortName,
     public mixed $thumb,
     public array $stickers,
-    public string $software,
+    public ?string $software,
     ) {
     }
 }

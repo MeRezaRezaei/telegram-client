@@ -20,15 +20,15 @@ final class TlChannelsCreateChannelData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $broadcast,
-    public bool $megagroup,
-    public bool $forImport,
-    public bool $forum,
+    public ?bool $broadcast,
+    public ?bool $megagroup,
+    public ?bool $forImport,
+    public ?bool $forum,
     public string $title,
     public string $about,
     public mixed $geoPoint,
-    public string $address,
-    public int $ttlPeriod,
+    public ?string $address,
+    public ?int $ttlPeriod,
     ) {
     }
 }

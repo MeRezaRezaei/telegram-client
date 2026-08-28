@@ -12,17 +12,22 @@ use Spatie\LaravelData\Data;
  */
 final class AiComposeToneData extends TlAiComposeToneAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'creator' => ['flags', 0],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $creator,
+    public ?bool $creator,
     public int $id,
     public int $accessHash,
     public string $slug,
     public string $title,
-    public int $emojiId,
-    public string $prompt,
-    public int $installsCount,
-    public int $authorId,
+    public ?int $emojiId,
+    public ?string $prompt,
+    public ?int $installsCount,
+    public ?int $authorId,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlAiComposeToneExampleAbstractData $exampleEnglish,
     ) {
     }

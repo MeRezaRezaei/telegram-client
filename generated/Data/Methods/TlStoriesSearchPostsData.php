@@ -20,7 +20,7 @@ final class TlStoriesSearchPostsData extends Data
 
     public function __construct(
     public int $flags,
-    public string $hashtag,
+    public ?string $hashtag,
     public mixed $area,
     public mixed $peer,
     public string $offset,

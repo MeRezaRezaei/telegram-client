@@ -17,7 +17,7 @@ final class InputStickerSetItemData extends TlInputStickerSetItemAbstractData
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlInputDocumentAbstractData $document,
     public string $emoji,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlMaskCoordsAbstractData $maskCoords,
-    public string $keywords,
+    public ?string $keywords,
     ) {
     }
 }

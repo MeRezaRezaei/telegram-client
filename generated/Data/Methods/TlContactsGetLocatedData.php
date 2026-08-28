@@ -20,9 +20,9 @@ final class TlContactsGetLocatedData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $background,
+    public ?bool $background,
     public mixed $geoPoint,
-    public int $selfExpires,
+    public ?int $selfExpires,
     ) {
     }
 }

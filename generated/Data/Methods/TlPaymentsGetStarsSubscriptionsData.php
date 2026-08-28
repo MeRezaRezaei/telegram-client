@@ -20,7 +20,7 @@ final class TlPaymentsGetStarsSubscriptionsData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $missingBalance,
+    public ?bool $missingBalance,
     public mixed $peer,
     public string $offset,
     ) {

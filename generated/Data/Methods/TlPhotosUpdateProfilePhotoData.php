@@ -20,7 +20,7 @@ final class TlPhotosUpdateProfilePhotoData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $fallback,
+    public ?bool $fallback,
     public mixed $bot,
     public mixed $id,
     ) {

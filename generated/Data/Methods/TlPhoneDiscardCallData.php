@@ -20,7 +20,7 @@ final class TlPhoneDiscardCallData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $video,
+    public ?bool $video,
     public mixed $peer,
     public int $duration,
     public mixed $reason,

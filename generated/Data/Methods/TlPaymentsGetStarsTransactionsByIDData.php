@@ -20,7 +20,7 @@ final class TlPaymentsGetStarsTransactionsByIDData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $ton,
+    public ?bool $ton,
     public mixed $peer,
     public array $id,
     ) {

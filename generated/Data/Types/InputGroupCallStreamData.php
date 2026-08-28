@@ -17,8 +17,8 @@ final class InputGroupCallStreamData extends TlInputFileLocationAbstractData
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlInputGroupCallAbstractData $call,
     public int $timeMs,
     public int $scale,
-    public int $videoChannel,
-    public int $videoQuality,
+    public ?int $videoChannel,
+    public ?int $videoQuality,
     ) {
     }
 }

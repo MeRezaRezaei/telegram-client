@@ -17,7 +17,7 @@ final class InputMediaPollData extends TlInputMediaAbstractData
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlPollAbstractData $poll,
     public ?array $correctAnswers,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlInputMediaAbstractData $attachedMedia,
-    public string $solution,
+    public ?string $solution,
     public ?array $solutionEntities,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlInputMediaAbstractData $solutionMedia,
     ) {

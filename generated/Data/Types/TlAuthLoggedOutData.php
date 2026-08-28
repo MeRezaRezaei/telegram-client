@@ -16,7 +16,7 @@ final class TlAuthLoggedOutData extends TlAuthLoggedOutAbstractData
 {
     public function __construct(
     public int $flags,
-    public string $futureAuthToken,
+    public ?string $futureAuthToken,
     ) {
     }
 }

@@ -14,21 +14,28 @@ use Spatie\LaravelData\Data;
  */
 final class TlAccountPasswordData extends TlAccountPasswordAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'hasRecovery' => ['flags', 0],
+        'hasSecureValues' => ['flags', 1],
+        'hasPassword' => ['flags', 2],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $hasRecovery,
-    public bool $hasSecureValues,
-    public bool $hasPassword,
+    public ?bool $hasRecovery,
+    public ?bool $hasSecureValues,
+    public ?bool $hasPassword,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlPasswordKdfAlgoAbstractData $currentAlgo,
-    public string $srpB,
-    public int $srpId,
-    public string $hint,
-    public string $emailUnconfirmedPattern,
+    public ?string $srpB,
+    public ?int $srpId,
+    public ?string $hint,
+    public ?string $emailUnconfirmedPattern,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlPasswordKdfAlgoAbstractData $newAlgo,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlSecurePasswordKdfAlgoAbstractData $newSecureAlgo,
     public string $secureRandom,
-    public int $pendingResetDate,
-    public string $loginEmailPattern,
+    public ?int $pendingResetDate,
+    public ?string $loginEmailPattern,
     ) {
     }
 }

@@ -12,14 +12,19 @@ use Spatie\LaravelData\Data;
  */
 final class ChannelParticipantBannedData extends TlChannelParticipantAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'left' => ['flags', 0],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $left,
+    public ?bool $left,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlPeerAbstractData $peer,
     public int $kickedBy,
     public int $date,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlChatBannedRightsAbstractData $bannedRights,
-    public string $rank,
+    public ?string $rank,
     ) {
     }
 }

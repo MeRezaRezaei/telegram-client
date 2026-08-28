@@ -20,7 +20,7 @@ final class TlMessagesDeleteChatUserData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $revokeHistory,
+    public ?bool $revokeHistory,
     public int $chatId,
     public mixed $userId,
     ) {

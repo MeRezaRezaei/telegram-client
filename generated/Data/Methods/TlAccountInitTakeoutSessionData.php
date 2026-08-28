@@ -20,13 +20,13 @@ final class TlAccountInitTakeoutSessionData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $contacts,
-    public bool $messageUsers,
-    public bool $messageChats,
-    public bool $messageMegagroups,
-    public bool $messageChannels,
-    public bool $files,
-    public int $fileMaxSize,
+    public ?bool $contacts,
+    public ?bool $messageUsers,
+    public ?bool $messageChats,
+    public ?bool $messageMegagroups,
+    public ?bool $messageChannels,
+    public ?bool $files,
+    public ?int $fileMaxSize,
     ) {
     }
 }

@@ -20,8 +20,8 @@ final class TlChannelsExportMessageLinkData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $grouped,
-    public bool $thread,
+    public ?bool $grouped,
+    public ?bool $thread,
     public mixed $channel,
     public int $id,
     ) {

@@ -20,7 +20,7 @@ final class TlPhoneExportGroupCallInviteData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $canSelfUnmute,
+    public ?bool $canSelfUnmute,
     public mixed $call,
     ) {
     }

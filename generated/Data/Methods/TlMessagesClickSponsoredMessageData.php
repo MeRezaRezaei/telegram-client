@@ -20,8 +20,8 @@ final class TlMessagesClickSponsoredMessageData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $media,
-    public bool $fullscreen,
+    public ?bool $media,
+    public ?bool $fullscreen,
     public string $randomId,
     ) {
     }

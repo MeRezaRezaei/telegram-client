@@ -20,11 +20,11 @@ final class TlMessagesRequestMainWebViewData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $compact,
-    public bool $fullscreen,
+    public ?bool $compact,
+    public ?bool $fullscreen,
     public mixed $peer,
     public mixed $bot,
-    public string $startParam,
+    public ?string $startParam,
     public mixed $themeParams,
     public string $platform,
     ) {

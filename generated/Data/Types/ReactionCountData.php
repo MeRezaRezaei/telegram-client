@@ -14,7 +14,7 @@ final class ReactionCountData extends TlReactionCountAbstractData
 {
     public function __construct(
     public int $flags,
-    public int $chosenOrder,
+    public ?int $chosenOrder,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlReactionAbstractData $reaction,
     public int $count,
     ) {

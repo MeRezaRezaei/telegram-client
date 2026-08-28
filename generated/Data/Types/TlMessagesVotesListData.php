@@ -18,7 +18,7 @@ final class TlMessagesVotesListData extends TlMessagesVotesListAbstractData
     public array $votes,
     public array $chats,
     public array $users,
-    public string $nextOffset,
+    public ?string $nextOffset,
     ) {
     }
 }

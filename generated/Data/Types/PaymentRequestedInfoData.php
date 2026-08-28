@@ -14,9 +14,9 @@ final class PaymentRequestedInfoData extends TlPaymentRequestedInfoAbstractData
 {
     public function __construct(
     public int $flags,
-    public string $name,
-    public string $phone,
-    public string $email,
+    public ?string $name,
+    public ?string $phone,
+    public ?string $email,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlPostAddressAbstractData $shippingAddress,
     ) {
     }

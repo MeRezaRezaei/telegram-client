@@ -20,11 +20,11 @@ final class TlMessagesGetExportedChatInvitesData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $revoked,
+    public ?bool $revoked,
     public mixed $peer,
     public mixed $adminId,
-    public int $offsetDate,
-    public string $offsetLink,
+    public ?int $offsetDate,
+    public ?string $offsetLink,
     public int $limit,
     ) {
     }

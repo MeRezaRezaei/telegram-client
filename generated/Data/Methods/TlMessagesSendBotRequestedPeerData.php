@@ -21,8 +21,8 @@ final class TlMessagesSendBotRequestedPeerData extends Data
     public function __construct(
     public int $flags,
     public mixed $peer,
-    public int $msgId,
-    public string $webappReqId,
+    public ?int $msgId,
+    public ?string $webappReqId,
     public int $buttonId,
     public array $requestedPeers,
     ) {

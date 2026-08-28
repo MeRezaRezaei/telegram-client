@@ -15,7 +15,7 @@ final class UpdateChannelUserTypingData extends TlUpdateAbstractData
     public function __construct(
     public int $flags,
     public int $channelId,
-    public int $topMsgId,
+    public ?int $topMsgId,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlPeerAbstractData $fromId,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlSendMessageActionAbstractData $action,
     ) {

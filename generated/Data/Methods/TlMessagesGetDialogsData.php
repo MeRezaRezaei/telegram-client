@@ -20,8 +20,8 @@ final class TlMessagesGetDialogsData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $excludePinned,
-    public int $folderId,
+    public ?bool $excludePinned,
+    public ?int $folderId,
     public int $offsetDate,
     public int $offsetId,
     public mixed $offsetPeer,

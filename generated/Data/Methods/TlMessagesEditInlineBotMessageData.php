@@ -20,10 +20,10 @@ final class TlMessagesEditInlineBotMessageData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $noWebpage,
-    public bool $invertMedia,
+    public ?bool $noWebpage,
+    public ?bool $invertMedia,
     public mixed $id,
-    public string $message,
+    public ?string $message,
     public mixed $media,
     public mixed $replyMarkup,
     public ?array $entities,

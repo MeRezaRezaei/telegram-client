@@ -20,7 +20,7 @@ final class TlMessagesSearchEmojiStickerSetsData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $excludeFeatured,
+    public ?bool $excludeFeatured,
     public string $q,
     public int $hash,
     ) {

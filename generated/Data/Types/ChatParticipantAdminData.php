@@ -17,7 +17,7 @@ final class ChatParticipantAdminData extends TlChatParticipantAbstractData
     public int $userId,
     public int $inviterId,
     public int $date,
-    public string $rank,
+    public ?string $rank,
     ) {
     }
 }

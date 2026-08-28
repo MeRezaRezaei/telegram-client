@@ -21,7 +21,7 @@ final class TlMessagesSetBotShippingResultsData extends Data
     public function __construct(
     public int $flags,
     public int $queryId,
-    public string $error,
+    public ?string $error,
     public ?array $shippingOptions,
     ) {
     }

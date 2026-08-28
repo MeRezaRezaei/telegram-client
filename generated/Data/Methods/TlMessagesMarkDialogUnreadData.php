@@ -20,7 +20,7 @@ final class TlMessagesMarkDialogUnreadData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $unread,
+    public ?bool $unread,
     public mixed $parentPeer,
     public mixed $peer,
     ) {

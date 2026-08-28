@@ -20,11 +20,11 @@ final class TlPaymentsGetStarsTransactionsData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $inbound,
-    public bool $outbound,
-    public bool $ascending,
-    public bool $ton,
-    public string $subscriptionId,
+    public ?bool $inbound,
+    public ?bool $outbound,
+    public ?bool $ascending,
+    public ?bool $ton,
+    public ?string $subscriptionId,
     public mixed $peer,
     public string $offset,
     public int $limit,

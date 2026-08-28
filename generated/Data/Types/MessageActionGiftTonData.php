@@ -18,7 +18,7 @@ final class MessageActionGiftTonData extends TlMessageActionAbstractData
     public int $amount,
     public string $cryptoCurrency,
     public int $cryptoAmount,
-    public string $transactionId,
+    public ?string $transactionId,
     ) {
     }
 }

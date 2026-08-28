@@ -15,7 +15,7 @@ final class UpdateDraftMessageData extends TlUpdateAbstractData
     public function __construct(
     public int $flags,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlPeerAbstractData $peer,
-    public int $topMsgId,
+    public ?int $topMsgId,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlPeerAbstractData $savedPeerId,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlDraftMessageAbstractData $draft,
     ) {

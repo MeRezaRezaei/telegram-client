@@ -25,7 +25,7 @@ final class TlMessagesSearchData extends Data
     public mixed $fromId,
     public mixed $savedPeerId,
     public ?array $savedReaction,
-    public int $topMsgId,
+    public ?int $topMsgId,
     public mixed $filter,
     public int $minDate,
     public int $maxDate,

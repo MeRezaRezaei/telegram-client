@@ -20,21 +20,21 @@ final class TlMessagesSendMultiMediaData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $silent,
-    public bool $background,
-    public bool $clearDraft,
-    public bool $noforwards,
-    public bool $updateStickersetsOrder,
-    public bool $invertMedia,
-    public bool $allowPaidFloodskip,
+    public ?bool $silent,
+    public ?bool $background,
+    public ?bool $clearDraft,
+    public ?bool $noforwards,
+    public ?bool $updateStickersetsOrder,
+    public ?bool $invertMedia,
+    public ?bool $allowPaidFloodskip,
     public mixed $peer,
     public mixed $replyTo,
     public array $multiMedia,
-    public int $scheduleDate,
+    public ?int $scheduleDate,
     public mixed $sendAs,
     public mixed $quickReplyShortcut,
-    public int $effect,
-    public int $allowPaidStars,
+    public ?int $effect,
+    public ?int $allowPaidStars,
     ) {
     }
 }

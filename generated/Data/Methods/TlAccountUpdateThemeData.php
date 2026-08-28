@@ -22,8 +22,8 @@ final class TlAccountUpdateThemeData extends Data
     public int $flags,
     public string $format,
     public mixed $theme,
-    public string $slug,
-    public string $title,
+    public ?string $slug,
+    public ?string $title,
     public mixed $document,
     public ?array $settings,
     ) {

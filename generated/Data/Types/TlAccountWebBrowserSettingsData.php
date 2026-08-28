@@ -12,10 +12,16 @@ use Spatie\LaravelData\Data;
  */
 final class TlAccountWebBrowserSettingsData extends TlAccountWebBrowserSettingsAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'openExternalBrowser' => ['flags', 0],
+        'displayCloseButton' => ['flags', 1],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $openExternalBrowser,
-    public bool $displayCloseButton,
+    public ?bool $openExternalBrowser,
+    public ?bool $displayCloseButton,
     public array $externalExceptions,
     public array $inappExceptions,
     public int $hash,

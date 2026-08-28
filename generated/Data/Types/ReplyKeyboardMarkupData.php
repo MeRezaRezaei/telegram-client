@@ -12,14 +12,22 @@ use Spatie\LaravelData\Data;
  */
 final class ReplyKeyboardMarkupData extends TlReplyMarkupAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'resize' => ['flags', 0],
+        'singleUse' => ['flags', 1],
+        'selective' => ['flags', 2],
+        'persistent' => ['flags', 4],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $resize,
-    public bool $singleUse,
-    public bool $selective,
-    public bool $persistent,
+    public ?bool $resize,
+    public ?bool $singleUse,
+    public ?bool $selective,
+    public ?bool $persistent,
     public array $rows,
-    public string $placeholder,
+    public ?string $placeholder,
     ) {
     }
 }

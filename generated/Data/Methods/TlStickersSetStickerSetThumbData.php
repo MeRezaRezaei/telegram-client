@@ -22,7 +22,7 @@ final class TlStickersSetStickerSetThumbData extends Data
     public int $flags,
     public mixed $stickerset,
     public mixed $thumb,
-    public int $thumbDocumentId,
+    public ?int $thumbDocumentId,
     ) {
     }
 }

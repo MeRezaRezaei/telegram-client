@@ -20,9 +20,9 @@ final class TlMessagesSetBotPrecheckoutResultsData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $success,
+    public ?bool $success,
     public int $queryId,
-    public string $error,
+    public ?string $error,
     ) {
     }
 }

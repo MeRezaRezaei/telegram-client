@@ -20,8 +20,8 @@ final class TlAccountSaveAutoDownloadSettingsData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $low,
-    public bool $high,
+    public ?bool $low,
+    public ?bool $high,
     public mixed $settings,
     ) {
     }

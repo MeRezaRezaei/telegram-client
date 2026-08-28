@@ -20,9 +20,9 @@ final class TlAccountSaveAutoSaveSettingsData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $users,
-    public bool $chats,
-    public bool $broadcasts,
+    public ?bool $users,
+    public ?bool $chats,
+    public ?bool $broadcasts,
     public mixed $peer,
     public mixed $settings,
     ) {

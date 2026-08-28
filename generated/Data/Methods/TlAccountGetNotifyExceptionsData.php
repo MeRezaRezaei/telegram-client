@@ -20,8 +20,8 @@ final class TlAccountGetNotifyExceptionsData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $compareSound,
-    public bool $compareStories,
+    public ?bool $compareSound,
+    public ?bool $compareStories,
     public mixed $peer,
     ) {
     }

@@ -12,13 +12,18 @@ use Spatie\LaravelData\Data;
  */
 final class TlHelpTermsOfServiceData extends TlHelpTermsOfServiceAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'popup' => ['flags', 0],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $popup,
+    public ?bool $popup,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlDataJSONAbstractData $id,
     public string $text,
     public array $entities,
-    public int $minAgeConfirm,
+    public ?int $minAgeConfirm,
     ) {
     }
 }

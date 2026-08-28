@@ -21,7 +21,7 @@ final class TlMessagesGetUnreadReactionsData extends Data
     public function __construct(
     public int $flags,
     public mixed $peer,
-    public int $topMsgId,
+    public ?int $topMsgId,
     public mixed $savedPeerId,
     public int $offsetId,
     public int $addOffset,

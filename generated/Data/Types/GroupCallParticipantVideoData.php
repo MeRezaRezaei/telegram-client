@@ -12,12 +12,17 @@ use Spatie\LaravelData\Data;
  */
 final class GroupCallParticipantVideoData extends TlGroupCallParticipantVideoAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'paused' => ['flags', 0],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $paused,
+    public ?bool $paused,
     public string $endpoint,
     public array $sourceGroups,
-    public int $audioSource,
+    public ?int $audioSource,
     ) {
     }
 }

@@ -20,8 +20,8 @@ final class TlMessagesReorderStickerSetsData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $masks,
-    public bool $emojis,
+    public ?bool $masks,
+    public ?bool $emojis,
     public array $order,
     ) {
     }

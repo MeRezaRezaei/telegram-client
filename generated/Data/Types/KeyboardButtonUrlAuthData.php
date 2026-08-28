@@ -16,7 +16,7 @@ final class KeyboardButtonUrlAuthData extends TlKeyboardButtonAbstractData
     public int $flags,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlKeyboardButtonStyleAbstractData $style,
     public string $text,
-    public string $fwdText,
+    public ?string $fwdText,
     public string $url,
     public int $buttonId,
     ) {

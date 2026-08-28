@@ -20,7 +20,7 @@ final class TlMessagesGetRecentStickersData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $attached,
+    public ?bool $attached,
     public int $hash,
     ) {
     }

@@ -20,9 +20,9 @@ final class TlPaymentsGetStarsRevenueWithdrawalUrlData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $ton,
+    public ?bool $ton,
     public mixed $peer,
-    public int $amount,
+    public ?int $amount,
     public mixed $password,
     ) {
     }

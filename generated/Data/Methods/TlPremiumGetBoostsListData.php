@@ -20,7 +20,7 @@ final class TlPremiumGetBoostsListData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $gifts,
+    public ?bool $gifts,
     public mixed $peer,
     public string $offset,
     public int $limit,

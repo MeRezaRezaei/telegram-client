@@ -12,9 +12,14 @@ use Spatie\LaravelData\Data;
  */
 final class BotBusinessConnectionData extends TlBotBusinessConnectionAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'disabled' => ['flags', 1],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $disabled,
+    public ?bool $disabled,
     public string $connectionId,
     public int $userId,
     public int $dcId,

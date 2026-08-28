@@ -20,7 +20,7 @@ final class TlAccountUpdateColorData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $forProfile,
+    public ?bool $forProfile,
     public mixed $color,
     ) {
     }

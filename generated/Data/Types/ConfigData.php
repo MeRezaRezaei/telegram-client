@@ -12,13 +12,22 @@ use Spatie\LaravelData\Data;
  */
 final class ConfigData extends TlConfigAbstractData
 {
+    /** @var array<string, array{0:string,1:int}> camelCase param name => [flag word, bit] for flags.N?true params */
+    public const TL_FLAG_BITS = [
+        'defaultP2pContacts' => ['flags', 3],
+        'preloadFeaturedStickers' => ['flags', 4],
+        'revokePmInbox' => ['flags', 6],
+        'blockedMode' => ['flags', 8],
+        'forceTryIpv6' => ['flags', 14],
+    ];
+
     public function __construct(
     public int $flags,
-    public bool $defaultP2pContacts,
-    public bool $preloadFeaturedStickers,
-    public bool $revokePmInbox,
-    public bool $blockedMode,
-    public bool $forceTryIpv6,
+    public ?bool $defaultP2pContacts,
+    public ?bool $preloadFeaturedStickers,
+    public ?bool $revokePmInbox,
+    public ?bool $blockedMode,
+    public ?bool $forceTryIpv6,
     public int $date,
     public int $expires,
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlBoolAbstractData $testMode,
@@ -42,25 +51,25 @@ final class ConfigData extends TlConfigAbstractData
     public int $ratingEDecay,
     public int $stickersRecentLimit,
     public int $channelsReadMediaPeriod,
-    public int $tmpSessions,
+    public ?int $tmpSessions,
     public int $callReceiveTimeoutMs,
     public int $callRingTimeoutMs,
     public int $callConnectTimeoutMs,
     public int $callPacketTimeoutMs,
     public string $meUrlPrefix,
-    public string $autoupdateUrlPrefix,
-    public string $gifSearchUsername,
-    public string $venueSearchUsername,
-    public string $imgSearchUsername,
-    public string $staticMapsProvider,
+    public ?string $autoupdateUrlPrefix,
+    public ?string $gifSearchUsername,
+    public ?string $venueSearchUsername,
+    public ?string $imgSearchUsername,
+    public ?string $staticMapsProvider,
     public int $captionLengthMax,
     public int $messageLengthMax,
     public int $webfileDcId,
-    public string $suggestedLangCode,
-    public int $langPackVersion,
-    public int $baseLangPackVersion,
+    public ?string $suggestedLangCode,
+    public ?int $langPackVersion,
+    public ?int $baseLangPackVersion,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlReactionAbstractData $reactionsDefault,
-    public string $autologinToken,
+    public ?string $autologinToken,
     ) {
     }
 }

@@ -17,9 +17,9 @@ final class TlAccountPasswordInputSettingsData extends TlAccountPasswordInputSet
     public function __construct(
     public int $flags,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlPasswordKdfAlgoAbstractData $newAlgo,
-    public string $newPasswordHash,
-    public string $hint,
-    public string $email,
+    public ?string $newPasswordHash,
+    public ?string $hint,
+    public ?string $email,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlSecureSecretSettingsAbstractData $newSecureSettings,
     ) {
     }

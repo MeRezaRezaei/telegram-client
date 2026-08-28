@@ -20,7 +20,7 @@ final class TlStatsGetMegagroupStatsData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $dark,
+    public ?bool $dark,
     public mixed $channel,
     ) {
     }

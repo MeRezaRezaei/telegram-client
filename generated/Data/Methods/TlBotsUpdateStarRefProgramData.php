@@ -22,7 +22,7 @@ final class TlBotsUpdateStarRefProgramData extends Data
     public int $flags,
     public mixed $bot,
     public int $commissionPermille,
-    public int $durationMonths,
+    public ?int $durationMonths,
     ) {
     }
 }

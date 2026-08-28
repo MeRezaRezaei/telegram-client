@@ -23,7 +23,7 @@ final class TlPaymentsPaymentReceiptData extends TlPaymentsPaymentReceiptAbstrac
     public \MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlInvoiceAbstractData $invoice,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlPaymentRequestedInfoAbstractData $info,
     public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlShippingOptionAbstractData $shipping,
-    public int $tipAmount,
+    public ?int $tipAmount,
     public string $currency,
     public int $totalAmount,
     public string $credentialsTitle,

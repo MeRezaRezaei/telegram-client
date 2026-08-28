@@ -17,8 +17,8 @@ final class UpdateReadChannelDiscussionInboxData extends TlUpdateAbstractData
     public int $channelId,
     public int $topMsgId,
     public int $readMaxId,
-    public int $broadcastId,
-    public int $broadcastPost,
+    public ?int $broadcastId,
+    public ?int $broadcastPost,
     ) {
     }
 }

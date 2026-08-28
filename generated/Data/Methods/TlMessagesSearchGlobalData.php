@@ -20,10 +20,10 @@ final class TlMessagesSearchGlobalData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $broadcastsOnly,
-    public bool $groupsOnly,
-    public bool $usersOnly,
-    public int $folderId,
+    public ?bool $broadcastsOnly,
+    public ?bool $groupsOnly,
+    public ?bool $usersOnly,
+    public ?int $folderId,
     public string $q,
     public mixed $filter,
     public int $minDate,

@@ -20,8 +20,8 @@ final class TlPhoneDeleteConferenceCallParticipantsData extends Data
 
     public function __construct(
     public int $flags,
-    public bool $onlyLeft,
-    public bool $kick,
+    public ?bool $onlyLeft,
+    public ?bool $kick,
     public mixed $call,
     public array $ids,
     public string $block,
