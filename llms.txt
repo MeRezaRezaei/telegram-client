@@ -11,7 +11,8 @@
 ## Docs
 
 - [README.md](README.md) — package overview
-- [docs/ingest.md](docs/ingest.md) — ingest API, route semantics, idempotency, tenancy
+- docs/quickstart.md: 4 first recipes (ingest, route, backfill, backup)
+- docs/ingest.md](docs/ingest.md) — ingest API, route semantics, idempotency, tenancy
 - [docs/bus.md](docs/bus.md) — Redis stream schema, routing, consumer, daemon, backfill
 - [docs/backup.md](docs/backup.md) — encrypted channel vault: crypto, CLI, verifier, limits
 - [../teleproto/skills/telegram-methods](../teleproto/skills/telegram-methods) — per-method skill files for the underlying engine (dev checkout sibling)

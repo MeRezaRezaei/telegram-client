@@ -186,11 +186,12 @@ Migrations ship with the package and load automatically; config merges as `teleg
 
 ## AI-friendly
 
- [`llms.txt`](llms.txt) indexes the package for agents, and the [`skills/`](skills/) directory carries a generated per-surface reference — the same docs your editor's agent reads.
+ the [teleproto skills](https://github.com/MeRezaRezaei/teleproto/tree/main/skills/telegram-methods) directory carries a generated per-surface reference — the same docs your editor's agent reads.
 
 ## Documentation
 
-- [Ingest — raw TL payloads into Postgres truth](docs/ingest.md)
+- [Quickstart — 4 first recipes](docs/quickstart.md)
+- [Ingest reference](docs/ingest.md)
 - [Bus — Redis streams, routing, daemon & backfill](docs/bus.md)
 - [Backup — encrypted Telegram-channel vault](docs/backup.md)
 - Engine layer: [teleproto docs](https://github.com/MeRezaRezaei/teleproto)

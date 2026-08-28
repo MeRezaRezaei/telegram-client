@@ -33,7 +33,7 @@
         "php": ">=8.2",
         "ext-pdo": "*",
         "ext-sodium": "*",
-        "merezarezaei/teleproto": "dev-main",
+        "merezarezaei/teleproto": "^1.1",
         "illuminate/database": "^10.0|^11.0|^12.0",
         "illuminate/support": "^10.0|^11.0|^12.0",
         "illuminate/console": "^10.0|^11.0|^12.0",
@@ -57,19 +57,22 @@
         }
     },
     "autoload-dev": {
-        "psr-4": { "MeRezaRezaei\\TelegramClient\\Tests\\": "tests" }
+        "psr-4": {
+            "MeRezaRezaei\\TelegramClient\\Tests\\": "tests"
+        }
     },
     "extra": {
         "laravel": {
-            "providers": ["MeRezaRezaei\\TelegramClient\\TelegramClientServiceProvider"]
+            "providers": [
+                "MeRezaRezaei\\TelegramClient\\TelegramClientServiceProvider"
+            ]
         }
     },
     "scripts": {
         "test": "vendor/bin/phpunit",
         "analyse": "vendor/bin/phpstan analyse --no-progress"
     },
-    "repositories": [
-        { "type": "path", "url": "../teleproto", "options": { "symlink": true } }
-    ],
-    "config": { "allow-plugins": false }
+    "config": {
+        "allow-plugins": false
+    }
 }
