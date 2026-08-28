@@ -1,0 +1,21 @@
+<?php
+
+// GENERATED — do not edit; run artisan telegram-client:regenerate
+
+declare(strict_types=1);
+
+namespace MeRezaRezaei\TelegramClient\Schema\Generated\Models;
+
+use MeRezaRezaei\TelegramClient\Schema\Eloquent\TlAnchorModel;
+
+/** Vector child rows for param connected_bots (table tl_account_connected_bots_connected_bots__connected_bots). */
+final class TlAccountConnectedBotsConnectedBotsConnected_bots extends TlAnchorModel
+{
+    protected $table = 'tl_account_connected_bots_connected_bots__connected_bots';
+
+    protected $guarded = [];
+
+    /** @var array<string, string> */
+    protected $casts = [
+    ];
+}

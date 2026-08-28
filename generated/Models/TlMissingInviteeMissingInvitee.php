@@ -1,0 +1,29 @@
+<?php
+
+// GENERATED — do not edit; run artisan telegram-client:regenerate
+
+declare(strict_types=1);
+
+namespace MeRezaRezaei\TelegramClient\Schema\Generated\Models;
+
+use MeRezaRezaei\TelegramClient\Schema\Eloquent\HasTlChildren;
+use MeRezaRezaei\TelegramClient\Schema\Eloquent\TlInstanceModel;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+/** Constructor model for missingInvitee of MissingInvitee (crc32 628c9224). */
+final class TlMissingInviteeMissingInvitee extends TlInstanceModel
+{
+    use HasFactory, HasTlChildren;
+
+    protected $table = 'tl_missing_invitee_missing_invitee';
+
+    protected $guarded = [];
+
+    /** @var array<string, string> */
+    protected $casts = [
+        'flags' => 'int',
+        'premium_would_allow_invite' => 'bool',
+        'premium_required_for_pm' => 'bool',
+        'user_id' => 'int',
+    ];
+}

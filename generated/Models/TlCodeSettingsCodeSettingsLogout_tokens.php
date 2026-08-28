@@ -1,0 +1,22 @@
+<?php
+
+// GENERATED — do not edit; run artisan telegram-client:regenerate
+
+declare(strict_types=1);
+
+namespace MeRezaRezaei\TelegramClient\Schema\Generated\Models;
+
+use MeRezaRezaei\TelegramClient\Schema\Eloquent\TlAnchorModel;
+
+/** Vector child rows for param logout_tokens (table tl_code_settings_code_settings__logout_tokens). */
+final class TlCodeSettingsCodeSettingsLogout_tokens extends TlAnchorModel
+{
+    protected $table = 'tl_code_settings_code_settings__logout_tokens';
+
+    protected $guarded = [];
+
+    /** @var array<string, string> */
+    protected $casts = [
+        'value' => 'string',
+    ];
+}

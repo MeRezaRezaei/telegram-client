@@ -1,0 +1,50 @@
+<?php
+
+// GENERATED — do not edit; run artisan telegram-client:regenerate
+
+declare(strict_types=1);
+
+namespace MeRezaRezaei\TelegramClient\Schema\Generated\Models;
+
+use MeRezaRezaei\TelegramClient\Schema\Eloquent\HasTlChildren;
+use MeRezaRezaei\TelegramClient\Schema\Eloquent\TlInstanceModel;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use MeRezaRezaei\TelegramClient\Schema\Generated\Models\TlUpdatesChannelDifferenceChannelDifferenceNew_messages;
+use MeRezaRezaei\TelegramClient\Schema\Generated\Models\TlUpdatesChannelDifferenceChannelDifferenceOther_updates;
+use MeRezaRezaei\TelegramClient\Schema\Generated\Models\TlUpdatesChannelDifferenceChannelDifferenceChats;
+use MeRezaRezaei\TelegramClient\Schema\Generated\Models\TlUpdatesChannelDifferenceChannelDifferenceUsers;
+
+/** Constructor model for updates.channelDifference of updates.ChannelDifference (crc32 2064674e). */
+final class TlUpdatesChannelDifferenceChannelDifference extends TlInstanceModel
+{
+    use HasFactory, HasTlChildren;
+
+    protected $table = 'tl_updates_channel_difference_channel_difference';
+
+    protected $guarded = [];
+
+    /** @var array<string, string> */
+    protected $casts = [
+        'flags' => 'int',
+        'final' => 'bool',
+        'pts' => 'int',
+        'timeout' => 'int',
+    ];
+
+    public function newMessages(): HasMany
+    {
+        return $this->tlChild(TlUpdatesChannelDifferenceChannelDifferenceNew_messages::class);
+    }
+    public function otherUpdates(): HasMany
+    {
+        return $this->tlChild(TlUpdatesChannelDifferenceChannelDifferenceOther_updates::class);
+    }
+    public function chats(): HasMany
+    {
+        return $this->tlChild(TlUpdatesChannelDifferenceChannelDifferenceChats::class);
+    }
+    public function users(): HasMany
+    {
+        return $this->tlChild(TlUpdatesChannelDifferenceChannelDifferenceUsers::class);
+    }
+}

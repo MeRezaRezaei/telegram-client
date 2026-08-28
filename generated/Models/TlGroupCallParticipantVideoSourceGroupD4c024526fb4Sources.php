@@ -1,0 +1,22 @@
+<?php
+
+// GENERATED — do not edit; run artisan telegram-client:regenerate
+
+declare(strict_types=1);
+
+namespace MeRezaRezaei\TelegramClient\Schema\Generated\Models;
+
+use MeRezaRezaei\TelegramClient\Schema\Eloquent\TlAnchorModel;
+
+/** Vector child rows for param sources (table tl_group_call_participant_video_source_group__3aa33ccb5d6b). */
+final class TlGroupCallParticipantVideoSourceGroupD4c024526fb4Sources extends TlAnchorModel
+{
+    protected $table = 'tl_group_call_participant_video_source_group__3aa33ccb5d6b';
+
+    protected $guarded = [];
+
+    /** @var array<string, string> */
+    protected $casts = [
+        'value' => 'int',
+    ];
+}

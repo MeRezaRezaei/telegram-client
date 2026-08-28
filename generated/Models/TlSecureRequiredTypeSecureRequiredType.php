@@ -1,0 +1,30 @@
+<?php
+
+// GENERATED — do not edit; run artisan telegram-client:regenerate
+
+declare(strict_types=1);
+
+namespace MeRezaRezaei\TelegramClient\Schema\Generated\Models;
+
+use MeRezaRezaei\TelegramClient\Schema\Eloquent\HasTlChildren;
+use MeRezaRezaei\TelegramClient\Schema\Eloquent\TlInstanceModel;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+/** Constructor model for secureRequiredType of SecureRequiredType (crc32 829d99da). */
+final class TlSecureRequiredTypeSecureRequiredType extends TlInstanceModel
+{
+    use HasFactory, HasTlChildren;
+
+    protected $table = 'tl_secure_required_type_secure_required_type';
+
+    protected $guarded = [];
+
+    /** @var array<string, string> */
+    protected $casts = [
+        'flags' => 'int',
+        'native_names' => 'bool',
+        'selfie_required' => 'bool',
+        'translation_required' => 'bool',
+        'tl_type' => 'string',
+    ];
+}

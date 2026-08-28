@@ -10,13 +10,15 @@ use MeRezaRezaei\TelegramClient\Schema\Generator\TeleprotoSchemeLoader;
 use MeRezaRezaei\TelegramClient\Schema\Generator\TlCanon;
 
 /**
- * Task 2 gate: the metamodel loads from teleproto's committed layer-229
- * schema/sources/*.tl via teleproto's TLSignatureParser — not fork-local .tl.
+ * Task 2 gate: the metamodel loads from this package's committed copy of
+ * the owner's full v227 mirror (schema/sources/TL_telegram_v227.tl +
+ * TL_mtproto_v1.tl + TL_secret.tl) via teleproto's TLSignatureParser —
+ * with teleproto's partial vendored sources as documented fallback.
  *
- * Count reality (committed sources, NOT the full official schema):
- * api.tl + mtproto.tl carry ~1.7k constructors / ~830 methods at LAYER 229.
- * The plan's ">7000 constructors" assumed the full official file; the
- * committed sources are the ground truth (see task-2 report).
+ * Count reality (owner's real fork run, verified locally): the v227
+ * mirror carries 1685 constructors / 799 methods at LAYER 227 — the
+ * same metamodel the fork's committed manifest records. Bands bracket
+ * those with layer-drift headroom.
  */
 final class MetamodelFromTeleprotoTest extends TestCase
 {
@@ -32,25 +34,29 @@ final class MetamodelFromTeleprotoTest extends TestCase
         return self::$cache->scheme ??= (new SchemaRegenerator())->loadScheme();
     }
 
-    public function test_loads_layer_229_from_committed_sources(): void
+    public function test_loads_layer_227_from_committed_mirror(): void
     {
-        self::assertSame(229, $this->scheme()->layer);
+        self::assertSame(227, $this->scheme()->layer);
     }
 
     public function test_method_and_constructor_bands(): void
     {
         $counts = $this->scheme()->counts();
-        self::assertGreaterThan(700, $counts['methods'], 'methods');
-        self::assertGreaterThan(1500, $counts['constructors'], 'constructors');
+        self::assertGreaterThan(1500, $counts['constructors'], 'constructors lower bound');
+        self::assertLessThan(2500, $counts['constructors'], 'constructors upper bound');
+        self::assertGreaterThan(750, $counts['methods'], 'methods lower bound');
+        self::assertLessThan(950, $counts['methods'], 'methods upper bound');
     }
 
     public function test_user_constructor_spot_check(): void
     {
         $user = $this->scheme()->types()['User']->constructors()['user'] ?? null;
         self::assertNotNull($user, 'constructor user missing');
-        // Ground truth: committed layer-229 api.tl carries user#b1b8cc83
-        // (the plan's 31774388 is teleproto's curated layer-227 registry id).
-        self::assertSame('b1b8cc83', sprintf('%08x', $user->id));
+        // Ground truth: the owner's v227 mirror carries user#31774388
+        // (hex as written in the .tl source) — the wire id our Layer-227
+        // MTProto speaks.
+        self::assertSame(829899656, $user->id);
+        self::assertSame('31774388', sprintf('%08x', $user->id));
         $id = $user->params()['id'] ?? null;
         self::assertNotNull($id, 'user.id param missing');
         self::assertSame('long', $id->baseType());
@@ -74,11 +80,22 @@ final class MetamodelFromTeleprotoTest extends TestCase
         self::assertArrayHasKey('ping', $this->scheme()->methods());
     }
 
+    public function test_secret_schema_merged_across_layer_fences(): void
+    {
+        // TL_secret.tl is split by MadelineProto "===N===" layer fences;
+        // ctors on both sides of every fence must load.
+        self::assertArrayHasKey('decryptedMessage', $this->scheme()->types()['DecryptedMessage']->constructors());
+        self::assertArrayHasKey(
+            'decryptedMessageActionReadMessages',
+            $this->scheme()->types()['DecryptedMessageAction']->constructors(),
+        );
+    }
+
     public function test_id_less_constructors_get_tlcanon_crc(): void
     {
-        $ctor = $this->scheme()->types()['TlsBlock']->constructors()['tlsBlockDomain'] ?? null;
-        self::assertNotNull($ctor, 'id-less tlsBlockDomain missing');
-        $expected = hexdec(hash('crc32b', TlCanon::normalize('tlsBlockDomain = TlsBlock')));
+        $ctor = $this->scheme()->types()['RSAPublicKey']->constructors()['rsa_public_key'] ?? null;
+        self::assertNotNull($ctor, 'id-less rsa_public_key missing');
+        $expected = hexdec(hash('crc32b', TlCanon::normalize('rsa_public_key n:string e:string = RSAPublicKey')));
         self::assertSame($expected, $ctor->id, 'id must be TlCanon-computed, never invented');
         self::assertNotSame(0, $ctor->id);
     }
@@ -94,19 +111,21 @@ final class MetamodelFromTeleprotoTest extends TestCase
         self::assertSame('int', $named['layer']->baseType());
     }
 
-    public function test_sources_dir_is_overridable(): void
+    public function test_default_sources_dir_is_our_mirror(): void
     {
         $dir = TeleprotoSchemeLoader::defaultSourcesDir();
-        self::assertFileExists($dir . '/api.tl');
-        self::assertFileExists($dir . '/mtproto.tl');
+        self::assertFileExists($dir . '/TL_telegram_v227.tl');
+        self::assertFileExists($dir . '/TL_mtproto_v1.tl');
+        self::assertFileExists($dir . '/TL_secret.tl');
 
         $scheme = (new SchemaRegenerator())->loadScheme($dir);
-        self::assertSame(229, $scheme->layer);
-        self::assertGreaterThan(700, $scheme->counts()['methods']);
+        self::assertSame(227, $scheme->layer);
+        self::assertGreaterThan(750, $scheme->counts()['methods']);
+        self::assertGreaterThan(1500, $scheme->counts()['constructors']);
     }
 }
 
-/** Tiny static cache so the 8k-line parse happens once per test run. */
+/** Tiny static cache so the multi-thousand-line parse happens once per test run. */
 final class TlSchemeCache
 {
     public ?\MeRezaRezaei\TelegramClient\Schema\Generator\Model\TlScheme $scheme = null;

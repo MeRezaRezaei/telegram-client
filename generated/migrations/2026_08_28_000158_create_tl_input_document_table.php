@@ -1,0 +1,40 @@
+<?php
+
+// GENERATED — do not edit; run artisan telegram-client:regenerate
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('tl_input_document', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->bigInteger('constructor_id'); // crc32, may exceed signed i32
+            $table->string('constructor_name', 96);
+            $table->timestamps();
+            $table->index('constructor_id');
+        });
+        Schema::create('tl_input_document_input_document', function (Blueprint $table) {
+            $table->foreignUuid('id')->primary()->constrained('tl_input_document')->cascadeOnDelete();
+            $table->bigInteger('tl_id');
+            $table->bigInteger('access_hash');
+            $table->binary('file_reference');
+            $table->timestamps();
+        });
+        Schema::create('tl_input_document_input_document_empty', function (Blueprint $table) {
+            $table->foreignUuid('id')->primary()->constrained('tl_input_document')->cascadeOnDelete();
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('tl_input_document_input_document_empty');
+        Schema::dropIfExists('tl_input_document_input_document');
+        Schema::dropIfExists('tl_input_document');
+    }
+};

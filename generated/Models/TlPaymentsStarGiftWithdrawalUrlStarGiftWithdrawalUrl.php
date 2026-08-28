@@ -1,0 +1,26 @@
+<?php
+
+// GENERATED — do not edit; run artisan telegram-client:regenerate
+
+declare(strict_types=1);
+
+namespace MeRezaRezaei\TelegramClient\Schema\Generated\Models;
+
+use MeRezaRezaei\TelegramClient\Schema\Eloquent\HasTlChildren;
+use MeRezaRezaei\TelegramClient\Schema\Eloquent\TlInstanceModel;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+/** Constructor model for payments.starGiftWithdrawalUrl of payments.StarGiftWithdrawalUrl (crc32 84aa3a9c). */
+final class TlPaymentsStarGiftWithdrawalUrlStarGiftWithdrawalUrl extends TlInstanceModel
+{
+    use HasFactory, HasTlChildren;
+
+    protected $table = 'tl_payments_star_gift_withdrawal_url_star_gif_98844d3a363c';
+
+    protected $guarded = [];
+
+    /** @var array<string, string> */
+    protected $casts = [
+        'url' => 'string',
+    ];
+}

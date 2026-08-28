@@ -1,0 +1,35 @@
+<?php
+
+// GENERATED — do not edit; run artisan telegram-client:regenerate
+
+declare(strict_types=1);
+
+namespace MeRezaRezaei\TelegramClient\Schema\Generated\Models;
+
+use MeRezaRezaei\TelegramClient\Schema\Eloquent\HasTlChildren;
+use MeRezaRezaei\TelegramClient\Schema\Eloquent\TlInstanceModel;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use MeRezaRezaei\TelegramClient\Schema\Generated\Models\TlWebDocumentWebDocumentAttributes;
+
+/** Constructor model for webDocument of WebDocument (crc32 1c570ed1). */
+final class TlWebDocumentWebDocument extends TlInstanceModel
+{
+    use HasFactory, HasTlChildren;
+
+    protected $table = 'tl_web_document_web_document';
+
+    protected $guarded = [];
+
+    /** @var array<string, string> */
+    protected $casts = [
+        'url' => 'string',
+        'access_hash' => 'int',
+        'tl_size' => 'int',
+        'mime_type' => 'string',
+    ];
+
+    public function attributes(): HasMany
+    {
+        return $this->tlChild(TlWebDocumentWebDocumentAttributes::class);
+    }
+}

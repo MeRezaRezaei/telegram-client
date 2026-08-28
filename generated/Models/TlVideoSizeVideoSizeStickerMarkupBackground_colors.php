@@ -1,0 +1,22 @@
+<?php
+
+// GENERATED — do not edit; run artisan telegram-client:regenerate
+
+declare(strict_types=1);
+
+namespace MeRezaRezaei\TelegramClient\Schema\Generated\Models;
+
+use MeRezaRezaei\TelegramClient\Schema\Eloquent\TlAnchorModel;
+
+/** Vector child rows for param background_colors (table tl_video_size_video_size_sticker_markup__background_colors). */
+final class TlVideoSizeVideoSizeStickerMarkupBackground_colors extends TlAnchorModel
+{
+    protected $table = 'tl_video_size_video_size_sticker_markup__background_colors';
+
+    protected $guarded = [];
+
+    /** @var array<string, string> */
+    protected $casts = [
+        'value' => 'int',
+    ];
+}

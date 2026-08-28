@@ -1,0 +1,39 @@
+<?php
+
+// GENERATED — do not edit; run artisan telegram-client:regenerate
+
+declare(strict_types=1);
+
+namespace MeRezaRezaei\TelegramClient\Schema\Generated\Models;
+
+use MeRezaRezaei\TelegramClient\Schema\Eloquent\HasTlChildren;
+use MeRezaRezaei\TelegramClient\Schema\Eloquent\TlInstanceModel;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use MeRezaRezaei\TelegramClient\Schema\Generated\Models\TlDecryptedMessageMediaDecryptedMessage1652f9c81874Attributes;
+
+/** Constructor model for decryptedMessageMediaDocument of DecryptedMessageMedia (crc32 6abd9782). */
+final class TlDecryptedMessageMediaDecryptedMessageMediaDocument extends TlInstanceModel
+{
+    use HasFactory, HasTlChildren;
+
+    protected $table = 'tl_decrypted_message_media_decrypted_message__1652f9c81874';
+
+    protected $guarded = [];
+
+    /** @var array<string, string> */
+    protected $casts = [
+        'thumb' => 'string',
+        'thumb_w' => 'int',
+        'thumb_h' => 'int',
+        'mime_type' => 'string',
+        'tl_size' => 'int',
+        'tl_key' => 'string',
+        'iv' => 'string',
+        'caption' => 'string',
+    ];
+
+    public function attributes(): HasMany
+    {
+        return $this->tlChild(TlDecryptedMessageMediaDecryptedMessage1652f9c81874Attributes::class);
+    }
+}

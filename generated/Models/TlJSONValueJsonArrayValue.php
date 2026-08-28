@@ -1,0 +1,21 @@
+<?php
+
+// GENERATED — do not edit; run artisan telegram-client:regenerate
+
+declare(strict_types=1);
+
+namespace MeRezaRezaei\TelegramClient\Schema\Generated\Models;
+
+use MeRezaRezaei\TelegramClient\Schema\Eloquent\TlAnchorModel;
+
+/** Vector child rows for param value (table tl_j_s_o_n_value_json_array__value). */
+final class TlJSONValueJsonArrayValue extends TlAnchorModel
+{
+    protected $table = 'tl_j_s_o_n_value_json_array__value';
+
+    protected $guarded = [];
+
+    /** @var array<string, string> */
+    protected $casts = [
+    ];
+}

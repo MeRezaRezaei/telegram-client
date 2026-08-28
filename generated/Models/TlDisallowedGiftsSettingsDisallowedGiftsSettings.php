@@ -1,0 +1,31 @@
+<?php
+
+// GENERATED — do not edit; run artisan telegram-client:regenerate
+
+declare(strict_types=1);
+
+namespace MeRezaRezaei\TelegramClient\Schema\Generated\Models;
+
+use MeRezaRezaei\TelegramClient\Schema\Eloquent\HasTlChildren;
+use MeRezaRezaei\TelegramClient\Schema\Eloquent\TlInstanceModel;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+/** Constructor model for disallowedGiftsSettings of DisallowedGiftsSettings (crc32 71f276c4). */
+final class TlDisallowedGiftsSettingsDisallowedGiftsSettings extends TlInstanceModel
+{
+    use HasFactory, HasTlChildren;
+
+    protected $table = 'tl_disallowed_gifts_settings_disallowed_gifts_settings';
+
+    protected $guarded = [];
+
+    /** @var array<string, string> */
+    protected $casts = [
+        'flags' => 'int',
+        'disallow_unlimited_stargifts' => 'bool',
+        'disallow_limited_stargifts' => 'bool',
+        'disallow_unique_stargifts' => 'bool',
+        'disallow_premium_gifts' => 'bool',
+        'disallow_stargifts_from_channels' => 'bool',
+    ];
+}

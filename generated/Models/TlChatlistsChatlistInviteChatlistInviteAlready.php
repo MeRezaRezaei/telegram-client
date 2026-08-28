@@ -1,0 +1,47 @@
+<?php
+
+// GENERATED — do not edit; run artisan telegram-client:regenerate
+
+declare(strict_types=1);
+
+namespace MeRezaRezaei\TelegramClient\Schema\Generated\Models;
+
+use MeRezaRezaei\TelegramClient\Schema\Eloquent\HasTlChildren;
+use MeRezaRezaei\TelegramClient\Schema\Eloquent\TlInstanceModel;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use MeRezaRezaei\TelegramClient\Schema\Generated\Models\TlChatlistsChatlistInviteChatlistInviteAlreadyMissing_peers;
+use MeRezaRezaei\TelegramClient\Schema\Generated\Models\TlChatlistsChatlistInviteChatlistInviteAlreadyAlready_peers;
+use MeRezaRezaei\TelegramClient\Schema\Generated\Models\TlChatlistsChatlistInviteChatlistInviteAlreadyChats;
+use MeRezaRezaei\TelegramClient\Schema\Generated\Models\TlChatlistsChatlistInviteChatlistInviteAlreadyUsers;
+
+/** Constructor model for chatlists.chatlistInviteAlready of chatlists.ChatlistInvite (crc32 fa87f659). */
+final class TlChatlistsChatlistInviteChatlistInviteAlready extends TlInstanceModel
+{
+    use HasFactory, HasTlChildren;
+
+    protected $table = 'tl_chatlists_chatlist_invite_chatlist_invite_already';
+
+    protected $guarded = [];
+
+    /** @var array<string, string> */
+    protected $casts = [
+        'filter_id' => 'int',
+    ];
+
+    public function missingPeers(): HasMany
+    {
+        return $this->tlChild(TlChatlistsChatlistInviteChatlistInviteAlreadyMissing_peers::class);
+    }
+    public function alreadyPeers(): HasMany
+    {
+        return $this->tlChild(TlChatlistsChatlistInviteChatlistInviteAlreadyAlready_peers::class);
+    }
+    public function chats(): HasMany
+    {
+        return $this->tlChild(TlChatlistsChatlistInviteChatlistInviteAlreadyChats::class);
+    }
+    public function users(): HasMany
+    {
+        return $this->tlChild(TlChatlistsChatlistInviteChatlistInviteAlreadyUsers::class);
+    }
+}

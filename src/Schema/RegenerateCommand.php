@@ -6,21 +6,22 @@ namespace MeRezaRezaei\TelegramClient\Schema;
 
 use Illuminate\Console\Command;
 use MeRezaRezaei\TelegramClient\Schema\Generator\SchemaRegenerator;
+use MeRezaRezaei\TelegramClient\Schema\Generator\TeleprotoSchemeLoader;
 
 /** artisan telegram-client:regenerate — rebuild the committed mirror from tracked schemes. */
 final class RegenerateCommand extends Command
 {
     protected $signature = 'telegram-client:regenerate
         {--force : Bypass the ±30% constructor-count sanity gate}
-        {--schemas= : Scheme directory (default: package schemas/)}
+        {--schemas= : Scheme directory (default: package schema/sources/ mirror)}
         {--out= : Output directory (default: package root)}';
 
     protected $description = 'Regenerate migrations/models/DTOs/factories from tracked TL schemes';
 
     public function handle(SchemaRegenerator $engine): int
     {
-        $packageRoot = dirname(__DIR__);
-        $schemas = (string) ($this->option('schemas') ?: $packageRoot . '/schemas');
+        $packageRoot = dirname(__DIR__, 2);
+        $schemas = (string) ($this->option('schemas') ?: TeleprotoSchemeLoader::defaultSourcesDir());
         $out = (string) ($this->option('out') ?: $packageRoot);
 
         $engine->force((bool) $this->option('force'));

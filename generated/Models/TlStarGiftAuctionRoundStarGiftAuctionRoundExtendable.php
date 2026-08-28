@@ -1,0 +1,29 @@
+<?php
+
+// GENERATED — do not edit; run artisan telegram-client:regenerate
+
+declare(strict_types=1);
+
+namespace MeRezaRezaei\TelegramClient\Schema\Generated\Models;
+
+use MeRezaRezaei\TelegramClient\Schema\Eloquent\HasTlChildren;
+use MeRezaRezaei\TelegramClient\Schema\Eloquent\TlInstanceModel;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+/** Constructor model for starGiftAuctionRoundExtendable of StarGiftAuctionRound (crc32 0aa021e5). */
+final class TlStarGiftAuctionRoundStarGiftAuctionRoundExtendable extends TlInstanceModel
+{
+    use HasFactory, HasTlChildren;
+
+    protected $table = 'tl_star_gift_auction_round_star_gift_auction__a0b7925a30f9';
+
+    protected $guarded = [];
+
+    /** @var array<string, string> */
+    protected $casts = [
+        'num' => 'int',
+        'duration' => 'int',
+        'extend_top' => 'int',
+        'extend_window' => 'int',
+    ];
+}

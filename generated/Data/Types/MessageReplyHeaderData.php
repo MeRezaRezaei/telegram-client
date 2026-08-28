@@ -1,0 +1,35 @@
+<?php
+
+// GENERATED — do not edit; run artisan telegram-client:regenerate
+
+declare(strict_types=1);
+
+namespace MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types;
+
+use Spatie\LaravelData\Data;
+
+/** DTO for messageReplyHeader of MessageReplyHeader.
+ *
+ * bytes params carried as base64 strings: poll_option
+ */
+final class MessageReplyHeaderData extends TlMessageReplyHeaderAbstractData
+{
+    public function __construct(
+    public int $flags,
+    public bool $replyToScheduled,
+    public bool $forumTopic,
+    public bool $quote,
+    public bool $replyToEphemeral,
+    public int $replyToMsgId,
+    public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlPeerAbstractData $replyToPeerId,
+    public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlMessageFwdHeaderAbstractData $replyFrom,
+    public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlMessageMediaAbstractData $replyMedia,
+    public int $replyToTopId,
+    public string $quoteText,
+    public ?array $quoteEntities,
+    public int $quoteOffset,
+    public int $todoItemId,
+    public string $pollOption,
+    ) {
+    }
+}

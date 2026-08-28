@@ -1,0 +1,48 @@
+<?php
+
+// GENERATED — do not edit; run artisan telegram-client:regenerate
+
+declare(strict_types=1);
+
+namespace MeRezaRezaei\TelegramClient\Schema\Generated\Models;
+
+use MeRezaRezaei\TelegramClient\Schema\Eloquent\HasTlChildren;
+use MeRezaRezaei\TelegramClient\Schema\Eloquent\TlInstanceModel;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use MeRezaRezaei\TelegramClient\Schema\Generated\Models\TlStoriesStoriesStoriesStories;
+use MeRezaRezaei\TelegramClient\Schema\Generated\Models\TlStoriesStoriesStoriesPinned_to_top;
+use MeRezaRezaei\TelegramClient\Schema\Generated\Models\TlStoriesStoriesStoriesChats;
+use MeRezaRezaei\TelegramClient\Schema\Generated\Models\TlStoriesStoriesStoriesUsers;
+
+/** Constructor model for stories.stories of stories.Stories (crc32 63c3dd0a). */
+final class TlStoriesStoriesStories extends TlInstanceModel
+{
+    use HasFactory, HasTlChildren;
+
+    protected $table = 'tl_stories_stories_stories';
+
+    protected $guarded = [];
+
+    /** @var array<string, string> */
+    protected $casts = [
+        'flags' => 'int',
+        'count' => 'int',
+    ];
+
+    public function stories(): HasMany
+    {
+        return $this->tlChild(TlStoriesStoriesStoriesStories::class);
+    }
+    public function pinnedToTop(): HasMany
+    {
+        return $this->tlChild(TlStoriesStoriesStoriesPinned_to_top::class);
+    }
+    public function chats(): HasMany
+    {
+        return $this->tlChild(TlStoriesStoriesStoriesChats::class);
+    }
+    public function users(): HasMany
+    {
+        return $this->tlChild(TlStoriesStoriesStoriesUsers::class);
+    }
+}

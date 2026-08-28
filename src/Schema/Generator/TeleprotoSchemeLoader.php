@@ -13,12 +13,16 @@ use MeRezaRezaei\TelegramClient\Schema\Generator\Model\TlParam;
 use MeRezaRezaei\TelegramClient\Schema\Generator\Model\TlScheme;
 
 /**
- * Input adaptor (plan Task 2): feeds the fork metamodel from teleproto's
- * committed schema/sources/*.tl via teleproto's own TLSignatureParser.
+ * Input adaptor (plan Task 2): feeds the fork metamodel from this
+ * package's committed schema/sources/*.tl (the owner's full v227 mirror:
+ * TL_telegram_v227.tl + TL_mtproto_v1.tl + TL_secret.tl) via teleproto's
+ * own TLSignatureParser; teleproto's partial vendored sources remain a
+ * documented fallback.
  *
  * Line protocol mirrors the sources: "//" comments (incl. "// LAYER N"),
- * "---types---"/"---functions---" section switches (default types), then
- * one definition per line.
+ * "---types---"/"---functions---" section switches (default types),
+ * MadelineProto "===N===" layer fences (skipped), then one definition
+ * per line.
  *
  * Out-of-grammar lines are handled explicitly, never silently:
  *  - core builtins ("int ? = Int;", "int128 4*[ int ] = Int128;", ...) are
@@ -63,6 +67,11 @@ final class TeleprotoSchemeLoader
             if ($line === '' || str_starts_with($line, '//')) {
                 continue;
             }
+            // MadelineProto multi-schema layer separators ("===8===", "===17===", ...):
+            // section fences between layered fragments of one file — no TL content.
+            if (str_starts_with($line, '===') && str_ends_with($line, '===')) {
+                continue;
+            }
             if ($line === '---types---' || $line === '---functions---') {
                 $mode = $line === '---functions---' ? 'functions' : 'types';
                 continue;
@@ -72,13 +81,20 @@ final class TeleprotoSchemeLoader
         return $scheme;
     }
 
-    /** Default teleproto sources dir: config override, then known layouts. */
+    /** Default sources dir: config override, then this package's committed mirror, then teleproto's. */
     public static function defaultSourcesDir(): string
     {
         $configured = self::configuredSourcesDir();
         if ($configured !== null) {
             return $configured;
         }
+        // this package's committed copies of the owner's full layer mirror
+        // (schema/sources/TL_telegram_v227.tl + TL_mtproto_v1.tl + TL_secret.tl)
+        $packageSources = dirname(__DIR__, 3) . '/schema/sources';
+        if (glob($packageSources . '/*.tl') !== []) {
+            return $packageSources;
+        }
+        // documented fallback: teleproto's committed (partial) sources
         // dev path repo: <pkg>/src/Schema/Generator -> <pkg>/vendor/...
         $candidate = dirname(__DIR__, 3) . '/vendor/merezarezaei/teleproto/schema/sources';
         if (is_dir($candidate)) {

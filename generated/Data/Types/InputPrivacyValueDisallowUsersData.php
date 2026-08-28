@@ -1,0 +1,19 @@
+<?php
+
+// GENERATED — do not edit; run artisan telegram-client:regenerate
+
+declare(strict_types=1);
+
+namespace MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types;
+
+use Spatie\LaravelData\Data;
+
+/** DTO for inputPrivacyValueDisallowUsers of InputPrivacyRule.
+ */
+final class InputPrivacyValueDisallowUsersData extends TlInputPrivacyRuleAbstractData
+{
+    public function __construct(
+    public array $users,
+    ) {
+    }
+}

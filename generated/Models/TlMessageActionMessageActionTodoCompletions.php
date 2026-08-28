@@ -1,0 +1,36 @@
+<?php
+
+// GENERATED — do not edit; run artisan telegram-client:regenerate
+
+declare(strict_types=1);
+
+namespace MeRezaRezaei\TelegramClient\Schema\Generated\Models;
+
+use MeRezaRezaei\TelegramClient\Schema\Eloquent\HasTlChildren;
+use MeRezaRezaei\TelegramClient\Schema\Eloquent\TlInstanceModel;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use MeRezaRezaei\TelegramClient\Schema\Generated\Models\TlMessageActionMessageActionTodoCompletionsCompleted;
+use MeRezaRezaei\TelegramClient\Schema\Generated\Models\TlMessageActionMessageActionTodoCompletionsIncompleted;
+
+/** Constructor model for messageActionTodoCompletions of MessageAction (crc32 cc7c5c89). */
+final class TlMessageActionMessageActionTodoCompletions extends TlInstanceModel
+{
+    use HasFactory, HasTlChildren;
+
+    protected $table = 'tl_message_action_message_action_todo_completions';
+
+    protected $guarded = [];
+
+    /** @var array<string, string> */
+    protected $casts = [
+    ];
+
+    public function completed(): HasMany
+    {
+        return $this->tlChild(TlMessageActionMessageActionTodoCompletionsCompleted::class);
+    }
+    public function incompleted(): HasMany
+    {
+        return $this->tlChild(TlMessageActionMessageActionTodoCompletionsIncompleted::class);
+    }
+}

@@ -1,0 +1,26 @@
+<?php
+
+// GENERATED — do not edit; run artisan telegram-client:regenerate
+
+declare(strict_types=1);
+
+namespace MeRezaRezaei\TelegramClient\Schema\Generated\Models;
+
+use MeRezaRezaei\TelegramClient\Schema\Eloquent\HasTlChildren;
+use MeRezaRezaei\TelegramClient\Schema\Eloquent\TlInstanceModel;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+/** Constructor model for inputPaymentCredentialsGooglePay of InputPaymentCredentials (crc32 8ac32801). */
+final class TlInputPaymentCredentialsInputPaymentCredentialsGooglePay extends TlInstanceModel
+{
+    use HasFactory, HasTlChildren;
+
+    protected $table = 'tl_input_payment_credentials_input_payment_cr_19f70d5158de';
+
+    protected $guarded = [];
+
+    /** @var array<string, string> */
+    protected $casts = [
+        'payment_token' => 'string',
+    ];
+}

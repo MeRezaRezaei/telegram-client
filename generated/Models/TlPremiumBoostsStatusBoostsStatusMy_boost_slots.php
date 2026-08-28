@@ -1,0 +1,22 @@
+<?php
+
+// GENERATED — do not edit; run artisan telegram-client:regenerate
+
+declare(strict_types=1);
+
+namespace MeRezaRezaei\TelegramClient\Schema\Generated\Models;
+
+use MeRezaRezaei\TelegramClient\Schema\Eloquent\TlAnchorModel;
+
+/** Vector child rows for param my_boost_slots (table tl_premium_boosts_status_boosts_status__my_boost_slots). */
+final class TlPremiumBoostsStatusBoostsStatusMy_boost_slots extends TlAnchorModel
+{
+    protected $table = 'tl_premium_boosts_status_boosts_status__my_boost_slots';
+
+    protected $guarded = [];
+
+    /** @var array<string, string> */
+    protected $casts = [
+        'value' => 'int',
+    ];
+}

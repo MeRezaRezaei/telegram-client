@@ -1,0 +1,27 @@
+<?php
+
+// GENERATED — do not edit; run artisan telegram-client:regenerate
+
+declare(strict_types=1);
+
+namespace MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types;
+
+use Spatie\LaravelData\Data;
+
+/** DTO for messages.channelMessages of messages.Messages.
+ */
+final class TlMessagesChannelMessagesData extends TlMessagesMessagesAbstractData
+{
+    public function __construct(
+    public int $flags,
+    public bool $inexact,
+    public int $pts,
+    public int $count,
+    public int $offsetIdOffset,
+    public array $messages,
+    public array $topics,
+    public array $chats,
+    public array $users,
+    ) {
+    }
+}

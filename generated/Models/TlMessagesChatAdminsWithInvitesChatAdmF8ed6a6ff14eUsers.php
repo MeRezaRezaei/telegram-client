@@ -1,0 +1,21 @@
+<?php
+
+// GENERATED — do not edit; run artisan telegram-client:regenerate
+
+declare(strict_types=1);
+
+namespace MeRezaRezaei\TelegramClient\Schema\Generated\Models;
+
+use MeRezaRezaei\TelegramClient\Schema\Eloquent\TlAnchorModel;
+
+/** Vector child rows for param users (table tl_messages_chat_admins_with_invites_chat_adm_3175fc4f3da2). */
+final class TlMessagesChatAdminsWithInvitesChatAdmF8ed6a6ff14eUsers extends TlAnchorModel
+{
+    protected $table = 'tl_messages_chat_admins_with_invites_chat_adm_3175fc4f3da2';
+
+    protected $guarded = [];
+
+    /** @var array<string, string> */
+    protected $casts = [
+    ];
+}

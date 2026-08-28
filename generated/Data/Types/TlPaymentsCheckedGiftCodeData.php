@@ -1,0 +1,28 @@
+<?php
+
+// GENERATED — do not edit; run artisan telegram-client:regenerate
+
+declare(strict_types=1);
+
+namespace MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types;
+
+use Spatie\LaravelData\Data;
+
+/** DTO for payments.checkedGiftCode of payments.CheckedGiftCode.
+ */
+final class TlPaymentsCheckedGiftCodeData extends TlPaymentsCheckedGiftCodeAbstractData
+{
+    public function __construct(
+    public int $flags,
+    public bool $viaGiveaway,
+    public ?\MeRezaRezaei\TelegramClient\Schema\Generated\Data\Types\TlPeerAbstractData $fromId,
+    public int $giveawayMsgId,
+    public int $toId,
+    public int $date,
+    public int $days,
+    public int $usedDate,
+    public array $chats,
+    public array $users,
+    ) {
+    }
+}
