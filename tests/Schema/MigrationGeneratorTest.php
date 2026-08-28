@@ -38,6 +38,8 @@ final class MigrationGeneratorTest extends TestCase
         self::assertStringContainsString("\$table->uuid('id')->primary();", $user);
         self::assertStringContainsString("\$table->bigInteger('constructor_id');", $user);
         self::assertStringContainsString("\$table->string('constructor_name', 96);", $user);
+        self::assertStringContainsString("\$table->bigInteger('account_id'); // tenant (roadmap: account_id on every anchor)", $user);
+        self::assertStringContainsString("\$table->index('account_id');", $user);
     }
 
     public function test_instance_table_shape(): void

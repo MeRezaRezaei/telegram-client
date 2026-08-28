@@ -71,13 +71,16 @@ final class MigrationGenerator
         $up = [];
         $down = [];
 
-        // Anchor table (spec §4.1)
+        // Anchor table (spec §4.1) — tenant-scoped (roadmap contract:
+        // account_id on every anchor; no global singletons by telegram id).
         $up[] = "Schema::create('{$anchor}', function (Blueprint \$table) {";
         $up[] = "    \$table->uuid('id')->primary();";
         $up[] = "    \$table->bigInteger('constructor_id'); // crc32, may exceed signed i32";
         $up[] = "    \$table->string('constructor_name', 96);";
+        $up[] = "    \$table->bigInteger('account_id'); // tenant (roadmap: account_id on every anchor)";
         $up[] = "    \$table->timestamps();";
         $up[] = "    \$table->index('constructor_id');";
+        $up[] = "    \$table->index('account_id');";
         $up[] = "});";
         $down[] = "Schema::dropIfExists('{$anchor}');";
         $this->tableMap[$anchor] = $this->currentFile;

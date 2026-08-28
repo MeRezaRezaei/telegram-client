@@ -1,0 +1,121 @@
+<?php
+
+declare(strict_types=1);
+
+namespace MeRezaRezaei\TelegramClient\Tests\Ingest;
+
+use MeRezaRezaei\TelegramClient\Ingest\UpdateIngestor;
+use MeRezaRezaei\TelegramClient\Schema\Generated\Models\TlUser;
+use MeRezaRezaei\TelegramClient\Schema\Generated\Models\TlUserUser;
+use Symfony\Component\Uid\UuidV7;
+
+/**
+ * Plan Task 1: flat-constructor ingest of user#31774388 (v227) —
+ * tenant-scoped anchor + verbatim instance row + idempotent re-ingest.
+ */
+final class UpdateIngestorTest extends IngestTestCase
+{
+    private const ACCOUNT = 7;
+
+    /**
+     * Canned v227 wire payload for user#31774388: snake keys, raw flag ints
+     * (teleproto arrays-in truth). Flat fields only — nested refs (photo,
+     * status, emoji_status, colors) and vectors (restriction_reason,
+     * usernames) are Task 3's walker scope.
+     */
+    private static function userPayload(): array
+    {
+        return [
+            '_' => 'user',
+            // access_hash | first_name | last_name | username | phone | lang_code | premium
+            'flags' => (1 << 0) | (1 << 1) | (1 << 2) | (1 << 3) | (1 << 4) | (1 << 22) | (1 << 28),
+            'id' => 501558149,
+            'access_hash' => -5988024083302710253,
+            'first_name' => 'Reza',
+            'last_name' => 'Rezaei',
+            'username' => 'RezaRezaei',
+            'phone' => '989121234567',
+            'lang_code' => 'en',
+            'flags2' => (1 << 4), // stories_unavailable
+            'stories_unavailable' => true,
+            'premium' => true, // flags.28?true — set-flag bools arrive as keys
+        ];
+    }
+
+    public function test_boot_migrates_the_generated_truth(): void
+    {
+        // migrateIngestSurface() already ran in setUp via the dial; boot()
+        // must arrive at the same surface (idempotent migrate is a no-op).
+        (new UpdateIngestor())->boot();
+        self::assertTrue(\Illuminate\Support\Facades\Schema::hasTable('tl_user'));
+        self::assertTrue(\Illuminate\Support\Facades\Schema::hasTable('tl_user_user'));
+        self::assertTrue(\Illuminate\Support\Facades\Schema::hasTable('tl_users_users'));
+    }
+
+    public function test_ingests_flat_user_into_anchor_and_instance(): void
+    {
+        $instance = (new UpdateIngestor())->ingest(self::userPayload(), self::ACCOUNT);
+
+        self::assertInstanceOf(TlUserUser::class, $instance);
+
+        $anchor = TlUser::query()->sole();
+        self::assertTrue(UuidV7::isValid((string) $anchor->id), 'anchor PK must be the generated UUIDv7');
+        self::assertSame(0x31774388, $anchor->constructor_id);
+        self::assertSame('user', $anchor->constructor_name);
+        self::assertSame(self::ACCOUNT, (int) $anchor->account_id);
+        self::assertSame($anchor->id, $instance->id, 'instance shares the anchor PK (spec §4.2)');
+
+        $row = TlUserUser::query()->sole();
+        self::assertSame(501558149, $row->tl_id);
+        self::assertSame(
+            (1 << 0) | (1 << 1) | (1 << 2) | (1 << 3) | (1 << 4) | (1 << 22) | (1 << 28),
+            $row->flags,
+            'flags stored as the raw carrier int',
+        );
+        self::assertSame((1 << 4), $row->flags2);
+        self::assertSame(-5988024083302710253, $row->access_hash);
+        self::assertSame('Reza', $row->first_name);
+        self::assertSame('Rezaei', $row->last_name);
+        self::assertSame('RezaRezaei', $row->username);
+        self::assertSame('989121234567', $row->phone);
+        self::assertSame('en', $row->lang_code);
+        self::assertTrue($row->premium);
+        self::assertTrue($row->stories_unavailable);
+        self::assertFalse($row->bot);
+        self::assertNull($row->photo);
+    }
+
+    public function test_re_ingest_is_idempotent(): void
+    {
+        $ingestor = new UpdateIngestor();
+        $first = $ingestor->ingest(self::userPayload(), self::ACCOUNT);
+        $anchorId = (string) $first->id;
+
+        $second = $ingestor->ingest(self::userPayload(), self::ACCOUNT);
+
+        self::assertSame($anchorId, (string) $second->id, 'same anchor uuid reused');
+        self::assertSame(1, TlUser::query()->count());
+        self::assertSame(1, TlUserUser::query()->count());
+        self::assertSame($first->tl_id, $second->tl_id);
+        self::assertSame($first->username, $second->username);
+    }
+
+    public function test_tenants_get_separate_anchors_for_the_same_telegram_id(): void
+    {
+        $ingestor = new UpdateIngestor();
+        $ingestor->ingest(self::userPayload(), self::ACCOUNT);
+        $ingestor->ingest(self::userPayload(), 8);
+
+        self::assertSame(2, TlUser::query()->count(), 'one anchor per account');
+        self::assertSame(2, TlUserUser::query()->count());
+        self::assertSame(1, TlUser::query()->where('account_id', self::ACCOUNT)->count());
+        self::assertSame(1, TlUser::query()->where('account_id', 8)->count());
+    }
+
+    public function test_unknown_constructor_fails_loudly(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('userStatusOnline');
+        (new UpdateIngestor())->ingest(['_' => 'userStatusOnline', 'expires' => 0], self::ACCOUNT);
+    }
+}

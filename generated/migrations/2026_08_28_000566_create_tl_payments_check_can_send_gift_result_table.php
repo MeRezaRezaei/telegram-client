@@ -15,8 +15,10 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->bigInteger('constructor_id'); // crc32, may exceed signed i32
             $table->string('constructor_name', 96);
+            $table->bigInteger('account_id'); // tenant (roadmap: account_id on every anchor)
             $table->timestamps();
             $table->index('constructor_id');
+            $table->index('account_id');
         });
         Schema::create('tl_payments_check_can_send_gift_result_check__b2fde8ccbce4', function (Blueprint $table) {
             $table->foreignUuid('id')->primary()->constrained('tl_payments_check_can_send_gift_result')->cascadeOnDelete();

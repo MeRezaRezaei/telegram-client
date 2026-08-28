@@ -15,8 +15,10 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->bigInteger('constructor_id'); // crc32, may exceed signed i32
             $table->string('constructor_name', 96);
+            $table->bigInteger('account_id'); // tenant (roadmap: account_id on every anchor)
             $table->timestamps();
             $table->index('constructor_id');
+            $table->index('account_id');
         });
         Schema::create('tl_phone_call_discard_reason_phone_call_disca_f54184aa04dd', function (Blueprint $table) {
             $table->foreignUuid('id')->primary()->constrained('tl_phone_call_discard_reason')->cascadeOnDelete();
