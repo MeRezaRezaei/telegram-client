@@ -13,6 +13,8 @@ final class TlMessagesAvailableReactionsAvailableReactionsReactions extends TlAn
 {
     protected $table = 'tl_messages_available_reactions_available_rea_505a84565215';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

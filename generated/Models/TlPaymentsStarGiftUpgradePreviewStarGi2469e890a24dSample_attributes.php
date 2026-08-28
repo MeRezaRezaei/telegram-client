@@ -13,6 +13,8 @@ final class TlPaymentsStarGiftUpgradePreviewStarGi2469e890a24dSample_attributes 
 {
     protected $table = 'tl_payments_star_gift_upgrade_preview_star_gi_d382bb48e929';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

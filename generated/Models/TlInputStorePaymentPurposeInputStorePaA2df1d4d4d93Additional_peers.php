@@ -13,6 +13,8 @@ final class TlInputStorePaymentPurposeInputStorePaA2df1d4d4d93Additional_peers e
 {
     protected $table = 'tl_input_store_payment_purpose_input_store_pa_50ddd03f255d';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

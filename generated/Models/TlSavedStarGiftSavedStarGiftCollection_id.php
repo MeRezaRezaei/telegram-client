@@ -13,6 +13,8 @@ final class TlSavedStarGiftSavedStarGiftCollection_id extends TlAnchorModel
 {
     protected $table = 'tl_saved_star_gift_saved_star_gift__collection_id';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

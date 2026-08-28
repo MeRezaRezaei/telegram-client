@@ -13,6 +13,8 @@ final class TlChatFullChannelFullPending_suggestions extends TlAnchorModel
 {
     protected $table = 'tl_chat_full_channel_full__pending_suggestions';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

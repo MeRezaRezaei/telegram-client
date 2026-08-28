@@ -13,6 +13,8 @@ final class TlUpdatesUpdatesCombinedUsers extends TlAnchorModel
 {
     protected $table = 'tl_updates_updates_combined__users';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

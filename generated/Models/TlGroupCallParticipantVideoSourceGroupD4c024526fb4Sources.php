@@ -13,6 +13,8 @@ final class TlGroupCallParticipantVideoSourceGroupD4c024526fb4Sources extends Tl
 {
     protected $table = 'tl_group_call_participant_video_source_group__3aa33ccb5d6b';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

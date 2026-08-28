@@ -13,6 +13,8 @@ final class TlUpdateUpdateMessagePollVotePositions extends TlAnchorModel
 {
     protected $table = 'tl_update_update_message_poll_vote__positions';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

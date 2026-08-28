@@ -13,6 +13,8 @@ final class TlContactsContactBirthdaysContactBirthdaysContacts extends TlAnchorM
 {
     protected $table = 'tl_contacts_contact_birthdays_contact_birthdays__contacts';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

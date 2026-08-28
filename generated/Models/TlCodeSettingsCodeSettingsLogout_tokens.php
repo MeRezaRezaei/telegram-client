@@ -13,6 +13,8 @@ final class TlCodeSettingsCodeSettingsLogout_tokens extends TlAnchorModel
 {
     protected $table = 'tl_code_settings_code_settings__logout_tokens';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

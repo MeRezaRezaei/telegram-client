@@ -13,6 +13,8 @@ final class TlAccountEmojiStatusesEmojiStatusesStatuses extends TlAnchorModel
 {
     protected $table = 'tl_account_emoji_statuses_emoji_statuses__statuses';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

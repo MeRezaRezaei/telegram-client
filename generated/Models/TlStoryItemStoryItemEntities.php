@@ -13,6 +13,8 @@ final class TlStoryItemStoryItemEntities extends TlAnchorModel
 {
     protected $table = 'tl_story_item_story_item__entities';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

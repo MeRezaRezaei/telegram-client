@@ -13,6 +13,8 @@ final class TlMessagesFeaturedStickersFeaturedStickersUnread extends TlAnchorMod
 {
     protected $table = 'tl_messages_featured_stickers_featured_stickers__unread';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

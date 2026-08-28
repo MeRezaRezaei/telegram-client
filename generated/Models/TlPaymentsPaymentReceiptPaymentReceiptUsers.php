@@ -13,6 +13,8 @@ final class TlPaymentsPaymentReceiptPaymentReceiptUsers extends TlAnchorModel
 {
     protected $table = 'tl_payments_payment_receipt_payment_receipt__users';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

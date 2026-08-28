@@ -13,6 +13,8 @@ final class TlTopPeerCategoryPeersTopPeerCategoryPeersPeers extends TlAnchorMode
 {
     protected $table = 'tl_top_peer_category_peers_top_peer_category_peers__peers';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

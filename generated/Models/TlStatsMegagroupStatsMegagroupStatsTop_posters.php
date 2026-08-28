@@ -13,6 +13,8 @@ final class TlStatsMegagroupStatsMegagroupStatsTop_posters extends TlAnchorModel
 {
     protected $table = 'tl_stats_megagroup_stats_megagroup_stats__top_posters';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

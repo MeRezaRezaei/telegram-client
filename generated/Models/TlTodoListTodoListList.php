@@ -13,6 +13,8 @@ final class TlTodoListTodoListList extends TlAnchorModel
 {
     protected $table = 'tl_todo_list_todo_list__list';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

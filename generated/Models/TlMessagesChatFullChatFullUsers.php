@@ -13,6 +13,8 @@ final class TlMessagesChatFullChatFullUsers extends TlAnchorModel
 {
     protected $table = 'tl_messages_chat_full_chat_full__users';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

@@ -13,6 +13,8 @@ final class TlAccountThemesThemesThemes extends TlAnchorModel
 {
     protected $table = 'tl_account_themes_themes__themes';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

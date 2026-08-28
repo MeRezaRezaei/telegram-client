@@ -13,6 +13,8 @@ final class TlHelpPremiumPromoPremiumPromoPeriod_options extends TlAnchorModel
 {
     protected $table = 'tl_help_premium_promo_premium_promo__period_options';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

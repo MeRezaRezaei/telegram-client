@@ -13,6 +13,8 @@ final class TlMessagesChatAdminsWithInvitesChatAdmF8ed6a6ff14eUsers extends TlAn
 {
     protected $table = 'tl_messages_chat_admins_with_invites_chat_adm_3175fc4f3da2';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

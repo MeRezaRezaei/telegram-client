@@ -13,6 +13,8 @@ final class TlMessageRepliesMessageRepliesRecent_repliers extends TlAnchorModel
 {
     protected $table = 'tl_message_replies_message_replies__recent_repliers';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

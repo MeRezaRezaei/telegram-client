@@ -13,6 +13,8 @@ final class TlChannelsSponsoredMessageReportResultS90d28813b853Options extends T
 {
     protected $table = 'tl_channels_sponsored_message_report_result_s_4f877f3b1319';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

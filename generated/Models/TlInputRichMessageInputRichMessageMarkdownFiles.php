@@ -13,6 +13,8 @@ final class TlInputRichMessageInputRichMessageMarkdownFiles extends TlAnchorMode
 {
     protected $table = 'tl_input_rich_message_input_rich_message_markdown__files';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

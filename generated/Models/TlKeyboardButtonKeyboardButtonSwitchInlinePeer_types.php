@@ -13,6 +13,8 @@ final class TlKeyboardButtonKeyboardButtonSwitchInlinePeer_types extends TlAncho
 {
     protected $table = 'tl_keyboard_button_keyboard_button_switch_inl_24451aa92e03';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

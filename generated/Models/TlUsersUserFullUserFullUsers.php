@@ -13,6 +13,8 @@ final class TlUsersUserFullUserFullUsers extends TlAnchorModel
 {
     protected $table = 'tl_users_user_full_user_full__users';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

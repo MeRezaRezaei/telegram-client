@@ -13,6 +13,8 @@ final class TlMessageActionMessageActionChatAddUserUsers extends TlAnchorModel
 {
     protected $table = 'tl_message_action_message_action_chat_add_user__users';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

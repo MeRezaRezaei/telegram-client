@@ -13,6 +13,8 @@ final class TlMessageReplyHeaderMessageReplyHeaderQuote_entities extends TlAncho
 {
     protected $table = 'tl_message_reply_header_message_reply_header__1793afabc836';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

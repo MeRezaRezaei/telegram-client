@@ -13,6 +13,8 @@ final class TlContactsImportedContactsImportedContactsImported extends TlAnchorM
 {
     protected $table = 'tl_contacts_imported_contacts_imported_contacts__imported';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

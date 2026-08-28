@@ -13,6 +13,8 @@ final class TlStickerSetStickerSetThumbs extends TlAnchorModel
 {
     protected $table = 'tl_sticker_set_sticker_set__thumbs';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

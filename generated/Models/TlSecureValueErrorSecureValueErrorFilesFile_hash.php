@@ -13,6 +13,8 @@ final class TlSecureValueErrorSecureValueErrorFilesFile_hash extends TlAnchorMod
 {
     protected $table = 'tl_secure_value_error_secure_value_error_files__file_hash';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

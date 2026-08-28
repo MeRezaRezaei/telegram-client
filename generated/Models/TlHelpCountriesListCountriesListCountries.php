@@ -13,6 +13,8 @@ final class TlHelpCountriesListCountriesListCountries extends TlAnchorModel
 {
     protected $table = 'tl_help_countries_list_countries_list__countries';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

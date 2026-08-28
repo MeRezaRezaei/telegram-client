@@ -13,6 +13,8 @@ final class TlMessagesMessagesChannelMessagesUsers extends TlAnchorModel
 {
     protected $table = 'tl_messages_messages_channel_messages__users';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

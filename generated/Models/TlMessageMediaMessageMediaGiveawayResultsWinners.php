@@ -13,6 +13,8 @@ final class TlMessageMediaMessageMediaGiveawayResultsWinners extends TlAnchorMod
 {
     protected $table = 'tl_message_media_message_media_giveaway_results__winners';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

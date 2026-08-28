@@ -13,6 +13,8 @@ final class TlPhoneGroupParticipantsGroupParticipantsUsers extends TlAnchorModel
 {
     protected $table = 'tl_phone_group_participants_group_participants__users';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

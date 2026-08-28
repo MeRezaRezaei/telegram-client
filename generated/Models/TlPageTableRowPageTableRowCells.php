@@ -13,6 +13,8 @@ final class TlPageTableRowPageTableRowCells extends TlAnchorModel
 {
     protected $table = 'tl_page_table_row_page_table_row__cells';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

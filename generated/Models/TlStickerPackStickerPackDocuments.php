@@ -13,6 +13,8 @@ final class TlStickerPackStickerPackDocuments extends TlAnchorModel
 {
     protected $table = 'tl_sticker_pack_sticker_pack__documents';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

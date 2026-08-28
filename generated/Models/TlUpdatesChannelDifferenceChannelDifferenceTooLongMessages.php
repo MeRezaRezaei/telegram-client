@@ -13,6 +13,8 @@ final class TlUpdatesChannelDifferenceChannelDifferenceTooLongMessages extends T
 {
     protected $table = 'tl_updates_channel_difference_channel_differe_ecde56c8e6a0';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

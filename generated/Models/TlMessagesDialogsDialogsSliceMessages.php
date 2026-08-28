@@ -13,6 +13,8 @@ final class TlMessagesDialogsDialogsSliceMessages extends TlAnchorModel
 {
     protected $table = 'tl_messages_dialogs_dialogs_slice__messages';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

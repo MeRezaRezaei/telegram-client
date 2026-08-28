@@ -13,6 +13,8 @@ final class TlInputReplyToInputReplyToMessageQuote_entities extends TlAnchorMode
 {
     protected $table = 'tl_input_reply_to_input_reply_to_message__quote_entities';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

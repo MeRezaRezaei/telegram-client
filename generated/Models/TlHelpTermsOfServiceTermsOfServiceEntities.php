@@ -13,6 +13,8 @@ final class TlHelpTermsOfServiceTermsOfServiceEntities extends TlAnchorModel
 {
     protected $table = 'tl_help_terms_of_service_terms_of_service__entities';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

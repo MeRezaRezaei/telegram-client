@@ -13,6 +13,8 @@ final class TlMessagesAffectedFoundMessagesAffectedD0b5b58c5216Messages extends 
 {
     protected $table = 'tl_messages_affected_found_messages_affected__84127c85d979';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

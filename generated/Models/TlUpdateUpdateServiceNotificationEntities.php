@@ -13,6 +13,8 @@ final class TlUpdateUpdateServiceNotificationEntities extends TlAnchorModel
 {
     protected $table = 'tl_update_update_service_notification__entities';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

@@ -13,6 +13,8 @@ final class TlAttachMenuBotIconAttachMenuBotIconColors extends TlAnchorModel
 {
     protected $table = 'tl_attach_menu_bot_icon_attach_menu_bot_icon__colors';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

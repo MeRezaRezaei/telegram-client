@@ -13,6 +13,8 @@ final class TlBotsPreviewInfoPreviewInfoMedia extends TlAnchorModel
 {
     protected $table = 'tl_bots_preview_info_preview_info__media';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

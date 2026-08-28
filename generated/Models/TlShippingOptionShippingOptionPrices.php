@@ -13,6 +13,8 @@ final class TlShippingOptionShippingOptionPrices extends TlAnchorModel
 {
     protected $table = 'tl_shipping_option_shipping_option__prices';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

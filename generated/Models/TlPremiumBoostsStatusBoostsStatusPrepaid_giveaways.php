@@ -13,6 +13,8 @@ final class TlPremiumBoostsStatusBoostsStatusPrepaid_giveaways extends TlAnchorM
 {
     protected $table = 'tl_premium_boosts_status_boosts_status__prepaid_giveaways';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

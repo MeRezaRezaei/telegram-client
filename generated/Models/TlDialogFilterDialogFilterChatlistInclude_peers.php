@@ -13,6 +13,8 @@ final class TlDialogFilterDialogFilterChatlistInclude_peers extends TlAnchorMode
 {
     protected $table = 'tl_dialog_filter_dialog_filter_chatlist__include_peers';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

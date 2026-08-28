@@ -13,6 +13,8 @@ final class TlPollAnswerVotersPollAnswerVotersRecent_voters extends TlAnchorMode
 {
     protected $table = 'tl_poll_answer_voters_poll_answer_voters__recent_voters';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

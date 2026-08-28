@@ -13,6 +13,8 @@ final class TlSecureRequiredTypeSecureRequiredTypeOneOfTypes extends TlAnchorMod
 {
     protected $table = 'tl_secure_required_type_secure_required_type_one_of__types';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

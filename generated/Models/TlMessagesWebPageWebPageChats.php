@@ -13,6 +13,8 @@ final class TlMessagesWebPageWebPageChats extends TlAnchorModel
 {
     protected $table = 'tl_messages_web_page_web_page__chats';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

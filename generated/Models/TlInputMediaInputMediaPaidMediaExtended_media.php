@@ -13,6 +13,8 @@ final class TlInputMediaInputMediaPaidMediaExtended_media extends TlAnchorModel
 {
     protected $table = 'tl_input_media_input_media_paid_media__extended_media';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

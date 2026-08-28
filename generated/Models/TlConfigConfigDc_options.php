@@ -13,6 +13,8 @@ final class TlConfigConfigDc_options extends TlAnchorModel
 {
     protected $table = 'tl_config_config__dc_options';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

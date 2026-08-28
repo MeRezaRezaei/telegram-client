@@ -13,6 +13,8 @@ final class TlBusinessRecipientsBusinessRecipientsUsers extends TlAnchorModel
 {
     protected $table = 'tl_business_recipients_business_recipients__users';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

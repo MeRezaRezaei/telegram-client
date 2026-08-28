@@ -13,6 +13,8 @@ final class TlInputBusinessChatLinkInputBusinessChatLinkEntities extends TlAncho
 {
     protected $table = 'tl_input_business_chat_link_input_business_ch_2c7a8d471020';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

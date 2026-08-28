@@ -13,6 +13,8 @@ final class TlDraftMessageDraftMessageEntities extends TlAnchorModel
 {
     protected $table = 'tl_draft_message_draft_message__entities';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

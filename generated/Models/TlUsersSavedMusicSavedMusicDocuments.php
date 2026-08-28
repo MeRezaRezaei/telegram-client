@@ -13,6 +13,8 @@ final class TlUsersSavedMusicSavedMusicDocuments extends TlAnchorModel
 {
     protected $table = 'tl_users_saved_music_saved_music__documents';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

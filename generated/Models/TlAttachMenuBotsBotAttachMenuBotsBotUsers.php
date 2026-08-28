@@ -13,6 +13,8 @@ final class TlAttachMenuBotsBotAttachMenuBotsBotUsers extends TlAnchorModel
 {
     protected $table = 'tl_attach_menu_bots_bot_attach_menu_bots_bot__users';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

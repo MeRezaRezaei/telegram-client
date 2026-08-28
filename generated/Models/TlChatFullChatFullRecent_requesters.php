@@ -13,6 +13,8 @@ final class TlChatFullChatFullRecent_requesters extends TlAnchorModel
 {
     protected $table = 'tl_chat_full_chat_full__recent_requesters';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

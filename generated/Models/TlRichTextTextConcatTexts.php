@@ -13,6 +13,8 @@ final class TlRichTextTextConcatTexts extends TlAnchorModel
 {
     protected $table = 'tl_rich_text_text_concat__texts';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

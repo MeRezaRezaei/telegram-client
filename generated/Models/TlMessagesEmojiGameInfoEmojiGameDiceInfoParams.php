@@ -13,6 +13,8 @@ final class TlMessagesEmojiGameInfoEmojiGameDiceInfoParams extends TlAnchorModel
 {
     protected $table = 'tl_messages_emoji_game_info_emoji_game_dice_info__params';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

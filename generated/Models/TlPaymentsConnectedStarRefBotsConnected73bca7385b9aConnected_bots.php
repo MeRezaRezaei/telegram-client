@@ -13,6 +13,8 @@ final class TlPaymentsConnectedStarRefBotsConnected73bca7385b9aConnected_bots ex
 {
     protected $table = 'tl_payments_connected_star_ref_bots_connected_a1abdb5c778e';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

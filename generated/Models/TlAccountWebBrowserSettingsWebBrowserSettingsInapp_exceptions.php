@@ -13,6 +13,8 @@ final class TlAccountWebBrowserSettingsWebBrowserSettingsInapp_exceptions extend
 {
     protected $table = 'tl_account_web_browser_settings_web_browser_s_4c8f4a163493';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

@@ -13,6 +13,8 @@ final class TlMessageMediaMessageMediaDocumentAlt_documents extends TlAnchorMode
 {
     protected $table = 'tl_message_media_message_media_document__alt_documents';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

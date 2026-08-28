@@ -13,6 +13,8 @@ final class TlMessagesAvailableEffectsAvailableEffectsDocuments extends TlAnchor
 {
     protected $table = 'tl_messages_available_effects_available_effects__documents';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

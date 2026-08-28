@@ -13,6 +13,8 @@ final class TlHelpPeerColorSetPeerColorProfileSetPalette_colors extends TlAnchor
 {
     protected $table = 'tl_help_peer_color_set_peer_color_profile_set_fb247985ae1f';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

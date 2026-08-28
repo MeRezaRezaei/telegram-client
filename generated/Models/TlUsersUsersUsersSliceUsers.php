@@ -13,6 +13,8 @@ final class TlUsersUsersUsersSliceUsers extends TlAnchorModel
 {
     protected $table = 'tl_users_users_users_slice__users';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

@@ -13,6 +13,8 @@ final class TlMessagesInvitedUsersInvitedUsersMissing_invitees extends TlAnchorM
 {
     protected $table = 'tl_messages_invited_users_invited_users__missing_invitees';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

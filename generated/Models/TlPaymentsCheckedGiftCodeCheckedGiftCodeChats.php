@@ -13,6 +13,8 @@ final class TlPaymentsCheckedGiftCodeCheckedGiftCodeChats extends TlAnchorModel
 {
     protected $table = 'tl_payments_checked_gift_code_checked_gift_code__chats';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

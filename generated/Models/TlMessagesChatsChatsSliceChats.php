@@ -13,6 +13,8 @@ final class TlMessagesChatsChatsSliceChats extends TlAnchorModel
 {
     protected $table = 'tl_messages_chats_chats_slice__chats';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

@@ -13,6 +13,8 @@ final class TlChatReactionsChatReactionsSomeReactions extends TlAnchorModel
 {
     protected $table = 'tl_chat_reactions_chat_reactions_some__reactions';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

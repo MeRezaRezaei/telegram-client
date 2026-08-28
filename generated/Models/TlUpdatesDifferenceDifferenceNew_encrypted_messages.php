@@ -13,6 +13,8 @@ final class TlUpdatesDifferenceDifferenceNew_encrypted_messages extends TlAnchor
 {
     protected $table = 'tl_updates_difference_difference__new_encrypted_messages';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

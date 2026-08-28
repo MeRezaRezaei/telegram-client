@@ -13,6 +13,8 @@ final class TlInputBusinessRecipientsInputBusinessRecipientsUsers extends TlAnch
 {
     protected $table = 'tl_input_business_recipients_input_business_r_f3ebd21efedf';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

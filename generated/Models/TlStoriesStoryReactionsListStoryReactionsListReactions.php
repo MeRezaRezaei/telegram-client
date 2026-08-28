@@ -13,6 +13,8 @@ final class TlStoriesStoryReactionsListStoryReactionsListReactions extends TlAnc
 {
     protected $table = 'tl_stories_story_reactions_list_story_reactio_d7e48e0a40c9';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

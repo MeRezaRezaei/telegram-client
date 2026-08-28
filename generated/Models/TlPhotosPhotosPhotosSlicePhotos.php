@@ -13,6 +13,8 @@ final class TlPhotosPhotosPhotosSlicePhotos extends TlAnchorModel
 {
     protected $table = 'tl_photos_photos_photos_slice__photos';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

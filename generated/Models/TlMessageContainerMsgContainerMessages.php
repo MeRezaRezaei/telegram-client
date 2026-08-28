@@ -13,6 +13,8 @@ final class TlMessageContainerMsgContainerMessages extends TlAnchorModel
 {
     protected $table = 'tl_message_container_msg_container__messages';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

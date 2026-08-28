@@ -13,6 +13,8 @@ final class TlChatThemeChatThemeUniqueGiftTheme_settings extends TlAnchorModel
 {
     protected $table = 'tl_chat_theme_chat_theme_unique_gift__theme_settings';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

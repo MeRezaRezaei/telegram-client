@@ -13,6 +13,8 @@ final class TlAccountAuthorizationFormAuthorizationFormRequired_types extends Tl
 {
     protected $table = 'tl_account_authorization_form_authorization_f_bfc11bfaf63e';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

@@ -13,6 +13,8 @@ final class TlVideoSizeVideoSizeEmojiMarkupBackground_colors extends TlAnchorMod
 {
     protected $table = 'tl_video_size_video_size_emoji_markup__background_colors';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

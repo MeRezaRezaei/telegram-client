@@ -13,6 +13,8 @@ final class TlBotInfoBotInfoCommands extends TlAnchorModel
 {
     protected $table = 'tl_bot_info_bot_info__commands';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

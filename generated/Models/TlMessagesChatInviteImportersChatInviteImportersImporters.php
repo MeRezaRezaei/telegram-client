@@ -13,6 +13,8 @@ final class TlMessagesChatInviteImportersChatInviteImportersImporters extends Tl
 {
     protected $table = 'tl_messages_chat_invite_importers_chat_invite_8f980112eace';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

@@ -13,6 +13,8 @@ final class TlStarGiftStarGiftUniqueResell_amount extends TlAnchorModel
 {
     protected $table = 'tl_star_gift_star_gift_unique__resell_amount';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

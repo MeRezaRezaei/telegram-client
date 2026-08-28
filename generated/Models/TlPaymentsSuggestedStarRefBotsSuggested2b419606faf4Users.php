@@ -13,6 +13,8 @@ final class TlPaymentsSuggestedStarRefBotsSuggested2b419606faf4Users extends TlA
 {
     protected $table = 'tl_payments_suggested_star_ref_bots_suggested_a10aaedcb3f4';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

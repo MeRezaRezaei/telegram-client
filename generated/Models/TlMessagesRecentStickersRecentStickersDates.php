@@ -13,6 +13,8 @@ final class TlMessagesRecentStickersRecentStickersDates extends TlAnchorModel
 {
     protected $table = 'tl_messages_recent_stickers_recent_stickers__dates';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

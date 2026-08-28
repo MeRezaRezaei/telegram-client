@@ -13,6 +13,8 @@ final class TlStarsGiveawayOptionStarsGiveawayOptionWinners extends TlAnchorMode
 {
     protected $table = 'tl_stars_giveaway_option_stars_giveaway_option__winners';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

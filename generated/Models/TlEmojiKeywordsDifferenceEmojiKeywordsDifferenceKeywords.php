@@ -13,6 +13,8 @@ final class TlEmojiKeywordsDifferenceEmojiKeywordsDifferenceKeywords extends TlA
 {
     protected $table = 'tl_emoji_keywords_difference_emoji_keywords_d_8bb0c8308884';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

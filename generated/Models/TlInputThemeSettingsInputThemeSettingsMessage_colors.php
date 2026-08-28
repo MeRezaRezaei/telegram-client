@@ -13,6 +13,8 @@ final class TlInputThemeSettingsInputThemeSettingsMessage_colors extends TlAncho
 {
     protected $table = 'tl_input_theme_settings_input_theme_settings__a1d0879fb3ca';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

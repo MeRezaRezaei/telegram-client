@@ -13,6 +13,8 @@ final class TlExportedChatlistInviteExportedChatlistInvitePeers extends TlAnchor
 {
     protected $table = 'tl_exported_chatlist_invite_exported_chatlist_fe83e2c1c582';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

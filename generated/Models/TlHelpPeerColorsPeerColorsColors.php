@@ -13,6 +13,8 @@ final class TlHelpPeerColorsPeerColorsColors extends TlAnchorModel
 {
     protected $table = 'tl_help_peer_colors_peer_colors__colors';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

@@ -13,6 +13,8 @@ final class TlBotsAccessSettingsAccessSettingsAdd_users extends TlAnchorModel
 {
     protected $table = 'tl_bots_access_settings_access_settings__add_users';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

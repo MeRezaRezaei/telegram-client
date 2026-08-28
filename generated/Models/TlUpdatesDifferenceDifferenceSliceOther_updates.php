@@ -13,6 +13,8 @@ final class TlUpdatesDifferenceDifferenceSliceOther_updates extends TlAnchorMode
 {
     protected $table = 'tl_updates_difference_difference_slice__other_updates';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

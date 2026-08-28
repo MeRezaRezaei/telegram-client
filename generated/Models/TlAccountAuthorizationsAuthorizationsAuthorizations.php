@@ -13,6 +13,8 @@ final class TlAccountAuthorizationsAuthorizationsAuthorizations extends TlAnchor
 {
     protected $table = 'tl_account_authorizations_authorizations__authorizations';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

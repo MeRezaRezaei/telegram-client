@@ -13,6 +13,8 @@ final class TlStarGiftAuctionStateStarGiftAuctionStateRounds extends TlAnchorMod
 {
     protected $table = 'tl_star_gift_auction_state_star_gift_auction_state__rounds';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

@@ -13,6 +13,8 @@ final class TlThemeSettingsThemeSettingsMessage_colors extends TlAnchorModel
 {
     protected $table = 'tl_theme_settings_theme_settings__message_colors';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

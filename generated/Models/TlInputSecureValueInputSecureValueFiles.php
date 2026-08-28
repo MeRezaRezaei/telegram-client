@@ -13,6 +13,8 @@ final class TlInputSecureValueInputSecureValueFiles extends TlAnchorModel
 {
     protected $table = 'tl_input_secure_value_input_secure_value__files';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

@@ -13,6 +13,8 @@ final class TlPaymentsStarGiftAuctionAcquiredGifts3ef8dccf2514Chats extends TlAn
 {
     protected $table = 'tl_payments_star_gift_auction_acquired_gifts__cd07c7958d0f';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

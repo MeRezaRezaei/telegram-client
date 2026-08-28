@@ -13,6 +13,8 @@ final class TlStatsBroadcastStatsBroadcastStatsRecent_posts_interactions extends
 {
     protected $table = 'tl_stats_broadcast_stats_broadcast_stats__rec_a92d3aa2a305';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

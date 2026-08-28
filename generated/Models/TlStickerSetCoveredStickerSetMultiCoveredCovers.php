@@ -13,6 +13,8 @@ final class TlStickerSetCoveredStickerSetMultiCoveredCovers extends TlAnchorMode
 {
     protected $table = 'tl_sticker_set_covered_sticker_set_multi_covered__covers';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

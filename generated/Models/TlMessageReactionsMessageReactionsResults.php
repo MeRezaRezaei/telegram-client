@@ -13,6 +13,8 @@ final class TlMessageReactionsMessageReactionsResults extends TlAnchorModel
 {
     protected $table = 'tl_message_reactions_message_reactions__results';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

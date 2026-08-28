@@ -13,6 +13,8 @@ final class TlTextWithEntitiesTextWithEntitiesEntities extends TlAnchorModel
 {
     protected $table = 'tl_text_with_entities_text_with_entities__entities';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

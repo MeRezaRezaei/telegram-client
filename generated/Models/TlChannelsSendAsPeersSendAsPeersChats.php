@@ -13,6 +13,8 @@ final class TlChannelsSendAsPeersSendAsPeersChats extends TlAnchorModel
 {
     protected $table = 'tl_channels_send_as_peers_send_as_peers__chats';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

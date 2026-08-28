@@ -13,6 +13,8 @@ final class TlMessageMediaMessageMediaToDoCompletions extends TlAnchorModel
 {
     protected $table = 'tl_message_media_message_media_to_do__completions';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

@@ -13,6 +13,8 @@ final class TlVideoSizeVideoSizeStickerMarkupBackground_colors extends TlAnchorM
 {
     protected $table = 'tl_video_size_video_size_sticker_markup__background_colors';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

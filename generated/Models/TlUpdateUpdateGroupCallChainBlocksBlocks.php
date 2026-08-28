@@ -13,6 +13,8 @@ final class TlUpdateUpdateGroupCallChainBlocksBlocks extends TlAnchorModel
 {
     protected $table = 'tl_update_update_group_call_chain_blocks__blocks';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

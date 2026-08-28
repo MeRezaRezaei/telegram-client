@@ -13,6 +13,8 @@ final class TlMessagesPeerSettingsPeerSettingsChats extends TlAnchorModel
 {
     protected $table = 'tl_messages_peer_settings_peer_settings__chats';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

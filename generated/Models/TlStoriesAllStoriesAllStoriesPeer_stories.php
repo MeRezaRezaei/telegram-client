@@ -13,6 +13,8 @@ final class TlStoriesAllStoriesAllStoriesPeer_stories extends TlAnchorModel
 {
     protected $table = 'tl_stories_all_stories_all_stories__peer_stories';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

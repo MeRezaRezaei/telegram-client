@@ -145,6 +145,8 @@ final class ModelGenerator
             '{',
             "    protected \$table = '{$table}';",
             '',
+            '    public $timestamps = false; // child tables carry no timestamps columns',
+            '',
             '    protected $guarded = [];',
             '',
             '    /** @var array<string, string> */',

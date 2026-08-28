@@ -13,6 +13,8 @@ final class TlMessageMediaMessageMediaGiveawayCountries_iso2 extends TlAnchorMod
 {
     protected $table = 'tl_message_media_message_media_giveaway__countries_iso2';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

@@ -13,6 +13,8 @@ final class TlBotInlineMessageBotInlineMessageMediaAutoEntities extends TlAnchor
 {
     protected $table = 'tl_bot_inline_message_bot_inline_message_medi_0c556e3e04d1';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

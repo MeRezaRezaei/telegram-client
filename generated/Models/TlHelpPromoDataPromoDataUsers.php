@@ -13,6 +13,8 @@ final class TlHelpPromoDataPromoDataUsers extends TlAnchorModel
 {
     protected $table = 'tl_help_promo_data_promo_data__users';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

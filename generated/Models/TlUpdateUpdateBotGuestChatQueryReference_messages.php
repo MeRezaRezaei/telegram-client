@@ -13,6 +13,8 @@ final class TlUpdateUpdateBotGuestChatQueryReference_messages extends TlAnchorMo
 {
     protected $table = 'tl_update_update_bot_guest_chat_query__reference_messages';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

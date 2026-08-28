@@ -13,6 +13,8 @@ final class TlAccountResolvedBusinessChatLinksResolC591db58a589Chats extends TlA
 {
     protected $table = 'tl_account_resolved_business_chat_links_resol_eb9e805b9db6';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

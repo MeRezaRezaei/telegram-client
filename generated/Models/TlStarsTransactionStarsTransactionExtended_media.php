@@ -13,6 +13,8 @@ final class TlStarsTransactionStarsTransactionExtended_media extends TlAnchorMod
 {
     protected $table = 'tl_stars_transaction_stars_transaction__extended_media';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

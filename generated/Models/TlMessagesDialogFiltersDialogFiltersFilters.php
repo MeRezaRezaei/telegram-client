@@ -13,6 +13,8 @@ final class TlMessagesDialogFiltersDialogFiltersFilters extends TlAnchorModel
 {
     protected $table = 'tl_messages_dialog_filters_dialog_filters__filters';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

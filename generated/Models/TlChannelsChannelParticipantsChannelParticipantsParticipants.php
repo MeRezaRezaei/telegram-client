@@ -13,6 +13,8 @@ final class TlChannelsChannelParticipantsChannelParticipantsParticipants extends
 {
     protected $table = 'tl_channels_channel_participants_channel_part_6b6c9e490b25';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

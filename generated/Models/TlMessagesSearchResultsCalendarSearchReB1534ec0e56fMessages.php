@@ -13,6 +13,8 @@ final class TlMessagesSearchResultsCalendarSearchReB1534ec0e56fMessages extends 
 {
     protected $table = 'tl_messages_search_results_calendar_search_re_d6395a6e2c2c';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

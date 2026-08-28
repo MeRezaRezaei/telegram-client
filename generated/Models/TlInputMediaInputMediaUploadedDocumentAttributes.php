@@ -13,6 +13,8 @@ final class TlInputMediaInputMediaUploadedDocumentAttributes extends TlAnchorMod
 {
     protected $table = 'tl_input_media_input_media_uploaded_document__attributes';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

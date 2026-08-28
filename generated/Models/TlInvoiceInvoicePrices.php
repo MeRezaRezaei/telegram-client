@@ -13,6 +13,8 @@ final class TlInvoiceInvoicePrices extends TlAnchorModel
 {
     protected $table = 'tl_invoice_invoice__prices';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

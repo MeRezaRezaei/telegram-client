@@ -13,6 +13,8 @@ final class TlUpdateUpdateBotCommandsCommands extends TlAnchorModel
 {
     protected $table = 'tl_update_update_bot_commands__commands';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

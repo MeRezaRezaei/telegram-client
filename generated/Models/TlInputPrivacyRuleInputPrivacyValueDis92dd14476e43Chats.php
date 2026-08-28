@@ -13,6 +13,8 @@ final class TlInputPrivacyRuleInputPrivacyValueDis92dd14476e43Chats extends TlAn
 {
     protected $table = 'tl_input_privacy_rule_input_privacy_value_dis_bb41d2b871d8';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

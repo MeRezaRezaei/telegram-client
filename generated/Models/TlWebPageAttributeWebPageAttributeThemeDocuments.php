@@ -13,6 +13,8 @@ final class TlWebPageAttributeWebPageAttributeThemeDocuments extends TlAnchorMod
 {
     protected $table = 'tl_web_page_attribute_web_page_attribute_theme__documents';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

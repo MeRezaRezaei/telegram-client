@@ -13,6 +13,8 @@ final class TlBotsPopularAppBotsPopularAppBotsUsers extends TlAnchorModel
 {
     protected $table = 'tl_bots_popular_app_bots_popular_app_bots__users';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

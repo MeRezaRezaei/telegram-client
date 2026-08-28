@@ -13,6 +13,8 @@ final class TlRichMessageRichMessageDocuments extends TlAnchorModel
 {
     protected $table = 'tl_rich_message_rich_message__documents';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

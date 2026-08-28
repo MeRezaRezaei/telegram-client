@@ -13,6 +13,8 @@ final class TlWebPageWebPageAttributes extends TlAnchorModel
 {
     protected $table = 'tl_web_page_web_page__attributes';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

@@ -13,6 +13,8 @@ final class TlWebPageAttributeWebPageAttributeStickerSetStickers extends TlAncho
 {
     protected $table = 'tl_web_page_attribute_web_page_attribute_stic_5d4fa9f0c49f';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

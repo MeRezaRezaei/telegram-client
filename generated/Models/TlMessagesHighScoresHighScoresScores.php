@@ -13,6 +13,8 @@ final class TlMessagesHighScoresHighScoresScores extends TlAnchorModel
 {
     protected $table = 'tl_messages_high_scores_high_scores__scores';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

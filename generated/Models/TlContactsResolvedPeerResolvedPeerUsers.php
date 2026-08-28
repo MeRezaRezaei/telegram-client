@@ -13,6 +13,8 @@ final class TlContactsResolvedPeerResolvedPeerUsers extends TlAnchorModel
 {
     protected $table = 'tl_contacts_resolved_peer_resolved_peer__users';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

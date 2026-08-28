@@ -13,6 +13,8 @@ final class TlReportResultReportResultChooseOptionOptions extends TlAnchorModel
 {
     protected $table = 'tl_report_result_report_result_choose_option__options';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

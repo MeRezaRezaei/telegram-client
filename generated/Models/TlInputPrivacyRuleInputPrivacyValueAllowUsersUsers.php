@@ -13,6 +13,8 @@ final class TlInputPrivacyRuleInputPrivacyValueAllowUsersUsers extends TlAnchorM
 {
     protected $table = 'tl_input_privacy_rule_input_privacy_value_all_71681af9150e';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

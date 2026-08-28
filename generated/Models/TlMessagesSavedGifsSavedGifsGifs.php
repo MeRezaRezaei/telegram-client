@@ -13,6 +13,8 @@ final class TlMessagesSavedGifsSavedGifsGifs extends TlAnchorModel
 {
     protected $table = 'tl_messages_saved_gifs_saved_gifs__gifs';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

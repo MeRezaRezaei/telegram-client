@@ -13,6 +13,8 @@ final class TlPageListItemPageListItemBlocksBlocks extends TlAnchorModel
 {
     protected $table = 'tl_page_list_item_page_list_item_blocks__blocks';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

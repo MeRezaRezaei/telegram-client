@@ -13,6 +13,8 @@ final class TlReplyMarkupReplyKeyboardMarkupRows extends TlAnchorModel
 {
     protected $table = 'tl_reply_markup_reply_keyboard_markup__rows';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

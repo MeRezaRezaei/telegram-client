@@ -13,6 +13,8 @@ final class TlMessagePeerVoteMessagePeerVoteMultipleOptions extends TlAnchorMode
 {
     protected $table = 'tl_message_peer_vote_message_peer_vote_multiple__options';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

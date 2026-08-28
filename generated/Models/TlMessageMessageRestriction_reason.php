@@ -13,6 +13,8 @@ final class TlMessageMessageRestriction_reason extends TlAnchorModel
 {
     protected $table = 'tl_message_message__restriction_reason';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

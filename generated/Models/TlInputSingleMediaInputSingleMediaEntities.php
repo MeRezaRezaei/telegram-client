@@ -13,6 +13,8 @@ final class TlInputSingleMediaInputSingleMediaEntities extends TlAnchorModel
 {
     protected $table = 'tl_input_single_media_input_single_media__entities';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

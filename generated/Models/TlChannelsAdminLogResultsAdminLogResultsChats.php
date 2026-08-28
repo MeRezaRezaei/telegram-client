@@ -13,6 +13,8 @@ final class TlChannelsAdminLogResultsAdminLogResultsChats extends TlAnchorModel
 {
     protected $table = 'tl_channels_admin_log_results_admin_log_results__chats';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

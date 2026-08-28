@@ -13,6 +13,8 @@ final class TlPeerColorPeerColorCollectibleDark_colors extends TlAnchorModel
 {
     protected $table = 'tl_peer_color_peer_color_collectible__dark_colors';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

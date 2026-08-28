@@ -13,6 +13,8 @@ final class TlAccountChatThemesChatThemesChats extends TlAnchorModel
 {
     protected $table = 'tl_account_chat_themes_chat_themes__chats';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

@@ -13,6 +13,8 @@ final class TlMessagesMessageReactionsListMessageReactionsListChats extends TlAn
 {
     protected $table = 'tl_messages_message_reactions_list_message_re_d7d3d8f71641';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

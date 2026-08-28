@@ -13,6 +13,8 @@ final class TlPageListOrderedItemPageListOrderedItemBlocksBlocks extends TlAncho
 {
     protected $table = 'tl_page_list_ordered_item_page_list_ordered_i_8d9d190d33ee';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

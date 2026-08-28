@@ -13,6 +13,8 @@ final class TlDecryptedMessageMediaDecryptedMessage1652f9c81874Attributes extend
 {
     protected $table = 'tl_decrypted_message_media_decrypted_message__fa113370e99a';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

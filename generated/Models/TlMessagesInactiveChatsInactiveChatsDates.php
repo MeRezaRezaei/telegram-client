@@ -13,6 +13,8 @@ final class TlMessagesInactiveChatsInactiveChatsDates extends TlAnchorModel
 {
     protected $table = 'tl_messages_inactive_chats_inactive_chats__dates';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

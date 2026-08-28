@@ -13,6 +13,8 @@ final class TlContactsFoundFoundMy_results extends TlAnchorModel
 {
     protected $table = 'tl_contacts_found_found__my_results';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

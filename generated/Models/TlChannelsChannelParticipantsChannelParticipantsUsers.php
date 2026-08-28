@@ -13,6 +13,8 @@ final class TlChannelsChannelParticipantsChannelParticipantsUsers extends TlAnch
 {
     protected $table = 'tl_channels_channel_participants_channel_part_c16b51bee12a';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

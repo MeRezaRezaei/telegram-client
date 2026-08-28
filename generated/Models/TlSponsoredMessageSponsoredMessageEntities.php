@@ -13,6 +13,8 @@ final class TlSponsoredMessageSponsoredMessageEntities extends TlAnchorModel
 {
     protected $table = 'tl_sponsored_message_sponsored_message__entities';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

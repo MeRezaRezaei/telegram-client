@@ -13,6 +13,8 @@ final class TlUpdateUpdatePrivacyRules extends TlAnchorModel
 {
     protected $table = 'tl_update_update_privacy__rules';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

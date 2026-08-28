@@ -13,6 +13,8 @@ final class TlAccountWallPapersWallPapersWallpapers extends TlAnchorModel
 {
     protected $table = 'tl_account_wall_papers_wall_papers__wallpapers';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

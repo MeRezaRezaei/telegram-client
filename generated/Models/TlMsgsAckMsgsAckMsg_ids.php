@@ -13,6 +13,8 @@ final class TlMsgsAckMsgsAckMsg_ids extends TlAnchorModel
 {
     protected $table = 'tl_msgs_ack_msgs_ack__msg_ids';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

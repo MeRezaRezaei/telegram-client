@@ -13,6 +13,8 @@ final class TlMessagesSponsoredMessagesSponsoredMessagesMessages extends TlAncho
 {
     protected $table = 'tl_messages_sponsored_messages_sponsored_mess_8fd982913adc';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

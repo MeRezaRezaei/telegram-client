@@ -13,6 +13,8 @@ final class TlInputRichMessageInputRichMessageHTMLFiles extends TlAnchorModel
 {
     protected $table = 'tl_input_rich_message_input_rich_message_h_t_m_l__files';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

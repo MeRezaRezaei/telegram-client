@@ -13,6 +13,8 @@ final class TlPollResultsPollResultsSolution_entities extends TlAnchorModel
 {
     protected $table = 'tl_poll_results_poll_results__solution_entities';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

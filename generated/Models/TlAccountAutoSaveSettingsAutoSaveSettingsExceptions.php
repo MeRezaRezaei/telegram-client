@@ -13,6 +13,8 @@ final class TlAccountAutoSaveSettingsAutoSaveSettingsExceptions extends TlAnchor
 {
     protected $table = 'tl_account_auto_save_settings_auto_save_setti_b5d6efe7410e';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

@@ -13,6 +13,8 @@ final class TlPaymentsBankCardDataBankCardDataOpen_urls extends TlAnchorModel
 {
     protected $table = 'tl_payments_bank_card_data_bank_card_data__open_urls';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

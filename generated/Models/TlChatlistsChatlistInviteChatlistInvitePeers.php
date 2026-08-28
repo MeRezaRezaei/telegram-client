@@ -13,6 +13,8 @@ final class TlChatlistsChatlistInviteChatlistInvitePeers extends TlAnchorModel
 {
     protected $table = 'tl_chatlists_chatlist_invite_chatlist_invite__peers';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

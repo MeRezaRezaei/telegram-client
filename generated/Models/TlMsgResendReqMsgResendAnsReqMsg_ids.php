@@ -13,6 +13,8 @@ final class TlMsgResendReqMsgResendAnsReqMsg_ids extends TlAnchorModel
 {
     protected $table = 'tl_msg_resend_req_msg_resend_ans_req__msg_ids';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

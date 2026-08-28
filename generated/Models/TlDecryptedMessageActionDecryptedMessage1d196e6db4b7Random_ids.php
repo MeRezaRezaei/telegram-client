@@ -13,6 +13,8 @@ final class TlDecryptedMessageActionDecryptedMessage1d196e6db4b7Random_ids exten
 {
     protected $table = 'tl_decrypted_message_action_decrypted_message_eddbfc36281f';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

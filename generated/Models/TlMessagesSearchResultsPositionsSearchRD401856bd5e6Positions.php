@@ -13,6 +13,8 @@ final class TlMessagesSearchResultsPositionsSearchRD401856bd5e6Positions extends
 {
     protected $table = 'tl_messages_search_results_positions_search_r_88108eb29971';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

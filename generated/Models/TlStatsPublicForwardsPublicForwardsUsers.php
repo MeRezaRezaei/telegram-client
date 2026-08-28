@@ -13,6 +13,8 @@ final class TlStatsPublicForwardsPublicForwardsUsers extends TlAnchorModel
 {
     protected $table = 'tl_stats_public_forwards_public_forwards__users';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

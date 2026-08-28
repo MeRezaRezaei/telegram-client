@@ -13,6 +13,8 @@ final class TlPhotoPhotoVideo_sizes extends TlAnchorModel
 {
     protected $table = 'tl_photo_photo__video_sizes';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

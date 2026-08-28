@@ -13,6 +13,8 @@ final class TlInputStorePaymentPurposeInputStorePaAb10defc70e9Countries_iso2 ext
 {
     protected $table = 'tl_input_store_payment_purpose_input_store_pa_94f902dbf3fa';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

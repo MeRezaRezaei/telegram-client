@@ -13,6 +13,8 @@ final class TlUpdateUpdateDeleteGroupCallMessagesMessages extends TlAnchorModel
 {
     protected $table = 'tl_update_update_delete_group_call_messages__messages';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

@@ -13,6 +13,8 @@ final class TlPageBlockPageBlockTableRows extends TlAnchorModel
 {
     protected $table = 'tl_page_block_page_block_table__rows';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

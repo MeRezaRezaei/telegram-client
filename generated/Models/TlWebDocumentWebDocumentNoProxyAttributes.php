@@ -13,6 +13,8 @@ final class TlWebDocumentWebDocumentNoProxyAttributes extends TlAnchorModel
 {
     protected $table = 'tl_web_document_web_document_no_proxy__attributes';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

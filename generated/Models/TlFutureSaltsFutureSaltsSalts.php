@@ -13,6 +13,8 @@ final class TlFutureSaltsFutureSaltsSalts extends TlAnchorModel
 {
     protected $table = 'tl_future_salts_future_salts__salts';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

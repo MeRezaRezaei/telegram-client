@@ -13,6 +13,8 @@ final class TlWebPageAttributeWebPageAttributeStar0f76dd30baafIcons extends TlAn
 {
     protected $table = 'tl_web_page_attribute_web_page_attribute_star_17202adcc3bb';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

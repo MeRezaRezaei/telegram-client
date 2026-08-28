@@ -13,6 +13,8 @@ final class TlUpdatesDifferenceDifferenceSliceNew_encrypted_messages extends TlA
 {
     protected $table = 'tl_updates_difference_difference_slice__new_e_864e87a82655';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

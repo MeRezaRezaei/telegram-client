@@ -13,6 +13,8 @@ final class TlBusinessWorkHoursBusinessWorkHoursWeekly_open extends TlAnchorMode
 {
     protected $table = 'tl_business_work_hours_business_work_hours__weekly_open';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

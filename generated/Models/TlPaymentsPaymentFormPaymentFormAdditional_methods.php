@@ -13,6 +13,8 @@ final class TlPaymentsPaymentFormPaymentFormAdditional_methods extends TlAnchorM
 {
     protected $table = 'tl_payments_payment_form_payment_form__additional_methods';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

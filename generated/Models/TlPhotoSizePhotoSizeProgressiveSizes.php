@@ -13,6 +13,8 @@ final class TlPhotoSizePhotoSizeProgressiveSizes extends TlAnchorModel
 {
     protected $table = 'tl_photo_size_photo_size_progressive__sizes';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

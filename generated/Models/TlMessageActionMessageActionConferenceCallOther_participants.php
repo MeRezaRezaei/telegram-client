@@ -13,6 +13,8 @@ final class TlMessageActionMessageActionConferenceCallOther_participants extends
 {
     protected $table = 'tl_message_action_message_action_conference_c_94dec57429e4';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

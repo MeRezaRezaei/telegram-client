@@ -13,6 +13,8 @@ final class TlMessagesFavedStickersFavedStickersStickers extends TlAnchorModel
 {
     protected $table = 'tl_messages_faved_stickers_faved_stickers__stickers';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

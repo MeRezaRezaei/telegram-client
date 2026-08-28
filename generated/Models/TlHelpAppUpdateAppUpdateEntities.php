@@ -13,6 +13,8 @@ final class TlHelpAppUpdateAppUpdateEntities extends TlAnchorModel
 {
     protected $table = 'tl_help_app_update_app_update__entities';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

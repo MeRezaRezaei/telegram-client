@@ -13,6 +13,8 @@ final class TlBotInlineMessageBotInlineMessageMediaWebPageEntities extends TlAnc
 {
     protected $table = 'tl_bot_inline_message_bot_inline_message_medi_483ead59e63e';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

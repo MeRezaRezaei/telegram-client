@@ -13,6 +13,8 @@ final class TlAccountSavedRingtonesSavedRingtonesRingtones extends TlAnchorModel
 {
     protected $table = 'tl_account_saved_ringtones_saved_ringtones__ringtones';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

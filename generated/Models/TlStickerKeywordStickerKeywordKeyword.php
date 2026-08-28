@@ -13,6 +13,8 @@ final class TlStickerKeywordStickerKeywordKeyword extends TlAnchorModel
 {
     protected $table = 'tl_sticker_keyword_sticker_keyword__keyword';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

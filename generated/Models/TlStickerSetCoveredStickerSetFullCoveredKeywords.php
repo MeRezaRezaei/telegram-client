@@ -13,6 +13,8 @@ final class TlStickerSetCoveredStickerSetFullCoveredKeywords extends TlAnchorMod
 {
     protected $table = 'tl_sticker_set_covered_sticker_set_full_covered__keywords';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

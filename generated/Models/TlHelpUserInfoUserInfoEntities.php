@@ -13,6 +13,8 @@ final class TlHelpUserInfoUserInfoEntities extends TlAnchorModel
 {
     protected $table = 'tl_help_user_info_user_info__entities';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

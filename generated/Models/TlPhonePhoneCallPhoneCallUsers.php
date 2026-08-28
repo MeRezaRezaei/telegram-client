@@ -13,6 +13,8 @@ final class TlPhonePhoneCallPhoneCallUsers extends TlAnchorModel
 {
     protected $table = 'tl_phone_phone_call_phone_call__users';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

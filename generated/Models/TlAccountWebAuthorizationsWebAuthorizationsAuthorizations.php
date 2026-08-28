@@ -13,6 +13,8 @@ final class TlAccountWebAuthorizationsWebAuthorizationsAuthorizations extends Tl
 {
     protected $table = 'tl_account_web_authorizations_web_authorizati_1c5ab83167e4';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

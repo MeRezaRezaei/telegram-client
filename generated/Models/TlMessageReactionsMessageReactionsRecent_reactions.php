@@ -13,6 +13,8 @@ final class TlMessageReactionsMessageReactionsRecent_reactions extends TlAnchorM
 {
     protected $table = 'tl_message_reactions_message_reactions__recent_reactions';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

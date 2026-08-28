@@ -13,6 +13,8 @@ final class TlPrivacyRulePrivacyValueAllowChatParticipantsChats extends TlAnchor
 {
     protected $table = 'tl_privacy_rule_privacy_value_allow_chat_part_30f33e023df6';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

@@ -13,6 +13,8 @@ final class TlContactsImportedContactsImportedContactsRetry_contacts extends TlA
 {
     protected $table = 'tl_contacts_imported_contacts_imported_contac_7e82948d3852';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

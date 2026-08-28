@@ -13,6 +13,8 @@ final class TlAccountWebAuthorizationsWebAuthorizationsUsers extends TlAnchorMod
 {
     protected $table = 'tl_account_web_authorizations_web_authorizations__users';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

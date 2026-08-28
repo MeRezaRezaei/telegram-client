@@ -13,6 +13,8 @@ final class TlContactsBlockedBlockedBlocked extends TlAnchorModel
 {
     protected $table = 'tl_contacts_blocked_blocked__blocked';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

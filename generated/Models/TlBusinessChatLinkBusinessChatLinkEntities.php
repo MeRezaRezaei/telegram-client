@@ -13,6 +13,8 @@ final class TlBusinessChatLinkBusinessChatLinkEntities extends TlAnchorModel
 {
     protected $table = 'tl_business_chat_link_business_chat_link__entities';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

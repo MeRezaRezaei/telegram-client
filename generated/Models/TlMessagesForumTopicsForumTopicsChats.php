@@ -13,6 +13,8 @@ final class TlMessagesForumTopicsForumTopicsChats extends TlAnchorModel
 {
     protected $table = 'tl_messages_forum_topics_forum_topics__chats';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

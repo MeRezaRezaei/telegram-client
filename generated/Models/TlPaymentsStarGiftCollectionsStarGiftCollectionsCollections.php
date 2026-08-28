@@ -13,6 +13,8 @@ final class TlPaymentsStarGiftCollectionsStarGiftCollectionsCollections extends 
 {
     protected $table = 'tl_payments_star_gift_collections_star_gift_c_3c2191db9981';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

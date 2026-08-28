@@ -13,6 +13,8 @@ final class TlHelpPremiumPromoPremiumPromoStatus_entities extends TlAnchorModel
 {
     protected $table = 'tl_help_premium_promo_premium_promo__status_entities';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

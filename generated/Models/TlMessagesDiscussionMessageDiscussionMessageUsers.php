@@ -13,6 +13,8 @@ final class TlMessagesDiscussionMessageDiscussionMessageUsers extends TlAnchorMo
 {
     protected $table = 'tl_messages_discussion_message_discussion_message__users';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

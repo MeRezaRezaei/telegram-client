@@ -13,6 +13,8 @@ final class TlAccountConnectedBotsConnectedBotsConnected_bots extends TlAnchorMo
 {
     protected $table = 'tl_account_connected_bots_connected_bots__connected_bots';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

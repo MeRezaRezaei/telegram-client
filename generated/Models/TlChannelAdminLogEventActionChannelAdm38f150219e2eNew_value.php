@@ -13,6 +13,8 @@ final class TlChannelAdminLogEventActionChannelAdm38f150219e2eNew_value extends 
 {
     protected $table = 'tl_channel_admin_log_event_action_channel_adm_54649cabd20d';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

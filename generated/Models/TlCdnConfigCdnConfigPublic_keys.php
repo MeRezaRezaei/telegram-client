@@ -13,6 +13,8 @@ final class TlCdnConfigCdnConfigPublic_keys extends TlAnchorModel
 {
     protected $table = 'tl_cdn_config_cdn_config__public_keys';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

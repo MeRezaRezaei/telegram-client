@@ -13,6 +13,8 @@ final class TlKeyboardButtonRowKeyboardButtonRowButtons extends TlAnchorModel
 {
     protected $table = 'tl_keyboard_button_row_keyboard_button_row__buttons';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

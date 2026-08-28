@@ -13,6 +13,8 @@ final class TlUserUserRestriction_reason extends TlAnchorModel
 {
     protected $table = 'tl_user_user__restriction_reason';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

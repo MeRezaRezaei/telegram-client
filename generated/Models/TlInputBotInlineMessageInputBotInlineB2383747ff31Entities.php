@@ -13,6 +13,8 @@ final class TlInputBotInlineMessageInputBotInlineB2383747ff31Entities extends Tl
 {
     protected $table = 'tl_input_bot_inline_message_input_bot_inline__a63d595c8be2';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

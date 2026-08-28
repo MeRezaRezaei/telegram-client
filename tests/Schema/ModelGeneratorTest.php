@@ -47,6 +47,9 @@ final class ModelGeneratorTest extends TestCase
         self::assertArrayHasKey('TlMessagesMessagesMessagesMessages.php', $files);
         $child = $files['TlMessagesMessagesMessagesMessages.php'];
         self::assertStringContainsString("protected \$table = 'tl_messages_messages_messages__messages';", $child);
+        // child tables carry no timestamps columns (migration shape) — the
+        // model must not let Eloquent maintain them
+        self::assertStringContainsString('public $timestamps = false;', $child);
     }
 
     public function test_deterministic(): void

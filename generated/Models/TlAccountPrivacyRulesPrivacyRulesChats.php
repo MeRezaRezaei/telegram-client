@@ -13,6 +13,8 @@ final class TlAccountPrivacyRulesPrivacyRulesChats extends TlAnchorModel
 {
     protected $table = 'tl_account_privacy_rules_privacy_rules__chats';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

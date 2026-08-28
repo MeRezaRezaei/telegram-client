@@ -13,6 +13,8 @@ final class TlInputBusinessBotRecipientsInputBusine36d9b3380d51Users extends TlA
 {
     protected $table = 'tl_input_business_bot_recipients_input_busine_bff2da7dc05c';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

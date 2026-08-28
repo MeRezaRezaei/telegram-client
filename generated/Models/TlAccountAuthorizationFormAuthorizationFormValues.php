@@ -13,6 +13,8 @@ final class TlAccountAuthorizationFormAuthorizationFormValues extends TlAnchorMo
 {
     protected $table = 'tl_account_authorization_form_authorization_form__values';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

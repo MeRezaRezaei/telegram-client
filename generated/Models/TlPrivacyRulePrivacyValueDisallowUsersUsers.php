@@ -13,6 +13,8 @@ final class TlPrivacyRulePrivacyValueDisallowUsersUsers extends TlAnchorModel
 {
     protected $table = 'tl_privacy_rule_privacy_value_disallow_users__users';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

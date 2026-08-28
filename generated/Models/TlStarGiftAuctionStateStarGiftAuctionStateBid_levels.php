@@ -13,6 +13,8 @@ final class TlStarGiftAuctionStateStarGiftAuctionStateBid_levels extends TlAncho
 {
     protected $table = 'tl_star_gift_auction_state_star_gift_auction__bb6c7ebe1d9b';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

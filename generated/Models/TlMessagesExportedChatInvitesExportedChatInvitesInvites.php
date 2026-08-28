@@ -13,6 +13,8 @@ final class TlMessagesExportedChatInvitesExportedChatInvitesInvites extends TlAn
 {
     protected $table = 'tl_messages_exported_chat_invites_exported_ch_6aaa781e3e6f';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

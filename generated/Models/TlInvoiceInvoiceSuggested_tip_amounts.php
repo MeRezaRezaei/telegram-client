@@ -13,6 +13,8 @@ final class TlInvoiceInvoiceSuggested_tip_amounts extends TlAnchorModel
 {
     protected $table = 'tl_invoice_invoice__suggested_tip_amounts';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

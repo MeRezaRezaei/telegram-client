@@ -13,6 +13,8 @@ final class TlPremiumBoostsStatusBoostsStatusMy_boost_slots extends TlAnchorMode
 {
     protected $table = 'tl_premium_boosts_status_boosts_status__my_boost_slots';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

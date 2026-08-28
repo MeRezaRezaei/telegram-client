@@ -13,6 +13,8 @@ final class TlSecureValueErrorSecureValueErrorTranslationFilesFile_hash extends 
 {
     protected $table = 'tl_secure_value_error_secure_value_error_tran_f5846064b312';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

@@ -13,6 +13,8 @@ final class TlMessagesPreparedInlineMessagePreparedAbbe0eee55f7Peer_types extend
 {
     protected $table = 'tl_messages_prepared_inline_message_prepared__42fa16a637ba';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

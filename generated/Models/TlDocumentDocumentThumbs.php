@@ -13,6 +13,8 @@ final class TlDocumentDocumentThumbs extends TlAnchorModel
 {
     protected $table = 'tl_document_document__thumbs';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

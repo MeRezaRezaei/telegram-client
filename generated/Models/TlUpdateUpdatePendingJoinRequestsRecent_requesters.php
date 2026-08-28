@@ -13,6 +13,8 @@ final class TlUpdateUpdatePendingJoinRequestsRecent_requesters extends TlAnchorM
 {
     protected $table = 'tl_update_update_pending_join_requests__recent_requesters';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

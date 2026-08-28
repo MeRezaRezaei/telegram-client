@@ -13,6 +13,8 @@ final class TlInputRichMessageInputRichMessageUsers extends TlAnchorModel
 {
     protected $table = 'tl_input_rich_message_input_rich_message__users';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

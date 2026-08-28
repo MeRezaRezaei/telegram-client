@@ -13,6 +13,8 @@ final class TlJSONValueJsonObjectValue extends TlAnchorModel
 {
     protected $table = 'tl_j_s_o_n_value_json_object__value';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

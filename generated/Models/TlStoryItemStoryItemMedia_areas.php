@@ -13,6 +13,8 @@ final class TlStoryItemStoryItemMedia_areas extends TlAnchorModel
 {
     protected $table = 'tl_story_item_story_item__media_areas';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

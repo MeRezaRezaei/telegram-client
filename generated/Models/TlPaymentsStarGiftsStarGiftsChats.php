@@ -13,6 +13,8 @@ final class TlPaymentsStarGiftsStarGiftsChats extends TlAnchorModel
 {
     protected $table = 'tl_payments_star_gifts_star_gifts__chats';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

@@ -13,6 +13,8 @@ final class TlMessagesTranslatedTextTranslateResultResult extends TlAnchorModel
 {
     protected $table = 'tl_messages_translated_text_translate_result__result';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

@@ -13,6 +13,8 @@ final class TlPhoneGroupCallStarsGroupCallStarsTop_donors extends TlAnchorModel
 {
     protected $table = 'tl_phone_group_call_stars_group_call_stars__top_donors';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

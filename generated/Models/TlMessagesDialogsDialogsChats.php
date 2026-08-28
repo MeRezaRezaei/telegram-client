@@ -13,6 +13,8 @@ final class TlMessagesDialogsDialogsChats extends TlAnchorModel
 {
     protected $table = 'tl_messages_dialogs_dialogs__chats';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

@@ -13,6 +13,8 @@ final class TlPhoneJoinAsPeersJoinAsPeersChats extends TlAnchorModel
 {
     protected $table = 'tl_phone_join_as_peers_join_as_peers__chats';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

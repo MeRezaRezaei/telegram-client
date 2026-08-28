@@ -13,6 +13,8 @@ final class TlMessagesPeerDialogsPeerDialogsDialogs extends TlAnchorModel
 {
     protected $table = 'tl_messages_peer_dialogs_peer_dialogs__dialogs';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

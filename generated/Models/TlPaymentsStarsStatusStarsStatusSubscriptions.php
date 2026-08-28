@@ -13,6 +13,8 @@ final class TlPaymentsStarsStatusStarsStatusSubscriptions extends TlAnchorModel
 {
     protected $table = 'tl_payments_stars_status_stars_status__subscriptions';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

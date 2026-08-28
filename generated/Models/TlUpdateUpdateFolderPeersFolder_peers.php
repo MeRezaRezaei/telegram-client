@@ -13,6 +13,8 @@ final class TlUpdateUpdateFolderPeersFolder_peers extends TlAnchorModel
 {
     protected $table = 'tl_update_update_folder_peers__folder_peers';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

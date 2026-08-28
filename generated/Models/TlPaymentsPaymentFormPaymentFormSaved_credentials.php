@@ -13,6 +13,8 @@ final class TlPaymentsPaymentFormPaymentFormSaved_credentials extends TlAnchorMo
 {
     protected $table = 'tl_payments_payment_form_payment_form__saved_credentials';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

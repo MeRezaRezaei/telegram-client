@@ -13,6 +13,8 @@ final class TlMessagesChatInviteJoinResultChatInviDacd8245b982Users extends TlAn
 {
     protected $table = 'tl_messages_chat_invite_join_result_chat_invi_8cf578081a5f';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

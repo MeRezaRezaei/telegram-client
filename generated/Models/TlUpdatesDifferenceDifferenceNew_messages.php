@@ -13,6 +13,8 @@ final class TlUpdatesDifferenceDifferenceNew_messages extends TlAnchorModel
 {
     protected $table = 'tl_updates_difference_difference__new_messages';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

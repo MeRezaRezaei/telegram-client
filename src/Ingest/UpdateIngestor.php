@@ -6,46 +6,77 @@ namespace MeRezaRezaei\TelegramClient\Ingest;
 
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+use MeRezaRezaei\TelegramClient\Ingest\Events\UpdateStored;
 use MeRezaRezaei\TelegramClient\Schema\Eloquent\TlAnchorModel;
 use MeRezaRezaei\TelegramClient\Schema\Eloquent\TlInstanceModel;
-use MeRezaRezaei\TelegramClient\Schema\Generated\Models\TlUser;
-use MeRezaRezaei\TelegramClient\Schema\Generated\Models\TlUserUser;
+use MeRezaRezaei\TelegramClient\Schema\Generator\Model\TlConstructor;
+use MeRezaRezaei\TelegramClient\Schema\Generator\Model\TlParam;
+use MeRezaRezaei\TelegramClient\Schema\Generator\Model\TlScheme;
+use MeRezaRezaei\TelegramClient\Schema\Generator\ModelGenerator;
 use MeRezaRezaei\TelegramClient\Schema\Generator\Naming;
+use MeRezaRezaei\TelegramClient\Schema\Generator\SchemaRegenerator;
 
 /**
  * Raw TL update arrays (teleproto truth: snake keys, `_` constructor name,
- * raw flag ints) → P1 anchor/instance truth. Tenant-scoped by accountId on
- * every anchor (roadmap tenancy contract), idempotent per (account, tl_id).
+ * raw flag ints) → P1 anchor/instance/child truth. Tenant-scoped by
+ * accountId on every anchor (roadmap tenancy contract).
  *
- * Task 1 surface: one flat constructor (user#31774388). Nested refs/vectors
- * and recursive writes arrive with the PayloadWalker (plan Tasks 2–3);
- * unknown constructors fail loudly rather than half-write.
+ * The P1 metamodel (schema/sources/*.tl, loaded via the generator layer)
+ * drives everything: constructor → crc32 id, anchor/instance/child model
+ * classes (Naming), scalar columns vs ref/vectors. The PayloadWalker (plan
+ * Task 2) enumerates nodes parents-before-children; writes run bottom-up so
+ * every immediate FK (instance→anchor, child→instance, ref columns hold
+ * already-written child PKs) is satisfied without deferrable constraints —
+ * sqlite ignores DEFERRABLE anyway.
+ *
+ * Identity: `id` params (→ tl_id) anchor per (account, telegram id); pure
+ * identity refs (peerUser/peerChannel — a lone *_id param) anchor the same
+ * way (tl_id-aggregation for referenced entities). Constructors without an
+ * identity param (entities, paramless shapes, update roots) aggregate by
+ * content: an identical column set under the same tenant reuses the
+ * existing row, so re-ingesting a payload is a stable no-op.
  */
 final class UpdateIngestor
 {
     /**
-     * Flat-constructor map: `_` name => [anchor class, instance class,
-     * scheme-written constructor id]. Constructor ids are the .tl-written
-     * hex (NOT runtime crc32 — scheme ids are canonical).
-     *
-     * @var array<string, array{0: class-string<TlAnchorModel>, 1: class-string<TlInstanceModel>, 2: int}>
+     * Identity-bearing columns (besides tl_id): a constructor whose whole
+     * param set is one of these is a pure identity ref (Peer namespace).
      */
-    private const CONSTRUCTORS = [
-        'user' => [TlUser::class, TlUserUser::class, 0x31774388],
-    ];
+    private const IDENTITY_COLUMNS = ['channel_id', 'chat_id', 'user_id'];
+
+    /** @var array<string, TlConstructor>|null ctor name => metamodel entry */
+    private static ?array $constructors = null;
+
+    private const MODELS_NS = 'MeRezaRezaei\TelegramClient\Schema\Generated\Models\\';
 
     /**
      * Root-namespace entity anchors are off the shipped dial by design
      * (P1 dial semantics: root namespace stays in the full generated set).
-     * Tests and console tooling migrate them alongside the dial.
+     * Tests and console tooling migrate them alongside the dial. Selection
+     * is table-driven off the shipped manifest: table => migration file,
+     * so filename drift is impossible.
      *
      * @return list<string>
      */
     public static function entityMigrationPaths(): array
     {
-        return [
-            dirname(__DIR__, 2) . '/generated/migrations/2026_08_28_000403_create_tl_user_table.php',
-        ];
+        $root = dirname(__DIR__, 2);
+        $manifest = json_decode(
+            (string) file_get_contents($root . '/generated/schema-manifest.json'),
+            true,
+        );
+        $tables = is_array($manifest) ? ($manifest['tables'] ?? []) : [];
+
+        $paths = [];
+        foreach (['tl_user', 'tl_chat', 'tl_chat_photo', 'tl_message', 'tl_message_entity', 'tl_message_media', 'tl_peer', 'tl_update'] as $table) {
+            $file = (string) ($tables[$table] ?? '');
+            if ($file !== '') {
+                $paths[] = $root . '/generated/migrations/' . $file;
+            }
+        }
+
+        return $paths;
     }
 
     /**
@@ -79,86 +110,346 @@ final class UpdateIngestor
     }
 
     /**
-     * Ingest one flat constructor payload under a tenant.
+     * The P1 metamodel (cached): combined scheme over the committed
+     * schema/sources/*.tl, indexed by constructor name.
+     *
+     * @return array<string, TlConstructor>
+     */
+    public static function constructors(): array
+    {
+        if (self::$constructors === null) {
+            $scheme = (new SchemaRegenerator())->loadScheme();
+            $index = [];
+            foreach ($scheme->types() as $type) {
+                foreach ($type->constructors() as $constructor) {
+                    $index[$constructor->name] = $constructor;
+                }
+            }
+            self::$constructors = $index;
+        }
+
+        return self::$constructors;
+    }
+
+    /** @var array<string, bool> table => migrated on this connection (checked once) */
+    private static array $tablesReady = [];
+
+    private static function constructor(string $name): TlConstructor
+    {
+        $ctor = self::constructors()[$name] ?? null;
+        if ($ctor === null) {
+            throw new \InvalidArgumentException(
+                "UpdateIngestor: unknown TL constructor '{$name}' (not in the committed scheme sources)",
+            );
+        }
+
+        return $ctor;
+    }
+
+    /**
+     * The scheme knows constructors whose tables are off the ingest surface
+     * (not shipped on the dial nor in entityMigrationPaths) — fail loudly
+     * naming the constructor instead of letting a raw QueryException out.
+     */
+    private static function assertTableReady(string $table, string $constructor): void
+    {
+        self::$tablesReady[$table] ??= Schema::hasTable($table);
+        if (!self::$tablesReady[$table]) {
+            throw new \InvalidArgumentException(
+                "UpdateIngestor: table '{$table}' for constructor '{$constructor}' is not migrated — "
+                . 'extend the dial or UpdateIngestor::entityMigrationPaths()',
+            );
+        }
+    }
+
+    /**
+     * Ingest one payload (flat or arbitrarily nested) under a tenant.
+     * Returns the root constructor's instance model after the transaction
+     * commits and UpdateStored has fired.
      *
      * @param array<string, mixed> $payload
      */
     public function ingest(array $payload, int $accountId): TlInstanceModel
     {
-        $name = (string) ($payload['_'] ?? '');
-        $def = self::CONSTRUCTORS[$name] ?? null;
-        if ($def === null) {
+        $nodes = iterator_to_array(PayloadWalker::walk($payload), false);
+        if ($nodes === []) {
             throw new \InvalidArgumentException(
-                "UpdateIngestor: no constructor mapping for '{$name}' (Task 1 surface: user)",
+                "UpdateIngestor: payload carries no '_' constructor node — nothing to ingest",
             );
         }
 
-        /** @var class-string<TlAnchorModel> $anchorClass */
-        [$anchorClass, $instanceClass, $ctorId] = $def;
-        /** @var class-string<TlInstanceModel> $instanceClass */
+        /** @var array<string, TlInstanceModel> $instances path => written model */
+        $instances = [];
+        /** @var list<array{class: class-string<TlAnchorModel>, parent_path: string, idx: int, value_path?: string, value?: mixed}> $childRows */
+        $childRows = [];
 
-        $columns = $this->columns($payload);
-
-        return DB::transaction(function () use ($columns, $accountId, $name, $anchorClass, $instanceClass, $ctorId): TlInstanceModel {
-            $anchorId = $this->existingAnchorId($instanceClass, $anchorClass, (int) $columns['tl_id'], $accountId);
-            if ($anchorId === null) {
-                $anchor = new $anchorClass();
-                $anchor->forceFill([
-                    'constructor_id' => $ctorId,
-                    'constructor_name' => $name,
-                    'account_id' => $accountId,
-                ]);
-                $anchor->save(); // TlAnchorModel::booted assigns the UUIDv7 PK
-
-                $anchorId = (string) $anchor->getKey();
+        $root = DB::transaction(function () use ($nodes, $accountId, &$instances, &$childRows): TlInstanceModel {
+            // Bottom-up: the walker yields parents before children, so the
+            // reversed order writes deepest nodes first — every ref column
+            // then holds an already-written child instance PK.
+            foreach (array_reverse($nodes) as $node) {
+                $instances[$node['path']] = $this->writeNode(
+                    $node['constructor'],
+                    $node['payload'],
+                    $node['path'],
+                    $accountId,
+                    $instances,
+                    $childRows,
+                );
             }
 
-            $instance = $instanceClass::query()->find($anchorId) ?? new $instanceClass();
-            $instance->setAttribute('id', $anchorId); // shared PK with the anchor (spec §4.2)
-            $instance->fill($columns);
-            $instance->save();
+            // Vector child rows come after their parent instances exist
+            // (immediate FK child.parent_id → instance.id).
+            foreach ($childRows as $row) {
+                $valuePath = $row['value_path'] ?? null;
+                $this->upsertChildRow(
+                    $row,
+                    (string) $instances[$row['parent_path']]->getKey(),
+                    $valuePath !== null ? (string) $instances[$valuePath]->getKey() : null,
+                );
+            }
 
-            return $instance;
+            return $instances[$nodes[0]['path']]; // walker yields the root first
         });
+
+        event(new UpdateStored($root, $accountId));
+
+        return $root;
     }
 
     /**
-     * Payload keys are wire snake_case; column names follow the P1
-     * metamodel naming (reserved words get the tl_ prefix — id → tl_id).
-     * Nested arrays (refs/vectors) are skipped until the walker lands.
-     *
      * @param array<string, mixed> $payload
-     * @return array<string, mixed>
+     * @param array<string, TlInstanceModel> $instances
+     * @param list<array{class: class-string<TlAnchorModel>, parent_path: string, idx: int, value_path?: string, value?: mixed}> $childRows
      */
-    private function columns(array $payload): array
-    {
+    private function writeNode(
+        string $name,
+        array $payload,
+        string $path,
+        int $accountId,
+        array $instances,
+        array &$childRows,
+    ): TlInstanceModel {
+        $ctor = self::constructor($name);
+        /** @var class-string<TlAnchorModel> $anchorClass */
+        $anchorClass = self::modelClass(Naming::model($ctor->resultType));
+        /** @var class-string<TlInstanceModel> $instanceClass */
+        $instanceClass = self::modelClass(Naming::ctorModel($ctor->resultType, $name));
+        self::assertTableReady((new $anchorClass())->getTable(), $name);
+
         $columns = [];
         foreach ($payload as $key => $value) {
-            if ($key === '_' || is_array($value)) {
+            if ($key === '_') {
+                continue;
+            }
+            if (is_array($value)) {
+                if (array_is_list($value)) {
+                    $childClass = self::childModelClass($ctor, $name, $key);
+                    foreach ($value as $idx => $item) {
+                        $row = [
+                            'class' => $childClass,
+                            'parent_path' => $path,
+                            'idx' => (int) $idx,
+                        ];
+                        if (is_array($item) && isset($item['_'])) {
+                            // object element → value_id column (ref-vector table)
+                            $row['value_path'] = self::joinPath($path, $key, (int) $idx);
+                        } else {
+                            // scalar element → value column (scalar-vector table)
+                            $row['value'] = $item;
+                        }
+                        $childRows[] = $row;
+                    }
+                } elseif (isset($value['_'])) {
+                    $child = $instances[self::joinPath($path, $key, null)] ?? null;
+                    if ($child !== null) {
+                        $columns[Naming::column($key)] = (string) $child->getKey(); // ref column = child instance PK
+                    }
+                }
                 continue;
             }
             $columns[Naming::column((string) $key)] = $value;
         }
-        return $columns;
+
+        $identity = self::identityColumn($ctor, $columns);
+        $anchorId = $identity !== null
+            ? $this->existingAnchorId($instanceClass, $anchorClass, $identity[0], $identity[1], $accountId)
+            : $this->contentAnchorId($instanceClass, $anchorClass, $columns, $accountId);
+
+        if ($anchorId === null) {
+            $anchor = new $anchorClass();
+            $anchor->forceFill([
+                'constructor_id' => $ctor->id,
+                'constructor_name' => $name,
+                'account_id' => $accountId,
+            ]);
+            $anchor->save(); // TlAnchorModel::booted assigns the UUIDv7 PK
+
+            $anchorId = (string) $anchor->getKey();
+        }
+
+        $instance = $instanceClass::query()->find($anchorId) ?? new $instanceClass();
+        $instance->setAttribute('id', $anchorId); // shared PK with the anchor (spec §4.2)
+        $instance->fill($columns);
+        $instance->save();
+
+        return $instance;
     }
 
     /**
-     * Anchor for (tenant, telegram id): tl_id lives on the instance tables
-     * (per-constructor), so resolve through them — no global lookups by
-     * telegram id alone (roadmap tenancy contract).
+     * Identity for anchor reuse: the `id` param (column tl_id), or a lone
+     * identity ref param (peerUser/peerChannel/peerChat — their *_id IS the
+     * whole constructor). Constructors with any further content (entities,
+     * update roots, paramless shapes) return null → content aggregation.
+     *
+     * @param array<string, mixed> $columns
+     * @return array{0: string, 1: int|string}|null
      */
-    private function existingAnchorId(string $instanceClass, string $anchorClass, int $tlId, int $accountId): ?string
+    private static function identityColumn(TlConstructor $ctor, array $columns): ?array
     {
-        $ids = $instanceClass::query()->where('tl_id', $tlId)->pluck('id')->all();
+        $tlId = $columns['tl_id'] ?? null;
+        if (is_int($tlId) || is_string($tlId)) {
+            return ['tl_id', $tlId];
+        }
+
+        $params = array_values(array_filter(
+            $ctor->params(),
+            static fn (TlParam $p): bool => !$p->isFiller,
+        ));
+        if (count($params) === 1 && $params[0]->kind() !== 'vector') {
+            $column = Naming::column($params[0]->name);
+            if (in_array($column, self::IDENTITY_COLUMNS, true) && isset($columns[$column])) {
+                return [$column, $columns[$column]];
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Anchor for (tenant, identity value): identities live on the instance
+     * tables (per-constructor), so resolve through them — no global lookups
+     * by telegram id alone (roadmap tenancy contract).
+     *
+     * @param class-string<TlInstanceModel> $instanceClass
+     * @param class-string<TlAnchorModel> $anchorClass
+     */
+    private function existingAnchorId(string $instanceClass, string $anchorClass, string $column, int|string $value, int $accountId): ?string
+    {
+        $ids = $instanceClass::query()->where($column, $value)->pluck('id')->all();
         if ($ids === []) {
             return null;
         }
 
+        return $this->anchorIdFor($anchorClass, $ids, $accountId);
+    }
+
+    /**
+     * Content aggregation for identity-less constructors (entities,
+     * paramless shapes, update roots): an instance of the same tenant whose
+     * verbatim column set matches is reused — re-ingesting an identical
+     * payload touches nothing.
+     *
+     * @param array<string, mixed> $columns
+     * @param class-string<TlInstanceModel> $instanceClass
+     * @param class-string<TlAnchorModel> $anchorClass
+     */
+    private function contentAnchorId(string $instanceClass, string $anchorClass, array $columns, int $accountId): ?string
+    {
+        $query = $instanceClass::query();
+        foreach ($columns as $column => $value) {
+            $query->where($column, $value);
+        }
+        $ids = $query->pluck('id')->all();
+
+        return $this->anchorIdFor($anchorClass, $ids, $accountId);
+    }
+
+    /**
+     * @param class-string<TlAnchorModel> $anchorClass
+     * @param list<string> $ids
+     */
+    private function anchorIdFor(string $anchorClass, array $ids, int $accountId): ?string
+    {
+        if ($ids === []) {
+            return null;
+        }
+
+        /** @var TlAnchorModel|null $anchor */
         $anchor = $anchorClass::query()
             ->where('account_id', $accountId)
             ->whereIn('id', $ids)
             ->first();
 
-        return $anchor?->id !== null ? (string) $anchor->id : null;
+        return $anchor !== null ? (string) $anchor->getKey() : null;
+    }
+
+    /**
+     * Vector child row upsert: (parent_id, idx) is the stable slot (unique
+     * index); object elements link value_id to their instance, scalar
+     * elements land in the child `value` column (the two column sets are
+     * disjoint per generated DDL — ref-vector vs scalar-vector tables).
+     *
+     * @param array{class: class-string<TlAnchorModel>, parent_path: string, idx: int, value_path?: string, value?: mixed} $row
+     */
+    private function upsertChildRow(array $row, string $parentId, ?string $valueId): void
+    {
+        /** @var class-string<TlAnchorModel> $class */
+        $class = $row['class'];
+        $isScalar = array_key_exists('value', $row);
+        self::assertTableReady((new $class())->getTable(), 'vector child rows');
+
+        $fill = ['parent_id' => $parentId, 'idx' => $row['idx']];
+        if ($isScalar) {
+            $fill['value'] = $row['value'];
+        } else {
+            $fill['value_id'] = $valueId;
+        }
+
+        $existing = $class::query()->where('parent_id', $parentId)->where('idx', $row['idx'])->first();
+        if ($existing !== null) {
+            $changed = $isScalar
+                ? $existing->getAttribute('value') !== $row['value']
+                : (string) $existing->getAttribute('value_id') !== (string) $valueId;
+            if ($changed) {
+                $existing->forceFill($fill)->save();
+            }
+
+            return;
+        }
+
+        $new = new $class();
+        $new->forceFill($fill);
+        $new->save(); // TlAnchorModel::booted assigns the UUIDv7 PK
+    }
+
+    /** @return class-string<TlAnchorModel> */
+    private static function childModelClass(TlConstructor $ctor, string $name, string $param): string
+    {
+        $instanceTable = Naming::instanceTable($ctor->resultType, $name);
+
+        return self::modelClass(ModelGenerator::childModelClass($instanceTable, $param));
+    }
+
+    /** @param string $candidate short or absolute generated model class name
+     * @return class-string<TlAnchorModel>
+     */
+    private static function modelClass(string $candidate): string
+    {
+        $fqcn = str_starts_with($candidate, '\\') ? $candidate : self::MODELS_NS . $candidate;
+        if (!class_exists($fqcn)) {
+            throw new \InvalidArgumentException(
+                "UpdateIngestor: generated model '{$fqcn}' is missing — run artisan telegram-client:regenerate",
+            );
+        }
+
+        return $fqcn;
+    }
+
+    private static function joinPath(string $parentPath, string $param, ?int $vectorIndex): string
+    {
+        $segment = $vectorIndex !== null ? $param . '.' . $vectorIndex : $param;
+
+        return $parentPath === '' ? $segment : $parentPath . '.' . $segment;
     }
 }

@@ -13,6 +13,8 @@ final class TlStoriesStoryReactionsListStoryReactionsListChats extends TlAnchorM
 {
     protected $table = 'tl_stories_story_reactions_list_story_reactio_19a95eef9ec1';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

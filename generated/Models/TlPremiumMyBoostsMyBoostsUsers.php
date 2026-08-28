@@ -13,6 +13,8 @@ final class TlPremiumMyBoostsMyBoostsUsers extends TlAnchorModel
 {
     protected $table = 'tl_premium_my_boosts_my_boosts__users';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

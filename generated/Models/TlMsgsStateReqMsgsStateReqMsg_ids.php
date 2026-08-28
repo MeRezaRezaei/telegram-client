@@ -13,6 +13,8 @@ final class TlMsgsStateReqMsgsStateReqMsg_ids extends TlAnchorModel
 {
     protected $table = 'tl_msgs_state_req_msgs_state_req__msg_ids';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

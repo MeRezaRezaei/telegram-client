@@ -13,6 +13,8 @@ final class TlMessagesMessageViewsMessageViewsUsers extends TlAnchorModel
 {
     protected $table = 'tl_messages_message_views_message_views__users';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

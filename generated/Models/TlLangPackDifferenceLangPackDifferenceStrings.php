@@ -13,6 +13,8 @@ final class TlLangPackDifferenceLangPackDifferenceStrings extends TlAnchorModel
 {
     protected $table = 'tl_lang_pack_difference_lang_pack_difference__strings';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

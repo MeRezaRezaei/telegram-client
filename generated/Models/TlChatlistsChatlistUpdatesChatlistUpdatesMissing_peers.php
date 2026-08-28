@@ -13,6 +13,8 @@ final class TlChatlistsChatlistUpdatesChatlistUpdatesMissing_peers extends TlAnc
 {
     protected $table = 'tl_chatlists_chatlist_updates_chatlist_update_ca3e3eeccb63';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

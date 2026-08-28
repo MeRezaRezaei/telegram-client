@@ -13,6 +13,8 @@ final class TlChannelMessagesFilterChannelMessagesFilterRanges extends TlAnchorM
 {
     protected $table = 'tl_channel_messages_filter_channel_messages_filter__ranges';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */

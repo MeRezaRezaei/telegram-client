@@ -13,6 +13,8 @@ final class TlBusinessBotRecipientsBusinessBotRecipientsExclude_users extends Tl
 {
     protected $table = 'tl_business_bot_recipients_business_bot_recip_67c6d576f447';
 
+    public $timestamps = false; // child tables carry no timestamps columns
+
     protected $guarded = [];
 
     /** @var array<string, string> */
