@@ -29,6 +29,9 @@ final class ArrayRedis implements RedisConnectionContract
     /** @var array<string, array<string, array<string, string>>> group => stream => (entry id => consumer) */
     private array $pending = [];
 
+    /** @var array<string, array<string, array<string, true>>> group => stream => ids ever delivered via `>`. Real XREADGROUP advances a group last-delivered-id independent of acks — acked entries must NOT reappear for `>`. */
+    private array $delivered = [];
+
     /** @var array<string, list<callable(string, string): void>> */
     private array $subscribers = [];
 
@@ -62,10 +65,12 @@ final class ArrayRedis implements RedisConnectionContract
             $pending = $this->pending[$group][$stream] ?? [];
 
             if ($minId === '>') {
-                $fresh = array_diff_key($entries, $pending);
+                $delivered = $this->delivered[$group][$stream] ?? [];
+                $fresh = array_diff_key($entries, $delivered);
                 $selected = array_slice($fresh, 0, $count, true);
                 foreach ($selected as $entryId => $_fields) {
                     $this->pending[$group][$stream][$entryId] = $consumer;
+                    $this->delivered[$group][$stream][$entryId] = true;
                 }
             } else {
                 $own = array_filter(

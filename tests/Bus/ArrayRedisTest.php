@@ -47,6 +47,29 @@ final class ArrayRedisTest extends TestCase
         self::assertSame([], $redis->xreadgroup('g', 'c1', ['s' => 10], '0'));
     }
 
+    public function test_acked_entries_are_not_redelivered_via_new_entries(): void
+    {
+        $redis = new ArrayRedis();
+        $ids = [
+            $redis->xadd('s', '*', ['n' => '1']),
+            $redis->xadd('s', '*', ['n' => '2']),
+        ];
+
+        $redis->xreadgroup('g', 'c1', ['s' => 2], '>');
+        $redis->xack('s', 'g', $ids);
+
+        // Real group semantics: `>` follows the group last-delivered-id,
+        // not the pending list — acked history stays consumed.
+        self::assertSame([], $redis->xreadgroup('g', 'c1', ['s' => 10], '>'));
+
+        $third = $redis->xadd('s', '*', ['n' => '3']);
+        self::assertSame(
+            ['s' => [$third => ['n' => '3']]],
+            $redis->xreadgroup('g', 'c1', ['s' => 10], '>'),
+        );
+        self::assertSame([], $redis->xreadgroup('g', 'c2', ['s' => 10], '0'), 'other groups unaffected');
+    }
+
     public function test_hashes_roundtrip(): void
     {
         $redis = new ArrayRedis();
