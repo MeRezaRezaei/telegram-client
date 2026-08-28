@@ -85,3 +85,20 @@ based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   chunk_size, sets).
 - `docs/backup.md`: architecture, dedicated-session setup, config, CLI,
   verifier semantics (availability vs integrity), security notes, limits.
+
+### Fixed — Backup Vault review wave
+
+- `tests/Backup/LiveVaultSmokeTest.php`: live-gated smoke for the
+  telegram driver (reviewer I1) — skipped unless `TELEGRAM_CLIENT_LIVE=1`
+  and a session resolves (teleproto test-e2e env pattern:
+  `EnvFile::read` on `../teleproto/.env`, getenv fallback); dated
+  `teleproto-smoke-<date>` set via `forScope`, 1 KB putChunk/getChunk
+  roundtrip + manifest put/getLatest against the real scope call map.
+- `docs/backup.md`: prominent passphrase-rotation warning (new
+  passphrase ⇒ new set id/channel; dedup keys on plaintext hash so old
+  ciphertext would be reused into a mixed-key set), confirm-guess
+  security note on plaintext-hash chunk names (low severity, private
+  channel), limits entries (orphaned chunks never GC'd; telegram driver
+  live-tested only via the smoke).
+- `TelegramVault` docblock corrected: chunk names are the plaintext
+  content hash, not a ciphertext hash.

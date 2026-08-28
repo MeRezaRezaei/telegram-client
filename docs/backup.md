@@ -7,6 +7,17 @@ and a staleness verifier. `php telegram-client:backup <action>` drives
 everything; the offline `memory` driver is the default so nothing touches
 the network until you opt in.
 
+> **Warning — passphrase rotation trap.** Dedup keys on the *plaintext*
+> chunk hash and the runner reuses the set's salt, so giving an existing
+> set a new passphrase does **not** re-encrypt anything: unchanged chunks
+> count as already-uploaded (their ciphertext is still sealed under the
+> *old* key) and only newly-uploaded uniques use the new key. The channel
+> then holds a mixed-key set that **no single passphrase can restore** —
+> silent data loss on the next `restore`. To rotate a passphrase: point
+> the backup at a **new set id** (new channel, new salt), `run` it fully
+> under the new passphrase, `verify --passphrase` it, and only then
+> retire the old set/channel.
+
 ## How it works
 
 - **One channel per set.** Each backup set gets its own private broadcast
@@ -106,12 +117,20 @@ decrypt/hash mismatches.
   `TELEGRAM_CLIENT_BACKUP_PASSPHRASE`; never logged or echoed. Lose it
   and the chunks are unrecoverable by design (Argon2id + AEAD, no
   escrow). The salt is public (manifest), the key never leaves the
-  process.
+  process. Rotating the passphrase means rotating the set id — see the
+  rotation trap warning above.
 - **No server-side index**: Telegram sees ciphertext blobs, file names
   (hashes), channel titles, and message timing — nothing else. Do not
   put secrets in set names/paths.
 - **Channel hygiene**: keep the vault channels private and empty of
   other traffic — the vault scans by title and exact chunk names.
+- **Confirm-guess leak (low severity)**: chunk names are sha256 of the
+  *plaintext*, so a channel reader holding a byte-exact guess of a
+  chunk's content (a known file at a known version) can confirm or deny
+  it by looking for that hash among the messages — no key needed. Low
+  severity (it needs read access to the private channel plus a precise
+  guess, and learns only "present/absent"), but it is one more reason
+  vault channels must stay private and third-party-free.
 
 ## Limits
 
@@ -121,4 +140,13 @@ decrypt/hash mismatches.
   `upload.saveFilePart` loop either way.
 - **Dedup scope** is per set (salt reuse is the linchpin: same passphrase +
   same salt → same chunk hashes). Different sets don't share chunks.
+- **No garbage collection**: chunks that drop out of every file list
+  (deleted/changed source files) are never removed from the channel —
+  Telegram storage is the only cost, but a shrinking set never shrinks
+  its channel. Prune manually if that matters.
+- **Telegram-driver coverage**: beyond the offline wiring (fake call
+  map), the telegram driver is exercised only by the live-gated smoke
+  (`tests/Backup/LiveVaultSmokeTest.php`, skipped unless
+  `TELEGRAM_CLIENT_LIVE=1` plus a real session in `../teleproto/.env` or
+  the environment) — run it manually before relying on the driver.
 - **`memory` driver** never persists — it exists for offline tests.

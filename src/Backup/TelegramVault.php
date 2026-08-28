@@ -12,8 +12,8 @@ use RuntimeException;
  * Telegram-channel-backed vault (plan Phase 4, ported from the owner's
  * sdd/backup TelegramVault design onto teleproto primitives): one private
  * broadcast channel per backup set, titled CHANNEL_PREFIX + setId. Chunks
- * are force_file documents NAMED by their ciphertext hash (caption too),
- * manifests are text messages carrying MANIFEST_MARKER + base64 JSON —
+ * are force_file documents NAMED by their plaintext content hash (caption
+ * too), manifests are text messages carrying MANIFEST_MARKER + base64 JSON —
  * latest manifest wins, chunk lookup is exact-name, marker detection is
  * str_starts_with/substr only (src/ is regex-free by policy).
  *
