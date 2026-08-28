@@ -12,10 +12,12 @@ declare(strict_types=1);
 // (runningUnitTests(), via ConfiguresPrompts) — and drives it through a
 // Symfony console Application. Zero refactor of the command itself.
 //
-// Usage: php bin/regenerate [--force] [--schemas=DIR] [--out=DIR]
+// Usage: php bin/regenerate [--force] [--schemas=DIR] [--out=DIR] [--ship]
 //   --force    bypass the ±30% constructor-count sanity gate
 //   --schemas  .tl sources dir (default: package schema/sources/ mirror)
 //   --out      output dir; artifacts land in <out>/generated/ (default: package root)
+//   --ship     also copy the curated dial's namespace migrations to <out>/migrations/
+//              (dial: config telegram-client.ship_namespaces; full set stays in generated/)
 
 require __DIR__ . '/../vendor/autoload.php';
 

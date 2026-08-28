@@ -14,11 +14,24 @@ use MeRezaRezaei\TelegramClient\Schema\Generator\Model\TlScheme;
  */
 final class SchemaRegenerator
 {
+    /** Curated migration dial default (plan Task 4): TL namespaces shipped to migrations/. */
+    public const DEFAULT_SHIP_NAMESPACES = ['auth', 'messages', 'users', 'channels', 'updates', 'help', 'contacts'];
+
     private bool $force = false;
+
+    /** @var list<string>|null null = do not ship; list = copy these namespaces' migrations to <out>/migrations */
+    private ?array $shipNamespaces = null;
 
     public function force(bool $force = true): self
     {
         $this->force = $force;
+        return $this;
+    }
+
+    /** @param list<string>|null $namespaces */
+    public function shipNamespaces(?array $namespaces): self
+    {
+        $this->shipNamespaces = $namespaces;
         return $this;
     }
 
@@ -41,7 +54,9 @@ final class SchemaRegenerator
         return $this->parseAll($files);
     }
 
-    /** @return array{counts: array{types:int,constructors:int,methods:int,files:int,tables:int,fks:int}, manifest: array} */
+    /**
+     * @return array{counts: array{types:int,constructors:int,methods:int,files:int,tables:int,fks:int}, manifest: array, ship?: array{namespaces:list<string>,count:int,dir:string}}
+     */
     public function regenerate(string $schemasDir, string $outputDir): array
     {
         if (!is_dir($schemasDir)) {
@@ -90,7 +105,53 @@ final class SchemaRegenerator
         file_put_contents($outputDir . '/generated/schema-manifest.json',
             json_encode($manifest, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . "\n");
 
-        return ['counts' => $counts, 'manifest' => $manifest];
+        $result = ['counts' => $counts, 'manifest' => $manifest];
+        if ($this->shipNamespaces !== null) {
+            $result['ship'] = $this->shipMigrations($combined, $stats['tables'], $migFiles, $outputDir);
+        }
+        return $result;
+    }
+
+    /**
+     * Curated migration dial (plan Task 4): copy the per-type migration
+     * files whose TL type namespace is on the dial from the freshly
+     * generated full set into <out>/migrations (byte-identical copies —
+     * the publishable surface; provider loadMigrationsFrom). Namespace
+     * membership is read from the scheme (TlType::namespace()), never
+     * parsed back out of filenames — root-namespace types (User, Chat,
+     * Updates, ...) and the cross-namespace route/FK monolith files stay
+     * in the full generated/ set only.
+     *
+     * @param array<string,string> $tableMap anchor/instance/child table => migration filename
+     * @param array<string,string> $migFiles migration filename => content
+     * @return array{namespaces:list<string>,count:int,dir:string}
+     */
+    private function shipMigrations(TlScheme $combined, array $tableMap, array $migFiles, string $outputDir): array
+    {
+        $dir = $outputDir . '/migrations';
+        if (is_dir($dir)) {
+            exec('rm -rf ' . escapeshellarg($dir));
+        }
+        mkdir($dir, 0777, true);
+
+        $shipped = [];
+        foreach ($combined->types() as $type) {
+            if ($type->name === 'Vector t' || $type->constructors() === []) {
+                continue; // mirrors MigrationGenerator's file-emission loop
+            }
+            if (!in_array($type->namespace(), $this->shipNamespaces ?? [], true)) {
+                continue;
+            }
+            $file = $tableMap[Naming::anchorTable($type->name)] ?? null;
+            if ($file !== null && isset($migFiles[$file])) {
+                $shipped[$file] = $migFiles[$file];
+            }
+        }
+        ksort($shipped);
+        foreach ($shipped as $name => $content) {
+            file_put_contents($dir . '/' . $name, $content);
+        }
+        return ['namespaces' => $this->shipNamespaces ?? [], 'count' => count($shipped), 'dir' => $dir];
     }
 
     /** @param list<string> $files */

@@ -18,6 +18,10 @@ final class TelegramClientServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        // Curated migration dial (plan Task 4): the publishable subset in
+        // migrations/ — the full layer mirror stays in generated/.
+        $this->loadMigrationsFrom(__DIR__ . '/../migrations');
+
         if ($this->app->runningInConsole()) {
             $this->commands([RegenerateCommand::class]);
         }
