@@ -6,6 +6,7 @@
     "require": {
         "php": ">=8.2",
         "ext-pdo": "*",
+        "ext-sodium": "*",
         "merezarezaei/teleproto": "dev-main",
         "illuminate/database": "^10.0|^11.0|^12.0",
         "illuminate/support": "^10.0|^11.0|^12.0",
