@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace MeRezaRezaei\TelegramClient\Schema\Generator;
 
 use MeRezaRezaei\TelegramClient\Schema\Generator\Model\TlScheme;
+use FilesystemIterator;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 
 /**
  * Regeneration engine (spec §7): loads the metamodel from teleproto's
@@ -129,10 +132,8 @@ final class SchemaRegenerator
     private function shipMigrations(TlScheme $combined, array $tableMap, array $migFiles, string $outputDir): array
     {
         $dir = $outputDir . '/migrations';
-        if (is_dir($dir)) {
-            exec('rm -rf ' . escapeshellarg($dir));
-        }
-        mkdir($dir, 0777, true);
+        self::removeTree($dir);
+        mkdir($dir, 0775, true);
 
         $shipped = [];
         foreach ($combined->types() as $type) {
@@ -208,18 +209,41 @@ final class SchemaRegenerator
     private function wipe(string $outputDir): void
     {
         foreach (['migrations', 'Models', 'Data', 'Factories'] as $dir) {
-            $path = $outputDir . '/generated/' . $dir;
-            if (is_dir($path)) {
-                exec('rm -rf ' . escapeshellarg($path));
-            }
+            self::removeTree($outputDir . '/generated/' . $dir);
         }
         $manifest = $outputDir . '/generated/schema-manifest.json';
         if (is_file($manifest)) {
             unlink($manifest);
         }
         if (!is_dir($outputDir . '/generated')) {
-            mkdir($outputDir . '/generated', 0777, true);
+            mkdir($outputDir . '/generated', 0775, true);
         }
+    }
+
+    /**
+     * Shell-free recursive delete (night W4 safety): CHILD_FIRST order
+     * unlinks files before their directories rmdir; SKIP_DOTS guards
+     * '.'/'..' self-recursion; symlinks unlink, never traverse. The
+     * companion mkdirs use 0775 — these are dev-artifact trees:
+     * group-writable, not world-writable.
+     */
+    private static function removeTree(string $dir): void
+    {
+        if (!is_dir($dir)) {
+            return;
+        }
+        $items = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($dir, FilesystemIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::CHILD_FIRST,
+        );
+        foreach ($items as $item) {
+            if ($item->isLink() || !$item->isDir()) {
+                unlink($item->getPathname());
+            } else {
+                rmdir($item->getPathname());
+            }
+        }
+        rmdir($dir);
     }
 
     /** @param array<string,string> $files */
@@ -227,7 +251,7 @@ final class SchemaRegenerator
     {
         foreach ($files as $name => $content) {
             $path = $dir . '/' . $name;
-            @mkdir(dirname($path), 0777, true);
+            @mkdir(dirname($path), 0775, true);
             file_put_contents($path, $content);
         }
     }

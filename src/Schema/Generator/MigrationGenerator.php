@@ -264,6 +264,8 @@ final class MigrationGenerator
 
     private static function quote(string $table): string
     {
-        return '"' . $table . '"';
+        // SQL-standard identifier doubling: "a""b" is an embedded quote,
+        // never a terminator.
+        return '"' . str_replace('"', '""', $table) . '"';
     }
 }

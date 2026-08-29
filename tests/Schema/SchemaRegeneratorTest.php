@@ -56,6 +56,27 @@ final class SchemaRegeneratorTest extends TestCase
         self::assertGreaterThan(10, $count);
     }
 
+    public function test_regenerate_wipes_stale_outputs(): void
+    {
+        // Night W4: the wipe path is a shell-free recursive delete; stale
+        // files in nested generated trees (and shipped migrations/) must
+        // not survive a regeneration.
+        $out = $this->tmpDir('wipe');
+        mkdir($out . '/generated/Models/deep', 0777, true);
+        file_put_contents($out . '/generated/Models/deep/Stale.php', '<?php // stale');
+        mkdir($out . '/migrations', 0777, true);
+        file_put_contents($out . '/migrations/stale.php', '<?php // stale');
+
+        (new SchemaRegenerator())
+            ->shipNamespaces(['messages'])
+            ->regenerate(__DIR__ . '/fixtures', $out);
+
+        self::assertFileDoesNotExist($out . '/generated/Models/deep/Stale.php');
+        self::assertFileDoesNotExist($out . '/generated/Models/deep');
+        self::assertFileDoesNotExist($out . '/migrations/stale.php');
+        self::assertFileExists($out . '/generated/Models/TlUser.php');
+    }
+
     public function test_count_gate_blocks_and_force_bypasses(): void
     {
         $out = $this->tmpDir('gate');

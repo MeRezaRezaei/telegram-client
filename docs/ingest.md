@@ -57,6 +57,32 @@ two instance rows, two child-row sets — no cross-tenant reads are possible
 through the ingest or aggregation surfaces (lookups pin the anchor through
 its `account_id`; route ids are namespaced by account).
 
+## Concurrency
+
+Two workers ingesting payloads that resolve the same (account, identity)
+concurrently could both miss the existing-anchor lookup and each mint an
+anchor — the identity value lives in per-constructor instance tables,
+so no single DB unique constraint can back the anchor row itself.
+`Ingest\IdentityLock` serializes resolution per (account, identity) key
+in two layers:
+
+- **in-process**: a static depth-counted key map. PHP workers are
+  single-threaded, so the map never blocks — it exists to make nested
+  (reentrant) acquires of the SAME key legal: a region re-entered inside
+  one execution (`ingestResponse` → `ingest`, or two nodes of one
+  payload carrying the same identity) must not wedge on its own key.
+- **cross-worker (PostgreSQL)**: a transaction-scoped
+  `pg_advisory_xact_lock(hashtext(key))` taken with raw SQL on the
+  caller's connection INSIDE the caller's transaction — it
+  auto-releases at commit or rollback, so there is no release path to
+  forget and no orphaned lock after a crash. Advisory locks are
+  reentrant per session, so nested acquires within one transaction are
+  safe too.
+
+sqlite (single-writer) and mysql (no advisory locks) are a documented
+no-op: callers there rely on the anchor discriminator updates and
+content aggregation for eventual convergence.
+
 ## Events
 
 `MeRezaRezaei\TelegramClient\Ingest\Events\UpdateStored` fires after the
@@ -111,5 +137,12 @@ Logic tests run on in-memory sqlite (plan Tech Stack). On sqlite,
 DEFERRABLE FKs are ignored — the ingestor writes bottom-up so immediate
 FKs suffice on both drivers. Postgres (the production truth) additionally
 gets native `uuid` columns and deferrable constraints from the same
-generated migrations; PG-only behavior is exercised by the CI/live gate,
-not the unit suite.
+generated migrations.
+
+PG-only behavior is exercised by the opt-in PG test track: `tests/Pg`
+runs the full 637-migration generated mirror (plus a deferrable-FK
+proof) on a disposable schema. `TELEGRAM_CLIENT_PG=1` (with the
+`TELEGRAM_CLIENT_PG_*` connection env) forces the track on — an
+unreachable server then fails rather than skips; unset, it runs only
+when the configured local Postgres answers, else skips. CI runs it in a
+dedicated `pg-tests` job against a postgres:17 service.

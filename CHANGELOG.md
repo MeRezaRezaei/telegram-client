@@ -5,23 +5,37 @@ based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
-### Release blockers — read before publishing v0.1.0
+### Added
 
-- **Tag teleproto v1.1.0 before publishing.** `merezarezaei/teleproto` is
-  currently constrained to `dev-main` because local `main` carries
-  untagged fixes this package depends on (schema mirror bootstrapping,
-  mirror gap-filling, double-codec & TL serializer fixes — ahead of the
-  only existing tag `v1.0.0`). Before the first Packagist release:
-  1. tag & push teleproto `v1.1.0`,
-  2. flip the constraint here from `dev-main` to `^1.0`,
-  3. move the `repositories` path-repo entry (`../teleproto`, symlink)
-     out of the published manifest — it is a dev-mode-only convenience
-     for the sibling checkout and does not exist for Packagist consumers
-     (the wire engine resolves from Packagist as
-     `merezarezaei/teleproto`).
-- **Create the GitHub repository** `MeRezaRezaei/telegram-client`
-  (homepage / support / issue templates all point at it — no remote is
-  configured locally yet) and register the package on Packagist.
+- **PostgreSQL test track**: `tests/Pg` runs the full 637-migration
+  generated mirror on a disposable pg schema — native `uuid` columns,
+  DEFERRABLE INITIALLY DEFERRED cross-type FK proof. Opt-in behind
+  `TELEGRAM_CLIENT_PG=1` (plus `TELEGRAM_CLIENT_PG_*` connection env);
+  an env-forced run fails — not skips — on an unreachable server, while
+  default sqlite runs skip the track. A dedicated `pg-tests` CI job
+  (postgres:17 service) runs it on every push/PR.
+- **Backup prune (chunk GC)**: `telegram-client:backup prune --set=...`
+  walks every vault chunk and deletes those outside the latest
+  manifest's keep-set; repeated prune prints `pruned:0`, so it is
+  cron-safe right after every `run`. Keyless by design (chunk names
+  are plaintext hashes). Closes the "orphaned chunks never GC'd" limit
+  from the v0.1.0 docs.
+
+### Fixed
+
+- **Ingest — concurrent identity resolution**: two workers resolving
+  the same (account, identity) could both miss the existing-anchor
+  lookup and each mint an anchor (no single DB unique constraint can
+  back it — identity values live in per-constructor instance tables).
+  `IdentityLock` now serializes resolution per key: a transaction-
+  scoped `pg_advisory_xact_lock(hashtext(key))` on PostgreSQL
+  (auto-released at commit/rollback, reentrant per session) plus a
+  depth-counted in-process key map (nested/reentrant acquires legal);
+  sqlite/mysql remain a documented no-op.
+- **Bus — wedged ingest failures**: consumer ingest-path exceptions no
+  longer retry forever — after 3 consecutive attempts the entry is
+  dead-lettered to `tg:stream:dead-letter` with `reason=ingest-failed`
+  and the error message, instead of wedging the pending backlog.
 
 ## [0.1.0] - 2026-08-29
 
@@ -128,6 +142,12 @@ encryption. Four phases shipped (P1–P4).
 
 ### Fixed — Backup Vault review wave
 
+- `TelegramVault` peer contract: vault calls address the backup channel
+  as a full peer reference (id + access_hash) rather than a bare id,
+  and `findMessagesByName` merges `messages.search` with a realtime
+  history top-up — the channel text index lags fresh posts by minutes,
+  so search alone cannot back the latest-wins manifest lookup (found
+  live by the smoke, green after the fix).
 - `tests/Backup/LiveVaultSmokeTest.php`: live-gated smoke for the
   telegram driver (reviewer I1) — skipped unless `TELEGRAM_CLIENT_LIVE=1`
   and a session resolves (teleproto test-e2e env pattern:

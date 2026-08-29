@@ -97,6 +97,15 @@ final class MigrationGeneratorTest extends TestCase
         }
     }
 
+    public function test_quote_doubles_embedded_double_quotes(): void
+    {
+        // SQL-standard identifier doubling: schema names carry no quotes
+        // today, but quote() must stay correct if one ever does.
+        $quote = new \ReflectionMethod(MigrationGenerator::class, 'quote');
+        self::assertSame('"tl_user"', $quote->invoke(null, 'tl_user'));
+        self::assertSame('"tl_we""ird"', $quote->invoke(null, 'tl_we"ird'));
+    }
+
     public function test_deterministic(): void
     {
         self::assertSame(self::generate(), self::generate());
