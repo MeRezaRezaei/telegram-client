@@ -24,6 +24,7 @@ use MeRezaRezaei\TelegramClient\Schema\Generated\Models\TlUpdate;
 use MeRezaRezaei\TelegramClient\Schema\Generated\Models\TlUpdateUpdateNewMessage;
 use MeRezaRezaei\TelegramClient\Schema\Generated\Models\TlUser;
 use MeRezaRezaei\TelegramClient\Schema\Generated\Models\TlUserUser;
+use MeRezaRezaei\TelegramClient\Tests\Ingest\Concerns\HasNestedUpdateFixtures;
 use Symfony\Component\Uid\UuidV7;
 
 /**
@@ -33,6 +34,9 @@ use Symfony\Component\Uid\UuidV7;
  * difference-stream sidecar entities (channel + user objects) that MTProto
  * delivers alongside, all through the same generic ingest() surface.
  *
+ * The payloads themselves live in HasNestedUpdateFixtures (shared 1:1 with
+ * the Postgres mirror track, tests/Pg/FullMirrorPgTest).
+ *
  * Write order satisfies IMMEDIATE FKs on sqlite (children before parents;
  * anchor before instance; child rows after their parent instance), tenants
  * are isolated per account, re-ingest is idempotent, and UpdateStored fires
@@ -40,87 +44,13 @@ use Symfony\Component\Uid\UuidV7;
  */
 final class NestedIngestTest extends IngestTestCase
 {
-    private const ACCOUNT = 7;
+    use HasNestedUpdateFixtures;
 
-    private const CHANNEL_ID = 1737473577;
+    private const ACCOUNT = self::FIXTURE_ACCOUNT;
 
-    private const USER_ID = 501558149;
+    private const CHANNEL_ID = self::FIXTURE_CHANNEL_ID;
 
-    /**
-     * Difference-stream sidecar: channel#1c32b11c (v227 full-ish field set).
-     * photo is a REQUIRED ref — chatPhotoEmpty#37c1011c rides along (a
-     * paramless constructor: pure aggregation node).
-     *
-     * @return array<string, mixed>
-     */
-    private static function channelPayload(): array
-    {
-        return [
-            '_' => 'channel',
-            // verified | megagroup | access_hash
-            'flags' => (1 << 7) | (1 << 8) | (1 << 13),
-            'verified' => true, // set-flag bools arrive as explicit keys (teleproto truth)
-            'megagroup' => true,
-            'id' => self::CHANNEL_ID,
-            'access_hash' => -7779317524312221622,
-            'title' => 'Teleproto Café',
-            'photo' => ['_' => 'chatPhotoEmpty'],
-            'date' => 1712345678,
-        ];
-    }
-
-    /**
-     * Difference-stream sidecar: user#31774388 (same shape as the Task-1
-     * fixture, flat fields only).
-     *
-     * @return array<string, mixed>
-     */
-    private static function userPayload(): array
-    {
-        return [
-            '_' => 'user',
-            'flags' => (1 << 0) | (1 << 1) | (1 << 2) | (1 << 3),
-            'id' => self::USER_ID,
-            'access_hash' => -5988024083302710253,
-            'first_name' => 'Reza',
-            'last_name' => 'Rezaei',
-            'username' => 'RezaRezaei',
-        ];
-    }
-
-    /**
-     * The root wire payload: updateNewMessage#1f2b0afd → message#7600b9d3
-     * with from_id peerUser, peer_id peerChannel, media messageMediaEmpty
-     * (flags.9), entities (flags.7) as a vector of three constructors.
-     *
-     * @return array<string, mixed>
-     */
-    private static function updateNewMessagePayload(): array
-    {
-        return [
-            '_' => 'updateNewMessage',
-            'message' => [
-                '_' => 'message',
-                // out | entities | from_id | media
-                'flags' => (1 << 1) | (1 << 7) | (1 << 8) | (1 << 9),
-                'out' => true, // set-flag bools arrive as explicit keys (teleproto truth)
-                'id' => 1186,
-                'from_id' => ['_' => 'peerUser', 'user_id' => self::USER_ID],
-                'peer_id' => ['_' => 'peerChannel', 'channel_id' => self::CHANNEL_ID],
-                'date' => 1724852400,
-                'message' => 'Check https://t.me/teleproto from @Reza',
-                'media' => ['_' => 'messageMediaEmpty'],
-                'entities' => [
-                    ['_' => 'messageEntityBold', 'offset' => 0, 'length' => 5],
-                    ['_' => 'messageEntityUrl', 'offset' => 6, 'length' => 21],
-                    ['_' => 'messageEntityMentionName', 'offset' => 33, 'length' => 5, 'user_id' => self::USER_ID],
-                ],
-                'flags2' => 0,
-            ],
-            'pts' => 1349,
-            'pts_count' => 1,
-        ];
-    }
+    private const USER_ID = self::FIXTURE_USER_ID;
 
     private function ingestTree(int $accountId = self::ACCOUNT): TlUpdateUpdateNewMessage
     {

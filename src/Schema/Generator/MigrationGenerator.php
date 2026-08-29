@@ -15,13 +15,25 @@ use MeRezaRezaei\TelegramClient\Schema\Generator\Model\TlType;
  * File layout (deterministic, ksort order):
  *  - one file per abstract type: anchor + its instance tables + child tables
  *  - one file with ALL method route tables
- *  - final 999999 file with cross-type deferred FKs (raw ALTERs)
+ *  - final 9999xx files with cross-type deferred FKs (raw ALTERs), split
+ *    into buckets so each migration transaction stays within stock PG's
+ *    lock budget (Night W3: one 3070-ALTER file died with `out of shared
+ *    memory` / max_locks_per_transaction on a default server)
  *
  * @phpstan-type ForeignKey array{table:string, column:string, target_table:string}
  */
 final class MigrationGenerator
 {
     public const DATE_TOKEN = '2026_08_28';
+
+    /**
+     * FK ALTERs per migration file. Each ALTER locks the altered table and
+     * the referenced table for the file's whole transaction: 512 keeps a
+     * bucket around ~1k relation locks, safely under stock Postgres's
+     * shared lock budget (max_locks_per_transaction 64 × max_connections
+     * 100 = 6400 slots), independent of host tuning.
+     */
+    public const FK_BUCKET_SIZE = 512;
 
     /** @var list<ForeignKey> */
     private array $deferredFks = [];
@@ -52,8 +64,9 @@ final class MigrationGenerator
         $this->currentFile = sprintf('%s_%06d_create_tl_route_tables.php', self::DATE_TOKEN, 900000 + $seq);
         $files[$this->currentFile] = $this->routeMigration($scheme);
 
-        $this->currentFile = self::DATE_TOKEN . '_999999_add_tl_foreign_keys.php';
-        $files[$this->currentFile] = $this->fkMigration();
+        foreach ($this->fkMigrations() as $name => $content) {
+            $files[$name] = $content;
+        }
 
         Naming::assertUnique(array_keys($this->tableMap), 'table');
         return $files;
@@ -213,11 +226,29 @@ final class MigrationGenerator
         return CodeWriter::migrationFile($up, array_reverse($down));
     }
 
-    private function fkMigration(): string
+    /**
+     * Cross-type FK files, DEFERRABLE INITIALLY DEFERRED (spec §4.5),
+     * bucketed (FK_BUCKET_SIZE per file) to bound per-transaction lock
+     * counts on Postgres.
+     *
+     * @return array<string,string> filename => content
+     */
+    private function fkMigrations(): array
+    {
+        $files = [];
+        foreach (array_chunk($this->deferredFks, self::FK_BUCKET_SIZE) as $i => $bucket) {
+            $files[sprintf('%s_%06d_add_tl_foreign_keys.php', self::DATE_TOKEN, 999901 + $i)] = $this->fkMigration($bucket);
+        }
+
+        return $files;
+    }
+
+    /** @param list<ForeignKey> $fks */
+    private function fkMigration(array $fks): string
     {
         $up = ['// Cross-type foreign keys, DEFERRABLE INITIALLY DEFERRED (spec §4.5).'];
         $keys = [];
-        foreach ($this->deferredFks as $fk) {
+        foreach ($fks as $fk) {
             $key = Naming::fit($fk['table'] . '_' . $fk['column'] . '_foreign');
             $keys[] = $key;
             $up[] = 'DB::statement(\'ALTER TABLE ' . self::quote($fk['table']) . ' ADD CONSTRAINT ' . $key
@@ -226,7 +257,7 @@ final class MigrationGenerator
         }
         $down = array_map(
             static fn (array $fk): string => 'DB::statement(\'ALTER TABLE ' . self::quote($fk['table']) . ' DROP CONSTRAINT IF EXISTS ' . Naming::fit($fk['table'] . '_' . $fk['column'] . '_foreign') . '\');',
-            array_reverse($this->deferredFks),
+            array_reverse($fks),
         );
         return CodeWriter::migrationFile($up, $down);
     }

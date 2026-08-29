@@ -27,7 +27,9 @@ final class MigrationGeneratorTest extends TestCase
         self::assertArrayHasKey('2026_08_28_000003_create_tl_user_status_table.php', $files);
         self::assertArrayHasKey('2026_08_28_000004_create_tl_messages_messages_table.php', $files);
         self::assertArrayHasKey('2026_08_28_900004_create_tl_route_tables.php', $files);
-        self::assertArrayHasKey('2026_08_28_999999_add_tl_foreign_keys.php', $files);
+        // Cross-type FKs: bucketed files (FK_BUCKET_SIZE per file) so each
+        // migration transaction stays inside stock PG's lock budget.
+        self::assertArrayHasKey('2026_08_28_999901_add_tl_foreign_keys.php', $files);
     }
 
     public function test_anchor_shape(): void
@@ -73,12 +75,26 @@ final class MigrationGeneratorTest extends TestCase
     public function test_deferred_fk_migration(): void
     {
         $files = self::generate();
-        $fks = $files['2026_08_28_999999_add_tl_foreign_keys.php'];
+        $fks = $files['2026_08_28_999901_add_tl_foreign_keys.php'];
         self::assertStringContainsString(
             'ALTER TABLE "tl_messages_messages_messages__messages" ADD CONSTRAINT tl_messages_messages_messages__messages_value_id_foreign',
             $fks,
         );
         self::assertStringContainsString('FOREIGN KEY (value_id) REFERENCES "tl_message" (id) DEFERRABLE INITIALLY DEFERRED', $fks);
+    }
+
+    public function test_fk_files_are_bucketed_within_lock_budget(): void
+    {
+        $files = self::generate();
+        $fkFiles = array_filter(array_keys($files), static fn (string $n): bool => str_contains($n, 'add_tl_foreign_keys'));
+        self::assertNotSame([], $fkFiles);
+        foreach ($fkFiles as $name) {
+            self::assertLessThanOrEqual(
+                \MeRezaRezaei\TelegramClient\Schema\Generator\MigrationGenerator::FK_BUCKET_SIZE,
+                substr_count($files[$name], 'ADD CONSTRAINT'),
+                "{$name} must hold at most FK_BUCKET_SIZE ALTERs (PG lock budget)",
+            );
+        }
     }
 
     public function test_deterministic(): void
