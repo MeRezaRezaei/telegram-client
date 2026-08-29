@@ -29,3 +29,4 @@ SDD per wave (parallel where disjoint); gates green per task; nothing uncommitte
 ## Log (appended as work lands)
 
 - W1-3 [tc] Backup chunk GC landed: `telegram-client:backup prune` + `Pruner` + vault list/delete (`findMessagesByName('')` / `delete`), 319 tests green, phpstan OK — see `.superpowers/night/w1-3.md`.
+- W3: PG track landed (1febb60): full 637-migration mirror on PG17 (3678 tables), deferrable-FK proof, generator FK-bucketing fix (max_locks_per_transaction), CI pg job.
