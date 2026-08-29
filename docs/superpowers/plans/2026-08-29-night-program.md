@@ -40,3 +40,4 @@ OWNER MORNING ITEMS:
 1. Approve teleproto v1.2.0 tag (commit 238dfcd; live-gated green; review clean) — then tc composer bump "^1.1 || ^1.2" optional.
 2. Packagist submit telegram-client (if not yet).
 3. Backlog (non-urgent): pre-I/O eviction minors (W2 review), batch map clear, PG NOAUTH live-test env, FLOOD_WAIT live-sample verifier.
+- W6: W2 minors polished (e3f8893): no eviction on pre-I/O errors, batch-state finally. teleproto 247/2581.
