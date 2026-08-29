@@ -17,6 +17,13 @@ namespace MeRezaRezaei\TelegramClient\Backup;
  * regex (src/ is regex-free by policy). Anything else (manifest
  * messages, foreign traffic) is structurally immune, and delete() on
  * the vault is idempotent, so repeated prunes are no-ops.
+ *
+ * The inventory walk is duck-typed: a vault exposing listAllEntries()
+ * (TelegramVault — an UNCAPPED getHistory pagination, because its
+ * findMessagesByName is capped at SEARCH_LIMIT and would hide orphans
+ * beyond the newest ~100 messages) gets the full walk; every other
+ * VaultInterface implementation (InMemoryVault, test fakes) falls back
+ * to findMessagesByName(''), which is already a complete listing.
  */
 final class Pruner
 {
@@ -40,9 +47,13 @@ final class Pruner
             }
         }
 
+        $inventory = method_exists($vault, 'listAllEntries')
+            ? $vault->listAllEntries()
+            : $vault->findMessagesByName('');
+
         $scanned = 0;
         $pruned = 0;
-        foreach ($vault->findMessagesByName('') as $entry) {
+        foreach ($inventory as $entry) {
             $scanned++;
             $name = $entry['name'] ?? null;
 

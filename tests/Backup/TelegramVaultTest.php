@@ -155,17 +155,37 @@ final class TelegramVaultTest extends TestCase
         $vault->getLatestManifest();
     }
 
-    public function test_scope_api_map_exposes_the_seven_callables(): void
+    public function test_scope_api_map_exposes_the_eight_callables(): void
     {
         $map = TelegramVault::scopeApi(new FakeUserScope());
         ksort($map);
 
         self::assertSame(
-            ['createChannel', 'deleteMessages', 'findChannel', 'findMessagesByName', 'sendDocument', 'sendText', 'uploadBytes'],
+            ['createChannel', 'deleteMessages', 'findChannel', 'findMessagesByName', 'listHistoryPage', 'sendDocument', 'sendText', 'uploadBytes'],
             array_keys($map)
         );
         foreach ($map as $callable) {
             self::assertIsCallable($callable);
+        }
+    }
+
+    public function test_list_all_entries_is_uncapped_whereas_find_messages_by_name_caps_at_search_limit(): void
+    {
+        $api = new FakeVaultApi();
+        $channelId = $api->addChannel('teleproto-backup:set1');
+        foreach (range(1, 150) as $i) {
+            $api->postDocument($channelId, 'hash-' . str_pad((string) $i, 3, '0', STR_PAD_LEFT), 'bytes-' . $i);
+        }
+        $vault = new TelegramVault('set1', $api->map());
+
+        self::assertCount(100, $vault->findMessagesByName(''), 'SEARCH_LIMIT still caps the search-backed listing (find path)');
+        $entries = $vault->listAllEntries();
+        self::assertCount(150, $entries, 'the prune-path walk is uncapped: every entry is visible');
+        self::assertSame('hash-150', $entries[0]['name'], 'newest first, like findMessagesByName');
+        self::assertSame('hash-001', $entries[149]['name'], 'oldest last');
+        foreach ($entries as $entry) {
+            self::assertSame(['id', 'name'], array_keys($entry), 'findMessagesByName entry shape');
+            self::assertIsString($entry['id']);
         }
     }
 

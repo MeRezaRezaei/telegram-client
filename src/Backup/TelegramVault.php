@@ -32,10 +32,12 @@ final class TelegramVault implements VaultInterface
     public const CHANNEL_ABOUT = 'teleproto encrypted backup vault';
 
     private const SEARCH_LIMIT = 100;
+    private const LIST_PAGE_SIZE = 100; // getHistory page size of the uncapped prune walk
+    private const LIST_HARD_CAP = 10000; // pathological-stream abort: throw, never truncate
     private const PART_SIZE = 524288; // 512 KB standard MTProto part size
     private const BIG_FILE_THRESHOLD = 10485760; // > 10 MB switches to saveBigFilePart
 
-    private const API_KEYS = ['findChannel', 'createChannel', 'uploadBytes', 'sendDocument', 'sendText', 'findMessagesByName', 'deleteMessages'];
+    private const API_KEYS = ['findChannel', 'createChannel', 'uploadBytes', 'sendDocument', 'sendText', 'findMessagesByName', 'deleteMessages', 'listHistoryPage'];
 
     private ?int $channelId = null;
 
@@ -88,8 +90,14 @@ final class TelegramVault implements VaultInterface
      *     latest-wins manifest lookup. An EMPTY namePrefix is valid and
      *     returns every message: messages.search with an empty q lists
      *     all of a peer's messages per the Telegram docs (plus the
-     *     history merge) — that is what the prune GC's list-all walk
-     *     rides on.
+     *     history merge) — but the RESULT COUNT is capped at the passed
+     *     limit (SEARCH_LIMIT for vault-internal find() calls), so the
+     *     prune GC must NOT ride this call (see listHistoryPage).
+     * - listHistoryPage(peer, limit, offsetId):
+     *     list<array{id: int, name: string, fetch(name): string}>
+     *     one messages.getHistory page strictly below offsetId (0 = new-
+     *     est). listAllEntries() pages through it with the oldest-id
+     *     cursor — the UNcapped inventory the prune GC walks.
      * - deleteMessages(peer, ids): array   messages.deleteMessages (revoke)
      *
      * @param UserAccountScope $scope a BotAccountScope passes as-is (subclass)
@@ -145,6 +153,7 @@ final class TelegramVault implements VaultInterface
                 $scope->sendMessage($peer, $text)
             ),
             'findMessagesByName' => fn (array $peer, string $namePrefix, int $limit): array => self::searchMessagesByName($scope, $peer, $namePrefix, $limit),
+            'listHistoryPage' => fn (array $peer, int $limit, int $offsetId): array => self::historyPageEntries($scope, $peer, $limit, $offsetId),
             'deleteMessages' => fn (array $peer, array $ids): array => $scope->deleteMessages($ids, true),
         ];
     }
@@ -224,6 +233,56 @@ final class TelegramVault implements VaultInterface
         $entries = [];
         foreach ($this->findEntries($namePrefix) as $entry) {
             $entries[] = ['id' => (string) ($entry['id'] ?? 0), 'name' => (string) ($entry['name'] ?? '')];
+        }
+
+        return $entries;
+    }
+
+    /**
+     * UNcapped channel inventory (night quality fix): findEntries caps
+     * at SEARCH_LIMIT=100, so the prune GC riding findMessagesByName('')
+     * never saw orphans older than the newest ~100 messages — at ≥50 MB
+     * sets those survived every prune forever. This walk instead pages
+     * messages.getHistory (offset_id = oldest id of the last page, LIST_
+     * PAGE_SIZE rows) until an empty page. Two pathological aborts THROW
+     * for manual review rather than silently truncate: a stream larger
+     * than LIST_HARD_CAP, and pagination that makes no forward progress.
+     *
+     * @return list<array<string, mixed>> same shape as findMessagesByName(): {id: string, name: string}, newest first
+     */
+    public function listAllEntries(): array
+    {
+        $entries = [];
+        $seen = [];
+        $fetched = 0;
+        $offsetId = 0;
+        while (true) {
+            $rows = ($this->api['listHistoryPage'])($this->inputPeer(), self::LIST_PAGE_SIZE, $offsetId);
+            $rows = is_array($rows) ? array_values(array_filter($rows, 'is_array')) : [];
+            if ($rows === []) {
+                break; // walked past the oldest message: complete inventory
+            }
+
+            $fetched += count($rows);
+            if ($fetched > self::LIST_HARD_CAP) {
+                throw new RuntimeException('vault channel ' . $this->setId . ' exceeds the ' . self::LIST_HARD_CAP . '-entry listing hard cap; aborting the prune walk for manual review');
+            }
+
+            $oldest = 0;
+            foreach ($rows as $row) {
+                $id = (int) ($row['id'] ?? 0);
+                $oldest = $oldest === 0 ? $id : min($oldest, $id);
+                if (isset($seen[$id])) {
+                    continue; // defensive: a page repeating an id must not duplicate the entry
+                }
+                $seen[$id] = true;
+                $entries[] = ['id' => (string) $id, 'name' => (string) ($row['name'] ?? '')];
+            }
+
+            if ($oldest <= 0 || ($offsetId !== 0 && $oldest >= $offsetId)) {
+                throw new RuntimeException('vault channel ' . $this->setId . ' history pagination made no forward progress at offset_id ' . $offsetId . '; aborting for manual review');
+            }
+            $offsetId = $oldest;
         }
 
         return $entries;
@@ -381,6 +440,31 @@ final class TelegramVault implements VaultInterface
         $rows = $result['messages'] ?? [];
 
         return is_array($rows) ? array_values(array_filter($rows, 'is_array')) : [];
+    }
+
+    /**
+     * One messages.getHistory page strictly below $offsetId (0 = newest)
+     * mapped to api-level vault entries — the raw material the uncapped
+     * listAllEntries() walk pages through.
+     *
+     * @return list<array<string, mixed>>
+     */
+    private static function historyPageEntries(UserAccountScope $scope, array $peer, int $limit, int $offsetId): array
+    {
+        $entries = [];
+        foreach (self::resultRows($scope->getHistory($peer, $limit, $offsetId)) as $message) {
+            $name = self::messageName($message);
+            if ($name === null) {
+                continue;
+            }
+            $entries[] = [
+                'id' => (int) ($message['id'] ?? 0),
+                'name' => $name,
+                'fetch' => fn (string $fetchName): string => self::downloadDocument($scope, $message),
+            ];
+        }
+
+        return $entries;
     }
 
     /**

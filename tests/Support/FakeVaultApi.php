@@ -13,8 +13,11 @@ use RuntimeException;
  * channel/message stores. findMessagesByName deliberately matches LOOSELY
  * (str_contains) so the vault's own string-function prefix/exact detection
  * is what the offline tests exercise — and an EMPTY prefix returns every
- * message, the list-all walk the prune GC rides on. deleteMessages drops
- * the given ids from the store (messages.deleteMessages + revoke).
+ * message (capped at the passed limit), the listing find() rides on.
+ * listHistoryPage mirrors messages.getHistory offset_id paging (strictly
+ * older rows, newest first) — the raw material of listAllEntries' uncapped
+ * walk. deleteMessages drops the given ids from the store
+ * (messages.deleteMessages + revoke).
  */
 final class FakeVaultApi
 {
@@ -128,20 +131,23 @@ final class FakeVaultApi
                     if (!str_contains($message['name'], $namePrefix)) {
                         continue; // deliberately loose: vault-side detection must filter
                     }
-                    $entries[] = [
-                        'id' => $message['id'],
-                        'name' => $message['name'],
-                        'fetch' => function (string $name) use ($message): string {
-                            if ($message['is_text']) {
-                                throw new RuntimeException("message {$message['id']} carries no document");
-                            }
-                            if (!isset($this->documents[$name])) {
-                                throw new RuntimeException("no document named {$name}");
-                            }
+                    $entries[] = $this->entryOf($message);
+                }
 
-                            return $this->documents[$name];
-                        },
-                    ];
+                return $entries;
+            },
+            'listHistoryPage' => function (array $peer, int $limit, int $offsetId): array {
+                $this->calls[] = ['call' => 'listHistoryPage', 'args' => [$peer, $limit, $offsetId]];
+
+                $entries = [];
+                foreach (array_reverse($this->messages[$peer['channel_id'] ?? 0] ?? []) as $message) { // newest first
+                    if ($offsetId !== 0 && $message['id'] >= $offsetId) {
+                        continue; // offset_id cursor: strictly-older rows only
+                    }
+                    $entries[] = $this->entryOf($message);
+                    if (count($entries) >= $limit) {
+                        break;
+                    }
                 }
 
                 return $entries;
@@ -167,5 +173,24 @@ final class FakeVaultApi
         $this->messages[$key][] = ['id' => $id, 'name' => $name, 'is_text' => $isText];
 
         return $id;
+    }
+
+    /** Api-level entry row (id + name + fetch) shared by the two listing calls. @return array<string, mixed> */
+    private function entryOf(array $message): array
+    {
+        return [
+            'id' => $message['id'],
+            'name' => $message['name'],
+            'fetch' => function (string $name) use ($message): string {
+                if ($message['is_text']) {
+                    throw new RuntimeException("message {$message['id']} carries no document");
+                }
+                if (!isset($this->documents[$name])) {
+                    throw new RuntimeException("no document named {$name}");
+                }
+
+                return $this->documents[$name];
+            },
+        ];
     }
 }
