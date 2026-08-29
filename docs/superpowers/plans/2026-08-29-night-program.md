@@ -30,3 +30,13 @@ SDD per wave (parallel where disjoint); gates green per task; nothing uncommitte
 
 - W1-3 [tc] Backup chunk GC landed: `telegram-client:backup prune` + `Pruner` + vault list/delete (`findMessagesByName('')` / `delete`), 319 tests green, phpstan OK — see `.superpowers/night/w1-3.md`.
 - W3: PG track landed (1febb60): full 637-migration mirror on PG17 (3678 tables), deferrable-FK proof, generator FK-bucketing fix (max_locks_per_transaction), CI pg job.
+- W4: audits (secrets CLEAN, license CLEAN, stability OK) -> fixes: teleproto 36b9534 (docs+proc policy), tc 3dce502 (changelog/docs/shell-free regen/quote-escape). tc 329 tests.
+- W5 validation: teleproto 3× suite stable (241/2558), e2e 5/5 ×3, batch-bench 3.0x PASS; tc suite stable ×4 (5 design skips), PG track 7/7, LIVE vault smoke green; both CIs green.
+- Flake audit: zero nondeterminism observed across all reruns tonight.
+
+## Final status (morning read)
+DONE: W1 (5 carried fixes) · W2 batching CLOSED tag-ready (v1.2.0) · W3 PG track (3678 tables live) · W4 audits+fixes (secrets/license CLEAN) · W5 double validation.
+OWNER MORNING ITEMS:
+1. Approve teleproto v1.2.0 tag (commit 238dfcd; live-gated green; review clean) — then tc composer bump "^1.1 || ^1.2" optional.
+2. Packagist submit telegram-client (if not yet).
+3. Backlog (non-urgent): pre-I/O eviction minors (W2 review), batch map clear, PG NOAUTH live-test env, FLOOD_WAIT live-sample verifier.
